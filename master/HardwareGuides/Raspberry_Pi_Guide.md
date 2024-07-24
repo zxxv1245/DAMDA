@@ -1,5 +1,10 @@
 # 가상환경
 
+### 원하는 버전 설치
+```bash
+sudo apt install python3.9 python3.9-venv python3.9-dev
+```
+
 ### 가상환경 만들기
 ```bash
 python -m venv [가상환경 이름]
