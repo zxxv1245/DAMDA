@@ -13,7 +13,7 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3312/shopping?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://i11c103.p.ssafy.io:3312/shopping?serverTimezone=Asia/Seoul
     username: c103Spray
     password: spray11C103!@
 
