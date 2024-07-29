@@ -62,6 +62,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     }
 
+    // 커스텀 로그인 설정
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, String loginUrl){
+        this.authenticationManager =authenticationManager;
+        setFilterProcessesUrl(loginUrl);
+    }
+
     // attemptAuthentication 실행 => 인증이 정상적으로 되었다면 successfulAuthentication 실행
     // JWT 토큰을 만들어서 request 요청을 한 사용자에게 JWT 토큰을 response 해주면 됨
     @Override
