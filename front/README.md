@@ -18,3 +18,5 @@ npx react-native run-android
 npx react-native start --reset-cache
 
 npm cache clean --force
+
+리드미수정
