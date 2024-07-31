@@ -8,13 +8,13 @@ import java.util.List;
 
 @Data
 public class PurchaseResponseDto {
-    private Long purchase_id;
+    private Long purchaseId;
     private LocalDate purchaseDate;
     private List<PurchaseProductDto> purchaseProducts;
     private double totalPrice;
 
-    public PurchaseResponseDto(Long purchase_id, LocalDate purchaseDate, List<PurchaseProductDto> purchaseProducts, double totalPrice) {
-        this.purchase_id = purchase_id;
+    public PurchaseResponseDto(Long purchaseId, LocalDate purchaseDate, List<PurchaseProductDto> purchaseProducts, double totalPrice) {
+        this.purchaseId = purchaseId;
         this.purchaseDate = purchaseDate;
         this.purchaseProducts = purchaseProducts;
         this.totalPrice = totalPrice;
