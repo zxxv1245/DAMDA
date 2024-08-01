@@ -2,8 +2,6 @@ package back.shoppingMart.discount.service;
 
 import back.shoppingMart.discount.dto.DiscountDto;
 import back.shoppingMart.discount.repository.DiscountRepository;
-import back.shoppingMart.product.Product;
-import back.shoppingMart.product.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

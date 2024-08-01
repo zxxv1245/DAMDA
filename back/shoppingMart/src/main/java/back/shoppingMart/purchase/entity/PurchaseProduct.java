@@ -1,7 +1,7 @@
 package back.shoppingMart.purchase.entity;
 
 import back.shoppingMart.discount.entity.DiscountType;
-import back.shoppingMart.product.Product;
+import back.shoppingMart.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;

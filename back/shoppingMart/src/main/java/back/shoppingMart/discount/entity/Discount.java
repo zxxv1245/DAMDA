@@ -1,6 +1,6 @@
 package back.shoppingMart.discount.entity;
 
-import back.shoppingMart.product.Product;
+import back.shoppingMart.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package back.shoppingMart.product;
+package back.shoppingMart.product.entity;
 
 import lombok.Data;
 
@@ -29,8 +29,4 @@ public class ProductDto {
         this.productImage = productImage;
     }
 
-    // id만 포함하는 생성자
-    public ProductDto(Long id) {
-        this.id = id;
-    }
 }
