@@ -6,6 +6,8 @@ public enum DiscountType {
     THIRTY,
     HALF;
 
+
+
     public String getDiscountValue() {
         switch (this) {
             case TEN:
