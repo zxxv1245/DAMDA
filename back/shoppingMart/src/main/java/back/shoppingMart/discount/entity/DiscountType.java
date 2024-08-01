@@ -4,7 +4,18 @@ public enum DiscountType {
     NONE,
     TEN,
     THIRTY,
-    HALF,
-//    ONE_PLUS_ONE,
-//    TWO_PLUS_ONE
+    HALF;
+
+    public String getDiscountValue() {
+        switch (this) {
+            case TEN:
+                return "10";
+            case THIRTY:
+                return "30";
+            case HALF:
+                return "50";
+            default:
+                return "0";
+        }
+    }
 }

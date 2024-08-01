@@ -20,7 +20,7 @@ public class DiscountService {
         return discountRepository.findAll().stream()
                 .map(discount -> new DiscountDto(
                         discount.getId(),
-                        discount.getDiscountType().toString()
+                        discount.getDiscountType()
                 ))
                 .collect(Collectors.toList());
     }
