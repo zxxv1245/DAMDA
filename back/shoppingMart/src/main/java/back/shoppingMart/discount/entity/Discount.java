@@ -1,4 +1,4 @@
-package back.shoppingMart.discount;
+package back.shoppingMart.discount.entity;
 
 import back.shoppingMart.product.Product;
 import jakarta.persistence.*;

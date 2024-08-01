@@ -48,6 +48,7 @@ public class SecurityConfig {
 
         // URL 경로에 따른 접근 권한 설정
         http.authorizeRequests(request -> {
+            request.requestMatchers("/api/v1/getDiscounts").permitAll();
             // /api/v1/user/** 경로는 ROLE_USER, ROLE_MANAGER, ROLE_ADMIN 권한을 가진 사용자만 접근 가능
             request.requestMatchers("/api/v1/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')");
             // /api/v1/manager/** 경로는 ROLE_MANAGER, ROLE_ADMIN 권한을 가진 사용자만 접근 가능
@@ -56,6 +57,7 @@ public class SecurityConfig {
             request.requestMatchers("/api/v1/admin/**").access("hasRole('ROLE_ADMIN')");
             // 루트 경로는 모든 사용자 접근 가능
             request.requestMatchers("/").permitAll();
+
         });
 
         return http.build();
