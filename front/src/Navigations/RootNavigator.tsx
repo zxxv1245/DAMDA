@@ -1,13 +1,15 @@
+// RootNavigator.tsx
+
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import DrawerNavigator from './DrawerNavigator';
 import StackNavigator from './StackNavigator';
 import useAuth from '../hooks/queries/useAuth';
+import TabNavigator from './TabNavigator';
 
 function RootNavigator() {
-  const { isLogin } = useAuth();
+  // const { isLogin } = useAuth();
   
-  return <>{isLogin ? <DrawerNavigator /> : <StackNavigator />}</>;
+  return <StackNavigator />;
 }
 
 const styles = StyleSheet.create({});

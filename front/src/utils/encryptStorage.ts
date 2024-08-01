@@ -1,3 +1,4 @@
+// encryptStorage.ts
 import EncryptedStorage from "react-native-encrypted-storage"
 
 const setEncryptStorage = async<T>(key : string, data : T) => {
