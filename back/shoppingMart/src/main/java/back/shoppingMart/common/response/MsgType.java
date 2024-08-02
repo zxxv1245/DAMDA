@@ -12,7 +12,8 @@ public enum MsgType {
     DATA_SUCCESSFULLY("데이터 생성 성공"),
     DELETED_SUCCESSFULLY("회원 탈퇴 완료"),
     PSW_CHANGED_SUCCESSFULLY("비밀번호 변경 완료"),
-    GENERATE_TOKEN_SUCCESSFULLY("토큰 생성 성공");
+    GENERATE_TOKEN_SUCCESSFULLY("토큰 생성 성공"),
+    DUPLICATION_TEST_COMPLETE("이메일 중복 검사 완료");
 
     private final String msg;
 

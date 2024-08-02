@@ -59,4 +59,10 @@ public class UserController {
     }
 
 
+    @GetMapping("/{email}/exists")
+    public ResponseEntityDto<Boolean> checkEmailDuplicate(@PathVariable("email") String email) {
+        Boolean emailExist = userService.checkIfEmailExists(email);
+        return ResponseUtils.ok(emailExist, MsgType.DUPLICATION_TEST_COMPLETE);
+    }
+
 }

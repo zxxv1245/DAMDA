@@ -9,7 +9,10 @@ public enum ErrorType {
     //----------------------- 유저 관련 부분 ------------------------------
     CONTENT_IS_NULL(400, "입력되지 않은 정보가 있습니다."),
     DUPLICATED_USERID(400, "중복된 아이디입니다."),
+    NO_EMAIL_INPUT(400, "이메일을 입력하지 않았습니다."),
+    NO_PSW_INPUT(400, "비밀번호를 입력하지 않았습니다."),
     NOT_FOUND_USER(401, "등록된 사용자가 없습니다."),
+    EMAIL_NOT_FOUND(401,"등록된 이메일이 없습니다." ),
     NOT_MATCHING_INFO(401, "아이디 또는 비밀번호를 잘못 입력했습니다."),
     NO_TOKEN(401, "토큰이 없습니다."),
     NOT_VALID_TOKEN(401, "토큰이 유효하지 않습니다."),

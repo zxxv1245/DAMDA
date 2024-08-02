@@ -44,14 +44,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
             // 토큰 만들기
         UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+                    new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
             // PrincipalDetailsService의 loadUserByUsername() 함수가 실행됨
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
             // 다운 캐스팅, authentication 객체가 session 영역에 저장됨 => 로그인이 되었다는 뜻
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("로그인 완료 : " + principalDetails.getUser().getUsername());
+        System.out.println("로그인 완료 : " + principalDetails.getUser().getEmail());
 
         return authentication;
 
@@ -81,7 +81,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject("로그인 토큰") // 토큰 이름
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) // 토큰 만료 시간 => 현재 시간 + 10분
                 .withClaim("id", principalDetails.getUser().getId())  // 비공개 claim, 내가 넣고 싶은 value값
-                .withClaim("username", principalDetails.getUser().getUsername())
+                .withClaim("email", principalDetails.getUser().getEmail())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));  // 내 서버가 아는 고유의 값
 
         // 사용자한테 응답할 response 헤더에

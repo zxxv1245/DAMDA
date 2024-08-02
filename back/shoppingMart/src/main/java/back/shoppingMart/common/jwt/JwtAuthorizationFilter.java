@@ -49,12 +49,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 토큰 검증으로 통해 정상적인 사용자인지 확인
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX,"");
 
-        String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
-                .getClaim("username").asString();
+        String email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
+                .getClaim("email").asString();
 
         // 서명이 정상적으로 됨
-        if (username != null) {
-            User userEntity = userRepository.findByUsername(username);
+        if (email != null) {
+            User userEntity = userRepository.findByEmail(email);
 
             // JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다
             PrincipalDetails principalDetails = new PrincipalDetails((userEntity));

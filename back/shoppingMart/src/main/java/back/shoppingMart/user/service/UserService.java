@@ -27,11 +27,17 @@ public class UserService {
 
     // 회원 가입 로직
     public User registerUser(UserDto userDto) {
-        checkIfUsernameExists(userDto.getUsername());
+        checkIfEmailExists(userDto.getEmail());
+        if (userDto.getEmail() == null) {
+            throw new CustomException(ErrorType.NO_EMAIL_INPUT);
+        }
+        if (userDto.getPassword() == null) {
+            throw new CustomException(ErrorType.NO_PSW_INPUT);
+        }
         User user = new User();
-        user.setUsername(userDto.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
+        user.setUsername(userDto.getUsername());
         user.setBirthDate(userDto.getBirthDate());
         user.setRoles("ROLE_USER");
         return userRepository.save(user);
@@ -39,11 +45,9 @@ public class UserService {
 
 
     // username이 이미 있는지 확인
-    public void checkIfUsernameExists(String username) {
-        Optional<User> existingUser = Optional.ofNullable(userRepository.findByUsername(username));
-        if (existingUser.isPresent()) {
-            throw new CustomException(ErrorType.DUPLICATED_USERID);
-        }
+    public Boolean checkIfEmailExists(String email) {
+
+        return userRepository.existsByEmail(email);
     }
 
     // Id로 유저 정보를 조회
