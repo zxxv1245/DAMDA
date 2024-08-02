@@ -28,10 +28,10 @@ public class UserService {
     // 회원 가입 로직
     public User registerUser(UserDto userDto) {
         checkIfEmailExists(userDto.getEmail());
-        if (userDto.getEmail() == null) {
+        if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
             throw new CustomException(ErrorType.NO_EMAIL_INPUT);
         }
-        if (userDto.getPassword() == null) {
+        if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
             throw new CustomException(ErrorType.NO_PSW_INPUT);
         }
         User user = new User();
