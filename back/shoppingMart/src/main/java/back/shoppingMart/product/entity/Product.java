@@ -22,6 +22,8 @@ public class Product {
     private Boolean productAdult;
     private String productDescription;
     private String productImage;
+    private String detectName;
+    private Integer productBarcode;
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "discount")

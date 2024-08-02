@@ -46,12 +46,6 @@ public class PurchaseProduct {
             case HALF:
                 totalPrice = count * price * 0.5;
                 break;
-//            case ONE_PLUS_ONE:
-//                totalPrice = (count / 2 + count % 2) * price;
-//                break;
-//            case TWO_PLUS_ONE:
-//                totalPrice = (count / 3 * 2 + count % 3) * price;
-//                break;
             case NONE:
             default:
                 totalPrice = count * price;

@@ -1,10 +1,12 @@
 package back.shoppingMart.purchase.dto;
 
+import back.shoppingMart.purchase.entity.Purchase;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class PurchaseResponseDto {
@@ -19,4 +21,6 @@ public class PurchaseResponseDto {
         this.purchaseProducts = purchaseProducts;
         this.totalPrice = totalPrice;
     }
+
 }
+

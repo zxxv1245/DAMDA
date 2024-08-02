@@ -12,13 +12,15 @@ public class ProductDto {
     private Boolean productAdult;
     private String productDescription;
     private String productImage;
+    private String detectName;
+    private Integer productBarcode;
 
     // 기본 생성자
     public ProductDto() {
     }
 
     // 모든 필드를 포함하는 생성자
-    public ProductDto(Long id, String serialNumber, String productName, Float productPrice, String productLocation, Boolean productAdult, String productDescription, String productImage) {
+    public ProductDto(Long id, String serialNumber, String productName, Float productPrice, String productLocation, Boolean productAdult, String productDescription, String productImage, String detectName, Integer productBarcode) {
         this.id = id;
         this.serialNumber = serialNumber;
         this.productName = productName;
@@ -27,6 +29,8 @@ public class ProductDto {
         this.productAdult = productAdult;
         this.productDescription = productDescription;
         this.productImage = productImage;
+        this.detectName = detectName;
+        this.productBarcode = productBarcode;
     }
 
 }
