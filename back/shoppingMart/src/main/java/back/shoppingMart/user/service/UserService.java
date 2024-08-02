@@ -34,6 +34,12 @@ public class UserService {
         if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
             throw new CustomException(ErrorType.NO_PSW_INPUT);
         }
+        if (userDto.getUsername() == null || userDto.getUsername().isEmpty()) {
+            throw new CustomException(ErrorType.NO_USERNAME_INPUT);
+        }
+        if (userDto.getBirthDate() == null) {
+            throw new CustomException(ErrorType.NO_BIRTHDATE_INPUT);
+        }
         User user = new User();
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
