@@ -1,10 +1,15 @@
 package back.shoppingMart.purchase.sevice;
 
+import back.shoppingMart.purchase.dto.PurchaseProductDto;
+import back.shoppingMart.purchase.dto.PurchaseResponseDto;
 import back.shoppingMart.purchase.entity.Purchase;
 import back.shoppingMart.purchase.entity.PurchaseProduct;
 import back.shoppingMart.purchase.repository.PurchaseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -48,5 +53,54 @@ public class PurchaseService {
                 .map(Purchase::getPurchaseDate)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PurchaseResponseDto> getAllPurchases(Long userId) {
+        Pageable pageable = PageRequest.of(0, 1);
+        List<Purchase> purchases = purchaseRepository.findAllPurchasesByUserId(userId);
+        return purchases.stream()
+                .map(purchase -> {
+                    List<PurchaseProductDto> purchaseProductDtos = purchase.getPurchaseProducts().stream()
+                            .map(purchaseProduct -> new PurchaseProductDto(
+                                    purchaseProduct.getProduct().getProductName(),
+                                    purchaseProduct.getCount(),
+                                    purchaseProduct.getTotalPrice()))
+                            .collect(Collectors.toList());
+
+                    double totalPrice = calculateTotalPrice(List.of(purchase));
+
+                    return new PurchaseResponseDto(
+                            purchase.getId(),
+                            purchase.getPurchaseDate(),
+                            purchaseProductDtos,
+                            totalPrice
+                    );
+                }).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PurchaseResponseDto> getMostRecentPurchases(Long userId) {
+        Pageable pageable = PageRequest.of(0, 1);
+        List<Purchase> purchases = purchaseRepository.findRecentPurchasesByUserId(userId, pageable);
+        return purchases.stream()
+                .map(purchase -> {
+                    List<PurchaseProductDto> purchaseProductDtos = purchase.getPurchaseProducts().stream()
+                            .map(purchaseProduct -> new PurchaseProductDto(
+                                    purchaseProduct.getProduct().getProductName(),
+                                    purchaseProduct.getCount(),
+                                    purchaseProduct.getTotalPrice(),
+                                    purchaseProduct.getProduct().getProductImage()))
+                            .collect(Collectors.toList());
+
+                    double totalPrice = calculateTotalPrice(List.of(purchase));
+
+                    return new PurchaseResponseDto(
+                            purchase.getId(),
+                            purchase.getPurchaseDate(),
+                            purchaseProductDtos,
+                            totalPrice
+                    );
+                }).collect(Collectors.toList());
     }
 }

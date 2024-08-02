@@ -16,11 +16,11 @@ public class PurchaseProductDto {
         this.totalPrice = totalPrice;
     }
 
-    public PurchaseProductDto(String productName, int count, double totalPrice, PurchaseProduct product) {
+    public PurchaseProductDto(String productName, int count, double totalPrice, String productImage) {
         this.productName = productName;
         this.count = count;
         this.totalPrice = totalPrice;
-        this.productImage = product.getProduct().getProductImage();  // Assuming getProduct() returns a Product object
+        this.productImage = productImage;
     }
 
 

@@ -74,4 +74,17 @@ public class PurchaseController {
         return ResponseUtils.ok(purchaseDates, MsgType.SEARCH_SUCCESSFULLY);
     }
 
+    @GetMapping("/myPurchase/allPurchases")
+    public ResponseEntityDto<List<PurchaseResponseDto>> getAllPurchase(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<PurchaseResponseDto> recentPurchase = purchaseService.getAllPurchases(principalDetails.getUser().getId());
+        return ResponseUtils.ok(recentPurchase, MsgType.SEARCH_SUCCESSFULLY);
+    }
+
+    @GetMapping("/myPurchase/recent")
+    public ResponseEntityDto<List<PurchaseResponseDto>> getRecentPurchase(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<PurchaseResponseDto> recentPurchase = purchaseService.getMostRecentPurchases(principalDetails.getUser().getId());
+        return ResponseUtils.ok(recentPurchase, MsgType.SEARCH_SUCCESSFULLY);
+    }
+
+
 }
