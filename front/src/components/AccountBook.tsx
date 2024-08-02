@@ -1,181 +1,111 @@
-// AccountBook.tsx
+import { colors } from "../constants/color";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, SafeAreaView, Text, View, FlatList } from 'react-native';
+import Calendar from "./Calendar";
+import { getMonthYearDetails, getNewMonthYear, getDateWithSeparator, formatDateWithDay } from "../utils/date";
+import { fetchPurchases, fetchPurchaseDates, PurchaseResponseDto } from '../api/purchaseApi';
 
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, TouchableOpacity, Modal, ScrollView } from 'react-native';
-import { Calendar, DateData, CalendarProps } from 'react-native-calendars';
-import moment from 'moment';
-import 'moment/locale/ko';  // 한국어 로케일 추가
-import { colors } from '../constants/color';  // colors 파일 import
-import { fetchPurchases } from '../api/productApi';
+interface AccountBookProps {}
 
+function AccountBook({ }: AccountBookProps) {
+  const currentMonthYear = getMonthYearDetails(new Date());
+  const [monthYear, setMonthYear] = useState(currentMonthYear);
+  const [selectedDate, setSelectedDate] = useState(0);
+  const [purchases, setPurchases] = useState<PurchaseResponseDto[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [purchaseDates, setPurchaseDates] = useState<string[]>([]);
 
-const { width, height } = Dimensions.get('window');
+  const handlePressDate = (date: number) => {
+    setSelectedDate(date);
+  }
 
-interface Purchase {
-  id: string;
-  item: string;
-  amount: string;
-}
-
-interface MarkingProps {
-  selected?: boolean;
-  marked?: boolean;
-  selectedColor?: string;
-  dotColor?: string;
-}
-
-const years = Array.from({ length: 20 }, (_, i) => (2024 + i).toString());
-
-function AccountBook() {
-  const [selectedDate, setSelectedDate] = useState<string>('');
-  const [purchases, setPurchases] = useState<Purchase[]>([]);
-  const [currentMonth, setCurrentMonth] = useState<string>(moment().format('YYYY-MM'));
-  const [yearModalVisible, setYearModalVisible] = useState<boolean>(false);
-
-  // 임의의 데이터: 날짜별 구매 목록
-  const data: { [key: string]: Purchase[] } = {
-    '2024-07-25': [{ id: '1', item: '진로', amount: '1500원' }],
-    '2024-07-26': [{ id: '2', item: '사이다', amount: '1400원' }, { id: '3', item: '초코과자', amount: '3000원' }],
+  const handleUpdateMonth = (increment: number) => {
+    setMonthYear(prev => getNewMonthYear(prev, increment));
+    setSelectedDate(0);
+    setPurchases([]);
   };
 
-  // const [data, setData] = useState<{ [key: string]: Purchase[] }>({});
-  // useEffect(() => {
-  //   const loadPurchases = async () => {
-  //     try {
-  //       const apiData = await fetchPurchases(currentMonth);
-  //       setData(apiData);
-  //     } catch (error) {
-  //       console.error('Error loading purchases:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchPurchaseData = async () => {
+      if (selectedDate > 0) {
+        setIsLoading(true);
+        try {
+          const purchaseDate = getDateWithSeparator(new Date(monthYear.year, monthYear.month - 1, selectedDate), '-');
+          const data = await fetchPurchases(purchaseDate);
+          setPurchases(data);
+        } catch (error) {
+          console.error('Error fetching purchase data:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
 
-  //   loadPurchases();
-  // }, [currentMonth]);
+    fetchPurchaseData();
+  }, [selectedDate, monthYear]);
 
-  const markedDates = Object.keys(data).reduce<Record<string, MarkingProps>>((acc, date) => {
-    acc[date] = { marked: true, dotColor: colors.GREEN_500 };
-    return acc;
-  }, {});
+  useEffect(() => {
+    const fetchPurchaseDatesData = async () => {
+      setIsLoading(true);
+      try {
+        const dates = await fetchPurchaseDates(monthYear.year, monthYear.month);
+        setPurchaseDates(dates);
+      } catch (error) {
+        console.error('Error fetching purchase dates:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const onDayPress = (day: DateData) => {
-    setSelectedDate(day.dateString);
-    setPurchases(data[day.dateString] || []);
-  };
-
-  const onVisibleMonthsChange = (months: DateData[]) => {
-    const month = months[0].year + '-' + String(months[0].month).padStart(2, '0');
-    setCurrentMonth(month);
-  };
-
-  const renderHeader = () => {
-    const header = moment(currentMonth, 'YYYY-MM').locale('ko').format('YYYY년 MM월');
-    return (
-      <View style={styles.header}>
-        <Text style={styles.headerText}>{header}</Text>
-        <TouchableOpacity onPress={() => setYearModalVisible(true)}>
-          <Text style={styles.dropdownArrow}>⌄</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+    fetchPurchaseDatesData();
+  }, [monthYear]);
 
   return (
-    <View style={styles.container}>
-      <Modal visible={yearModalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <ScrollView contentContainerStyle={styles.yearContainer}>
-              {years.map((year) => (
-                <TouchableOpacity 
-                  key={year} 
-                  style={[
-                    styles.yearButton, 
-                    currentMonth.startsWith(year) && styles.selectedYearButton
-                  ]} 
-                  onPress={() => {
-                    setCurrentMonth(`${year}-${currentMonth.split('-')[1]}`);
-                    setYearModalVisible(false);
-                  }}>
-                  <Text 
-                    style={[
-                      styles.yearButtonText, 
-                      currentMonth.startsWith(year) && styles.selectedYearButtonText
-                    ]}>
-                    {year}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-            <TouchableOpacity onPress={() => setYearModalVisible(false)} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>닫기 ⌃</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+    <SafeAreaView style={styles.container}>
       <Calendar
-        onDayPress={onDayPress}
-        onVisibleMonthsChange={onVisibleMonthsChange}
-        markedDates={{
-          ...markedDates,
-          [selectedDate]: { selected: true, marked: true, selectedColor: colors.PINK_500 },
-        }}
-        style={styles.calendar}
-        renderHeader={renderHeader}
-        theme={{
-          calendarBackground: colors.WHITE,
-          textSectionTitleColor: colors.GRAY_500,
-          selectedDayBackgroundColor: colors.PINK_500,
-          selectedDayTextColor: colors.WHITE,
-          todayTextColor: colors.PINK_500,
-          dayTextColor: colors.GRAY_700,
-          textDisabledColor: colors.GRAY_200,
-          monthTextColor: colors.BLACK,
-          arrowColor: colors.PINK_500,
-          textDayFontWeight: 'bold',
-          textMonthFontWeight: 'bold',
-          textDayHeaderFontWeight: 'bold',
-          'stylesheet.calendar.header': {
-            week: {
-              marginTop: 5,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 10,
-            },
-            dayTextAtIndex0: {
-              color: colors.RED_500,
-            },
-            dayTextAtIndex6: {
-              color: colors.PINK_500,
-            },
-          },
-        }}
-        firstDay={1}
+        monthYear={monthYear}
+        onChangeMonth={handleUpdateMonth}
+        selectedDate={selectedDate}
+        onPressDate={handlePressDate}
+        purchaseDates={purchaseDates} // 추가된 부분
       />
-      <View style={styles.listContainer}>
-        <Text style={styles.title}>{selectedDate}의 구매 목록</Text>
-        <FlatList
-          data={purchases}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.item}>
-              <Text>{item.item}</Text>
-              <Text>{item.amount}</Text>
+      {selectedDate > 0 && (
+        <View style={styles.listContainer}>
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <Text>Loading...</Text>
             </View>
+          ) : (
+            <FlatList
+              data={purchases}
+              renderItem={({ item }) => (
+                <View style={styles.item}>
+                  <View style={styles.itemHeader}>
+                    <Text style={styles.itemDate}>{formatDateWithDay(new Date(item.purchaseDate))}</Text>
+                    <Text style={styles.itemTotalPrice}>-{item.totalPrice.toLocaleString()}원</Text>
+                  </View>
+                  {item.purchaseProducts.map((product, index) => (
+                    <View style={styles.productItem} key={`${item.id}-${product.productName}-${index}`}>
+                      <Text style={styles.productName}>{product.productName} {product.count}개</Text>
+                      <Text style={styles.productPrice}>{product.totalPrice.toLocaleString()}원</Text>
+                      <Text style={styles.productStore}>롯데마트 철산점</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+              keyExtractor={item => item.id}
+            />
           )}
-        />
-      </View>
-    </View>
+        </View>
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.WHITE,
-  },
-  calendar: {
-    width: width,
-    height: height * 0.5,
+    backgroundColor: colors.WHITE
   },
   listContainer: {
     flex: 1,
@@ -183,79 +113,59 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 20,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
-    color: colors.GRAY_700,
+    color: colors.BLACK,
   },
   item: {
+    marginBottom: 15, // 간격 추가
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: colors.WHITE,
+  },
+  itemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.GRAY_200,
+    marginBottom: 10,
+    padding : 10,
+    borderWidth : 1,
+    borderColor : colors.BLACK,
+    borderRadius : 15,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  itemDate: {
+    fontSize: 16,
     color: colors.BLACK,
   },
-  dropdownArrow: {
-    fontSize: 20,
+  itemTotalPrice: {
+    fontSize: 16,
+    color: colors.RED_500,
+  },
+  productItem: {
+    paddingVertical: 5,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.BLUE_500,
+    marginVertical: 5,
+    paddingLeft: 10,
+  },
+  productName: {
+    fontSize: 16,
     color: colors.BLACK,
-    marginLeft: 5,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    width: '100%',
-    backgroundColor: colors.WHITE,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-  },
-  yearContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-  },
-  yearButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    margin: 5,
-    borderWidth: 1,
-    borderColor: colors.GRAY_200,
-    borderRadius: 5,
-  },
-  selectedYearButton: {
-    backgroundColor: colors.PINK_500,
-  },
-  yearButtonText: {
-    fontSize: 18,
+  productPrice: {
+    fontSize: 14,
     color: colors.GRAY_700,
   },
-  selectedYearButtonText: {
-    color: colors.WHITE,
-  },
-  closeButton: {
-    marginTop: 10,
-  },
-  closeButtonText: {
-    fontSize: 18,
-    color: colors.BLACK,
+  productStore: {
+    fontSize: 12,
+    color: colors.GRAY_500,
   },
 });
 

@@ -1,4 +1,3 @@
-// AuthHome.tsx (Login)
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import InputField from './InputField';
@@ -17,13 +16,12 @@ type AuthHomeProps = StackScreenProps<
 function AuthHome({ navigation }: AuthHomeProps) {
   const { values, touched, getTextInputProps } = useFormLogin({ initialValue: { username: '', password: '' } });
   const { loginMutation } = useAuth();
-  
 
   const handleSubmit = () => {
     loginMutation.mutate(values, {
       onSuccess: (data) => {
         console.log('Login successful:', data);
-        // 로그인 성공 후 네비게이션 처리는 필요 없습니다. RootNavigator에서 자동으로 처리됩니다.
+        navigation.replace(stackNavigations.MAIN);
       },
       onError: (error) => {
         console.error('error:', error);

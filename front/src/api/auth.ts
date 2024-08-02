@@ -15,7 +15,7 @@ type ResponseToken = {
 
 const postLogin = async ({ username, password }: RequestUser): Promise<ResponseToken> => {
   try {
-    const response = await axiosInstance.post('/login', { username, password });
+    const response = await axiosInstance.post('/api/v1/login', { username, password });
     // console.log('Response Headers:', response.headers); // Log all headers for debugging
 
     const authorizationToken = response.headers['authorization']; // Extract the token
@@ -36,7 +36,7 @@ const postLogin = async ({ username, password }: RequestUser): Promise<ResponseT
 const postSignup = async ({ username, password }: RequestUser): Promise<void> => {
   try {
     // /register
-    const response = await axiosInstance.post('/api/register', {
+    const response = await axiosInstance.post('/api/v1/register', {
       username,
       password,
     });

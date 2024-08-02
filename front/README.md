@@ -19,4 +19,6 @@ npx react-native start --reset-cache
 
 npm cache clean --force
 
-리드미수정
+
+할 때
+android 세팅 매우 많이 해야함 ...

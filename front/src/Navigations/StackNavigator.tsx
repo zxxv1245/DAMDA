@@ -1,71 +1,89 @@
-import { createStackNavigator } from '@react-navigation/stack';
+// StackNavigator.tsx
+
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { View, Image, TouchableOpacity } from 'react-native';
+import { stackNavigations } from '../constants';
+import TabNavigator from './TabNavigator';
 import AuthHome from '../components/AuthHome';
 import Signup from '../components/Signup';
 import Feed from '../components/Feed';
-import Article from '../components/Article';
-import { stackNavigations } from '../constants';
 import AccountBook from '../components/AccountBook';
 import QRCodeScannerScreen from '../components/QRCodeScannerScreen';
+import MapScreen from '../components/MapScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+// 이미지 파일 경로를 설정합니다.
+const logo = require('../assets/logo.png');
+
+const Stack = createStackNavigator();
 
 export type StackParamList = {
+  [stackNavigations.MAIN]: undefined;
   [stackNavigations.AUTH_HOME]: undefined;
   [stackNavigations.LOGIN]: undefined;
   [stackNavigations.SIGNUP]: undefined;
   [stackNavigations.FEED]: undefined;
-  [stackNavigations.ARTICLE]: undefined;
   [stackNavigations.ACCOUNTBOOK]: undefined;
-  QRCodeScannerScreen: undefined; // QR 코드 스캐너 화면 추가
+  [stackNavigations.MAPSCREEN]: undefined;
+  [stackNavigations.QRCODESCANNERSCREEN]: undefined;
 };
 
 function StackNavigator() {
-  const Stack = createStackNavigator<StackParamList>();
-
   return (
     <Stack.Navigator
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
         cardStyle: { backgroundColor: 'white' },
-        headerStyle: { backgroundColor: 'white', shadowColor: 'gray' },
-        headerTitleStyle: { fontSize: 20, fontWeight: 'bold' },
-        headerTitleAlign: 'center',
-        headerTintColor: 'gray',
-      }}
+        headerStyle: { 
+          backgroundColor: 'white', 
+          shadowColor: 'gray',
+        },
+        headerTitle: () => (
+          <Image
+            source={logo}
+            style={{ width: 100, height: 40 }} // 이미지 크기를 조정합니다.
+            resizeMode="contain"
+          />
+        ),
+        headerTitleAlign: 'center', // 제목을 중앙 정렬합니다.
+        headerRight: () => (
+          <TouchableOpacity onPress={() => { /* 알림 모달을 여는 로직을 여기에 추가 */ }}>
+            <Ionicons name="notifications-outline" size={24} color="black" style={{ marginRight: 15 }} />
+          </TouchableOpacity>
+        ),
+      })}
     >
+      <Stack.Screen
+        name={stackNavigations.MAIN}
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={stackNavigations.AUTH_HOME}
         component={AuthHome}
-        options={{ headerTitle: '담다' }}
       />
       <Stack.Screen
         name={stackNavigations.SIGNUP}
         component={Signup}
-        options={{ headerTitle: '회원가입' }}
       />
       <Stack.Screen
         name={stackNavigations.FEED}
         component={Feed}
-        options={{ headerTitle: '피드' }}
-      />
-      <Stack.Screen
-        name={stackNavigations.ARTICLE}
-        component={Article}
-        options={{ headerTitle: '기사' }}
       />
       <Stack.Screen
         name={stackNavigations.ACCOUNTBOOK}
         component={AccountBook}
-        options={{ headerTitle: '가계부' }}
       />
       <Stack.Screen
-        name="QRCodeScannerScreen"
+        name={stackNavigations.QRCODESCANNERSCREEN}
         component={QRCodeScannerScreen}
-        options={{ headerTitle: 'QR 코드 스캔' }}
+      />
+      <Stack.Screen
+        name={stackNavigations.MAPSCREEN}
+        component={MapScreen}
       />
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({});
 
 export default StackNavigator;
