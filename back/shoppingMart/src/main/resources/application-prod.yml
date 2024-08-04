@@ -18,6 +18,7 @@ spring:
     password: ${DB_PASSWORD}
 
 
+
   jpa:
     hibernate:
       ddl-auto: create #create update none
