@@ -5,9 +5,10 @@ import back.shoppingMart.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -29,6 +30,8 @@ public class PurchaseProduct {
 
 
     private int count;
+
+    private double singlePrice;
 
     public double getTotalPrice() {
         double totalPrice = 0.0;
@@ -52,6 +55,30 @@ public class PurchaseProduct {
         }
 
         return totalPrice;
+    }
+
+    public double calculateSinglePrice() {
+        double singlePrice = 0.0;
+        double price = product.getProductPrice();
+        DiscountType discount = product.getDiscount().getDiscountType();
+
+        switch (discount) {
+            case TEN:
+                singlePrice = price * 0.9;
+                break;
+            case THIRTY:
+                singlePrice = price * 0.7;
+                break;
+            case HALF:
+                singlePrice = price * 0.5;
+                break;
+            case NONE:
+            default:
+                singlePrice = price;
+                break;
+        }
+
+        return singlePrice;
     }
 
 

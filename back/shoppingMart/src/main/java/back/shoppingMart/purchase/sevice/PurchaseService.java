@@ -30,6 +30,8 @@ public class PurchaseService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
+
+    // 해당 월일로 그날 결제 정보 가져오기
     public List<PurchaseResponseDto> getPurchasesByUserAndDate(Long userId, LocalDate purchaseDate) {
         List<Purchase> purchases = purchaseRepository.findByUserIdAndPurchaseDate(userId, purchaseDate);
 
@@ -38,10 +40,15 @@ public class PurchaseService {
                     .map(purchaseProduct -> new PurchaseProductDto(
                             purchaseProduct.getProduct().getProductName(),
                             purchaseProduct.getCount(),
-                            purchaseProduct.getTotalPrice()))
+                            purchaseProduct.getTotalPrice(),
+                            purchaseProduct.calculateSinglePrice()))
                     .collect(Collectors.toList());
 
-            double totalPrice = calculateTotalPrice(List.of(purchase));
+            if (purchase.getTotalPrice() == 0 ){
+                purchase.calculateAndSetTotalPrice();
+                purchaseRepository.save(purchase);
+            }
+            double totalPrice = purchase.getTotalPrice();
 
             return new PurchaseResponseDto(
                     purchase.getId(),
@@ -54,10 +61,11 @@ public class PurchaseService {
 
     }
 
+    // 구매 총 금액 계산
     public double calculateTotalPrice(List<Purchase> purchases) {
+        purchases.forEach(Purchase::calculateAndSetTotalPrice);
         return purchases.stream()
-                .flatMap(purchase -> purchase.getPurchaseProducts().stream())
-                .mapToDouble(PurchaseProduct::getTotalPrice)
+                .mapToDouble(Purchase::getTotalPrice)
                 .sum();
     }
 
@@ -82,6 +90,8 @@ public class PurchaseService {
                 .collect(Collectors.toList());
     }
 
+
+    // 유저의 모든 결제 내역 조회
     @Transactional(readOnly = true)
     public List<PurchaseResponseDto> getAllPurchases(Long userId) {
         Pageable pageable = PageRequest.of(0, 1);
@@ -92,10 +102,16 @@ public class PurchaseService {
                             .map(purchaseProduct -> new PurchaseProductDto(
                                     purchaseProduct.getProduct().getProductName(),
                                     purchaseProduct.getCount(),
-                                    purchaseProduct.getTotalPrice()))
+                                    purchaseProduct.getTotalPrice(),
+                                    purchaseProduct.calculateSinglePrice()))
                             .collect(Collectors.toList());
 
-                    double totalPrice = calculateTotalPrice(List.of(purchase));
+                    if (purchase.getTotalPrice() == 0 ){
+                        purchase.calculateAndSetTotalPrice();
+                        purchaseRepository.save(purchase);
+                    }
+
+                    double totalPrice = purchase.getTotalPrice();
 
                     return new PurchaseResponseDto(
                             purchase.getId(),
@@ -106,6 +122,7 @@ public class PurchaseService {
                 }).collect(Collectors.toList());
     }
 
+    // 가장 최근 결제 내역 하나 가져오기
     @Transactional(readOnly = true)
     public List<PurchaseResponseWithImageDto> getMostRecentPurchases(Long userId) {
         Pageable pageable = PageRequest.of(0, 1);
@@ -120,7 +137,12 @@ public class PurchaseService {
                                     purchaseProduct.getProduct().getProductImage()))
                             .collect(Collectors.toList());
 
-                    double totalPrice = calculateTotalPrice(List.of(purchase));
+                    if (purchase.getTotalPrice() == 0 ){
+                        purchase.calculateAndSetTotalPrice();
+                        purchaseRepository.save(purchase);
+                    }
+
+                    double totalPrice = purchase.getTotalPrice();
 
                     return new PurchaseResponseWithImageDto(
                             purchase.getId(),
@@ -131,12 +153,14 @@ public class PurchaseService {
                 }).collect(Collectors.toList());
     }
 
+    // 결제 내역 저장
     @Transactional
     public Purchase savePurchase(Long userId, PurchaseRequestDto purchaseRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
         Purchase purchase = new Purchase();
         purchase.setUser(user);
         purchase.setPurchaseDate(LocalDate.now());
+        purchase.setTotalPrice(purchase.getTotalPrice());
 
         List<PurchaseProduct> purchaseProducts = purchaseRequestDto.getPurchaseProduct().stream().map(dto -> {
             PurchaseProduct purchaseProduct = new PurchaseProduct();
@@ -144,9 +168,13 @@ public class PurchaseService {
             if (product == null) {
                 throw new CustomException(ErrorType.NOT_FOUND_PRODUCT);
             }
+
+
             purchaseProduct.setPurchase(purchase);
             purchaseProduct.setProduct(product);
             purchaseProduct.setCount(dto.getCount());
+            purchaseProduct.setSinglePrice(dto.getTotalPrice() / dto.getCount());
+
             return purchaseProduct;
         }).toList();
 
