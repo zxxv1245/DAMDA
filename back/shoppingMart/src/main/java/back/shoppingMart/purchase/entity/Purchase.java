@@ -13,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Purchase {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +35,5 @@ public class Purchase {
         this.user = user;
         user.getPurchases().add(this);
     }
-
-    public void addPurchaseProduct(PurchaseProduct purchaseProduct) {
-        purchaseProducts.add(purchaseProduct);
-        purchaseProduct.setPurchase(this);
-    }
-
 
 }

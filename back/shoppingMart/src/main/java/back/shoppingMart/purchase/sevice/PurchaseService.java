@@ -1,10 +1,15 @@
 package back.shoppingMart.purchase.sevice;
 
-import back.shoppingMart.purchase.dto.PurchaseProductDto;
-import back.shoppingMart.purchase.dto.PurchaseResponseDto;
+import back.shoppingMart.common.exception.CustomException;
+import back.shoppingMart.common.exception.ErrorType;
+import back.shoppingMart.product.entity.Product;
+import back.shoppingMart.product.repository.ProductRepository;
+import back.shoppingMart.purchase.dto.*;
 import back.shoppingMart.purchase.entity.Purchase;
 import back.shoppingMart.purchase.entity.PurchaseProduct;
 import back.shoppingMart.purchase.repository.PurchaseRepository;
+import back.shoppingMart.user.entity.User;
+import back.shoppingMart.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +27,31 @@ public class PurchaseService {
 
 
     private final PurchaseRepository purchaseRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
-    public List<Purchase> getPurchasesByUserAndDate(Long userId, LocalDate purchaseDate) {
-        return purchaseRepository.findByUserIdAndPurchaseDate(userId, purchaseDate);
+    public List<PurchaseResponseDto> getPurchasesByUserAndDate(Long userId, LocalDate purchaseDate) {
+        List<Purchase> purchases = purchaseRepository.findByUserIdAndPurchaseDate(userId, purchaseDate);
+
+        return purchases.stream().map(purchase -> {
+            List<PurchaseProductDto> purchaseProductDtos = purchase.getPurchaseProducts().stream()
+                    .map(purchaseProduct -> new PurchaseProductDto(
+                            purchaseProduct.getProduct().getProductName(),
+                            purchaseProduct.getCount(),
+                            purchaseProduct.getTotalPrice()))
+                    .collect(Collectors.toList());
+
+            double totalPrice = calculateTotalPrice(List.of(purchase));
+
+            return new PurchaseResponseDto(
+                    purchase.getId(),
+                    purchase.getPurchaseDate(),
+                    purchaseProductDtos,
+                    totalPrice
+            );
+        }).collect(Collectors.toList());
+
+
     }
 
     public double calculateTotalPrice(List<Purchase> purchases) {
@@ -80,13 +107,13 @@ public class PurchaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<PurchaseResponseDto> getMostRecentPurchases(Long userId) {
+    public List<PurchaseResponseWithImageDto> getMostRecentPurchases(Long userId) {
         Pageable pageable = PageRequest.of(0, 1);
         List<Purchase> purchases = purchaseRepository.findRecentPurchasesByUserId(userId, pageable);
         return purchases.stream()
                 .map(purchase -> {
-                    List<PurchaseProductDto> purchaseProductDtos = purchase.getPurchaseProducts().stream()
-                            .map(purchaseProduct -> new PurchaseProductDto(
+                    List<PurchaseProductWithImageDto> purchaseProductDtos = purchase.getPurchaseProducts().stream()
+                            .map(purchaseProduct -> new PurchaseProductWithImageDto(
                                     purchaseProduct.getProduct().getProductName(),
                                     purchaseProduct.getCount(),
                                     purchaseProduct.getTotalPrice(),
@@ -95,12 +122,36 @@ public class PurchaseService {
 
                     double totalPrice = calculateTotalPrice(List.of(purchase));
 
-                    return new PurchaseResponseDto(
+                    return new PurchaseResponseWithImageDto(
                             purchase.getId(),
                             purchase.getPurchaseDate(),
                             purchaseProductDtos,
                             totalPrice
                     );
                 }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Purchase savePurchase(Long userId, PurchaseRequestDto purchaseRequestDto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
+        Purchase purchase = new Purchase();
+        purchase.setUser(user);
+        purchase.setPurchaseDate(LocalDate.now());
+
+        List<PurchaseProduct> purchaseProducts = purchaseRequestDto.getPurchaseProduct().stream().map(dto -> {
+            PurchaseProduct purchaseProduct = new PurchaseProduct();
+            Product product = productRepository.findByProductName(dto.getProductName());
+            if (product == null) {
+                throw new CustomException(ErrorType.NOT_FOUND_PRODUCT);
+            }
+            purchaseProduct.setPurchase(purchase);
+            purchaseProduct.setProduct(product);
+            purchaseProduct.setCount(dto.getCount());
+            return purchaseProduct;
+        }).toList();
+
+        purchase.setPurchaseProducts(purchaseProducts);
+        return purchaseRepository.save(purchase);
+
     }
 }

@@ -18,7 +18,8 @@ public enum ErrorType {
     NOT_MATCHING_INFO(401, "아이디 또는 비밀번호를 잘못 입력했습니다."),
     NO_TOKEN(401, "토큰이 없습니다."),
     NOT_VALID_TOKEN(401, "토큰이 유효하지 않습니다."),
-    PSW_DIFFERENT(401, "현재 비밀번호가 다릅니다.");
+    PSW_DIFFERENT(401, "현재 비밀번호가 다릅니다."),
+    NOT_FOUND_PRODUCT(400,"없는 상품입니다.");
     //---------------------------------------------------------------------
 
     private int code;

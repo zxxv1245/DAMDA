@@ -13,7 +13,6 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PurchaseProduct {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchaseProductId")

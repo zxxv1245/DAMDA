@@ -5,7 +5,9 @@ import back.shoppingMart.common.response.MsgType;
 import back.shoppingMart.common.response.ResponseEntityDto;
 import back.shoppingMart.common.response.ResponseUtils;
 import back.shoppingMart.purchase.dto.PurchaseProductDto;
+import back.shoppingMart.purchase.dto.PurchaseRequestDto;
 import back.shoppingMart.purchase.dto.PurchaseResponseDto;
+import back.shoppingMart.purchase.dto.PurchaseResponseWithImageDto;
 import back.shoppingMart.purchase.entity.Purchase;
 import back.shoppingMart.purchase.sevice.PurchaseService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/myPurchase")
 public class PurchaseController {
 
     private final PurchaseService purchaseService;
@@ -27,35 +29,15 @@ public class PurchaseController {
 
 
     // 해당 날짜 구매 조회
-    @GetMapping("/myPurchase/{purchase_date}")
+    @GetMapping("/{purchase_date}")
     public ResponseEntityDto<List<PurchaseResponseDto>> getPurchasesByDate(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                                            @PathVariable("purchase_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate purchaseDate) {
-
-        List<Purchase> purchases = purchaseService.getPurchasesByUserAndDate(principalDetails.getUser().getId(), purchaseDate);
-
-        List<PurchaseResponseDto> responseDtos = purchases.stream().map(purchase -> {
-            List<PurchaseProductDto> purchaseProductDtos = purchase.getPurchaseProducts().stream()
-                    .map(purchaseProduct -> new PurchaseProductDto(
-                            purchaseProduct.getProduct().getProductName(),
-                            purchaseProduct.getCount(),
-                            purchaseProduct.getTotalPrice()))
-                    .collect(Collectors.toList());
-
-            double totalPrice = purchaseService.calculateTotalPrice(List.of(purchase));
-
-            return new PurchaseResponseDto(
-                    purchase.getId(),
-                    purchase.getPurchaseDate(),
-                    purchaseProductDtos,
-                    totalPrice
-            );
-        }).collect(Collectors.toList());
-
+        List<PurchaseResponseDto> responseDtos = purchaseService.getPurchasesByUserAndDate(principalDetails.getUser().getId(), purchaseDate);
         return ResponseUtils.ok(responseDtos, MsgType.SEARCH_SUCCESSFULLY);
     }
 
     // 해당 월 사용한 총 금액 조회
-    @GetMapping("/myPurchase/{purchase_year}/{purchase_month}")
+    @GetMapping("/{purchase_year}/{purchase_month}")
     public ResponseEntityDto<Double> getTotalPriceByMonth(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                        @PathVariable("purchase_year") int year,
                                        @PathVariable("purchase_month") int month) {
@@ -65,7 +47,7 @@ public class PurchaseController {
     }
 
     // 해당 월 결제한 일자 조회
-    @GetMapping("/myPurchase/{purchase_year}/{purchase_month}/dates")
+    @GetMapping("/{purchase_year}/{purchase_month}/dates")
     public ResponseEntityDto<List<LocalDate>> getPurchaseDatesByMonth(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                    @PathVariable("purchase_year") int year,
                                                    @PathVariable("purchase_month") int month) {
@@ -74,16 +56,23 @@ public class PurchaseController {
         return ResponseUtils.ok(purchaseDates, MsgType.SEARCH_SUCCESSFULLY);
     }
 
-    @GetMapping("/myPurchase/allPurchases")
+    @GetMapping("/allPurchases")
     public ResponseEntityDto<List<PurchaseResponseDto>> getAllPurchase(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         List<PurchaseResponseDto> recentPurchase = purchaseService.getAllPurchases(principalDetails.getUser().getId());
         return ResponseUtils.ok(recentPurchase, MsgType.SEARCH_SUCCESSFULLY);
     }
 
-    @GetMapping("/myPurchase/recent")
-    public ResponseEntityDto<List<PurchaseResponseDto>> getRecentPurchase(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        List<PurchaseResponseDto> recentPurchase = purchaseService.getMostRecentPurchases(principalDetails.getUser().getId());
+    @GetMapping("/recent")
+    public ResponseEntityDto<List<PurchaseResponseWithImageDto>> getRecentPurchase(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<PurchaseResponseWithImageDto> recentPurchase = purchaseService.getMostRecentPurchases(principalDetails.getUser().getId());
         return ResponseUtils.ok(recentPurchase, MsgType.SEARCH_SUCCESSFULLY);
+    }
+
+    @PostMapping("/savePurchase")
+    public ResponseEntityDto<PurchaseRequestDto> savePurchase(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                               @RequestBody PurchaseRequestDto purchaseRequestDto) {
+        purchaseService.savePurchase(principalDetails.getUser().getId(), purchaseRequestDto);
+        return ResponseUtils.ok(purchaseRequestDto, MsgType.PURCHASE_SAVED);
     }
 
 
