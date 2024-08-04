@@ -17,6 +17,7 @@ spring:
     password: spray11C103
 
 
+
   jpa:
     hibernate:
       ddl-auto: create #create update none
