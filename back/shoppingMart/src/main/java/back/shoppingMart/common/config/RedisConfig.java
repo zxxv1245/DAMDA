@@ -49,6 +49,7 @@ public class RedisConfig {
             redisTemplate.setValueSerializer(new StringRedisSerializer());
             redisTemplate.setConnectionFactory(redisConnectionFactory());
 
+
             return redisTemplate;
     }
 }
