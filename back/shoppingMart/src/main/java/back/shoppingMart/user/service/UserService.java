@@ -79,6 +79,7 @@ public class UserService {
         }
     }
 
+
     // Id로 유저 정보를 조회
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
