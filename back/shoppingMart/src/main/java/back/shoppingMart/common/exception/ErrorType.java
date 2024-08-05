@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public enum ErrorType {
 
-    //----------------------- 유저 관련 부분 ------------------------------
+    //-----------------------------------------------------
     CONTENT_IS_NULL(400, "입력되지 않은 정보가 있습니다."),
-    DUPLICATED_USERID(400, "중복된 아이디입니다."),
+    DUPLICATED_EMAIL(400, "중복된 이메일입니다."),
     NO_EMAIL_INPUT(400, "이메일을 입력하지 않았습니다."),
     NO_PSW_INPUT(400, "비밀번호를 입력하지 않았습니다."),
     NO_USERNAME_INPUT(400, "닉네임을 입력하지 않았습니다."),
@@ -19,7 +19,10 @@ public enum ErrorType {
     NO_TOKEN(401, "토큰이 없습니다."),
     NOT_VALID_TOKEN(401, "토큰이 유효하지 않습니다."),
     PSW_DIFFERENT(401, "현재 비밀번호가 다릅니다."),
-    NOT_FOUND_PRODUCT(400,"없는 상품입니다.");
+    UNABLE_TO_SEND_EMAIL(500, "이메일 전송을 실패했습니다."),
+    NOT_FOUND_PRODUCT(400,"없는 상품입니다."),
+    NO_SUCH_ALGORITHM(500, "알 수 없는 알고리즘입니다.");
+
     //---------------------------------------------------------------------
 
     private int code;

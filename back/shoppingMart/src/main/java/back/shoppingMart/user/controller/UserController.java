@@ -1,5 +1,7 @@
 package back.shoppingMart.user.controller;
 import back.shoppingMart.common.auth.PrincipalDetails;
+import back.shoppingMart.common.mail.CustomEmail;
+import back.shoppingMart.common.mail.EmailVerificationResult;
 import back.shoppingMart.common.response.MsgType;
 import back.shoppingMart.common.response.ResponseEntityDto;
 import back.shoppingMart.common.response.ResponseUtils;
@@ -7,6 +9,7 @@ import back.shoppingMart.user.dto.UserDto;
 import back.shoppingMart.user.service.UserService;
 import back.shoppingMart.user.dto.ChangePasswordDto;
 import back.shoppingMart.user.entity.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -63,6 +66,20 @@ public class UserController {
     public ResponseEntityDto<Boolean> checkEmailDuplicate(@PathVariable("email") String email) {
         Boolean emailExist = userService.checkIfEmailExists(email);
         return ResponseUtils.ok(emailExist, MsgType.DUPLICATION_TEST_COMPLETE);
+    }
+
+    @PostMapping("/emails/verification-requests")
+    public ResponseEntityDto<Void> sendMessage(@RequestParam("email") @Valid @CustomEmail String email) {
+        userService.sendCodeToEmail(email);
+        return ResponseUtils.ok(MsgType.EMAIL_SUCCESSFULLY_SENT);
+    }
+
+    @GetMapping("/emails/verifications")
+    public ResponseEntityDto<EmailVerificationResult> verificationEmail(@RequestParam("email") @Valid @CustomEmail String email,
+                                            @RequestParam("code") String authCode) {
+        EmailVerificationResult response = userService.verifiedCode(email, authCode);
+
+        return ResponseUtils.ok(response, MsgType.EMAIL_SUCCESSFULLY_SENT);
     }
 
 }

@@ -15,7 +15,27 @@ spring:
     url: jdbc:mysql://localhost:3306/shopping?serverTimezone=Asia/Seoul
     username: c103
     password: spray11C103
-
+  redis:
+    host: i11c103.p.ssafy.io
+    port: 6379
+    password: "sprayC103"
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gwpeter1000@gmail.com
+    password: ymkouxljrrdfigir
+    properties:
+      mail:
+        smtp:
+          auth: true
+          debug: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 1800000
 
 
   jpa:
@@ -25,3 +45,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
 
+logging:
+  level:
+    root: INFO
+    back.shoppingMart: DEBUG  # 패키지 또는 클래스 레벨로 설정
