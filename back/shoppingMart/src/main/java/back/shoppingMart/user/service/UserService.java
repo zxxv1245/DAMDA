@@ -101,7 +101,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
     // 비밀번호 변경 로직
     public void changePassword(Long id, ChangePasswordDto changePasswordDto) {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
