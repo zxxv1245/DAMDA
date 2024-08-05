@@ -2,19 +2,22 @@ import { colors } from "../constants/color";
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, Text, View, FlatList } from 'react-native';
 import Calendar from "./Calendar";
-import { getMonthYearDetails, getNewMonthYear, getDateWithSeparator, formatDateWithDay } from "../utils/date";
+import { getMonthYearDetails, getNewMonthYear, getDateWithSeparator, formatDateWithDay, MonthYear } from "../utils/date";
 import { fetchPurchases, fetchPurchaseDates, PurchaseResponseDto } from '../api/purchaseApi';
+import YearSelector from "./YearSelector";
+import useModal from "../hooks/useModal";
 
-interface AccountBookProps {}
+interface AccountBookProps {
+}
 
-function AccountBook({ }: AccountBookProps) {
+function AccountBook({onChangeMonth }: AccountBookProps) {
   const currentMonthYear = getMonthYearDetails(new Date());
   const [monthYear, setMonthYear] = useState(currentMonthYear);
   const [selectedDate, setSelectedDate] = useState(0);
   const [purchases, setPurchases] = useState<PurchaseResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [purchaseDates, setPurchaseDates] = useState<string[]>([]);
-
+  
   const handlePressDate = (date: number) => {
     setSelectedDate(date);
   }
@@ -25,6 +28,12 @@ function AccountBook({ }: AccountBookProps) {
     setPurchases([]);
   };
 
+  const handleChangeYear = (selectYear: number) => {
+    onChangeMonth((selectYear - year) * 12);
+    yearSelector.hide();
+  };
+
+
   useEffect(() => {
     const fetchPurchaseData = async () => {
       if (selectedDate > 0) {
@@ -33,9 +42,8 @@ function AccountBook({ }: AccountBookProps) {
           const purchaseDate = getDateWithSeparator(new Date(monthYear.year, monthYear.month - 1, selectedDate), '-');
           const data = await fetchPurchases(purchaseDate);
           setPurchases(data);
-        } catch (error) {
-          console.error('Error fetching purchase data:', error);
-        } finally {
+        } 
+        finally {
           setIsLoading(false);
         }
       }
@@ -50,9 +58,8 @@ function AccountBook({ }: AccountBookProps) {
       try {
         const dates = await fetchPurchaseDates(monthYear.year, monthYear.month);
         setPurchaseDates(dates);
-      } catch (error) {
-        console.error('Error fetching purchase dates:', error);
-      } finally {
+      } 
+      finally {
         setIsLoading(false);
       }
     };
@@ -67,7 +74,7 @@ function AccountBook({ }: AccountBookProps) {
         onChangeMonth={handleUpdateMonth}
         selectedDate={selectedDate}
         onPressDate={handlePressDate}
-        purchaseDates={purchaseDates} // 추가된 부분
+        purchaseDates={purchaseDates}
       />
       {selectedDate > 0 && (
         <View style={styles.listContainer}>
@@ -88,7 +95,7 @@ function AccountBook({ }: AccountBookProps) {
                     <View style={styles.productItem} key={`${item.id}-${product.productName}-${index}`}>
                       <Text style={styles.productName}>{product.productName} {product.count}개</Text>
                       <Text style={styles.productPrice}>{product.totalPrice.toLocaleString()}원</Text>
-                      <Text style={styles.productStore}>롯데마트 철산점</Text>
+                      <Text style={styles.productStore}>롯데마트 첨단점</Text>
                     </View>
                   ))}
                 </View>
@@ -98,6 +105,7 @@ function AccountBook({ }: AccountBookProps) {
           )}
         </View>
       )}
+      
     </SafeAreaView>
   );
 }

@@ -6,8 +6,6 @@ import { stackNavigations } from '../constants';
 import { StackParamList } from '../Navigations/StackNavigator';
 
 const axiosInstance = axios.create({
-  // baseURL: 'http://192.168.100.38:8080',
-  // baseURL: 'http://192.168.25.7:8080',
   baseURL: 'https://i11c103.p.ssafy.io',
   withCredentials: true,
 });

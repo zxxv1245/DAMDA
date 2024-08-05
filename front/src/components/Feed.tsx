@@ -26,9 +26,9 @@ function Feed() {
       try {
         const year = new Date().getFullYear();
         const month = new Date().getMonth() + 1;
-        const price = await fetchTotalPriceByMonth(year, month);
         console.log(isLogin);
         if (isLogin) {
+          const price = await fetchTotalPriceByMonth(year, month);
           setTotalPrice(price);
         }
         
@@ -49,7 +49,7 @@ function Feed() {
           <TouchableOpacity style={styles.header} onPress={() => navigation.navigate('가계부')}>
             <Text style={styles.title}>이번 달 사용 금액</Text>
             {loading ? (
-              <ActivityIndicator size="large" color={colors.PINK_500} />
+              <ActivityIndicator size="large" color={colors.GRAY_100} />
             ) : (
               <Text style={styles.amount}>{totalPrice?.toLocaleString()}원</Text>
             )}
@@ -70,7 +70,7 @@ function Feed() {
         </>
       ) : (
         <View style={styles.loggedOutContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate(stackNavigations.AUTH_HOME)}>
+          <TouchableOpacity onPress={() => navigation.navigate(stackNavigations.LOGIN)}>
             <Text style={styles.loggedOutText}>로그인하고 이번 달 사용 금액을 조회하세요.</Text>
           </TouchableOpacity>
         </View>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    backgroundColor: colors.GRAY_200,
+    backgroundColor: colors.BLUE_300,
     paddingVertical: 20,
     paddingHorizontal: 15,
     borderRadius: 15,
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start', 
   },
   largeButton: {
-    height: 170,
+    height: 130,
   },
   buttonText: {
     fontSize: 16,

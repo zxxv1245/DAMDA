@@ -1,13 +1,15 @@
+// TabNavigator.tsx
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, TouchableOpacity, View, Modal, Text, StyleSheet } from 'react-native';
-import FeedStackNavigator from './FeedStackNavigator'; // FeedStackNavigator를 임포트합니다.
+import FeedStackNavigator from './FeedStackNavigator'; 
 import AccountBook from '../components/AccountBook';
 import QRCodeScannerScreen from '../components/QRCodeScannerScreen';
 import MyPage from '../components/MyPage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { colors } from '../constants/color'; // colors를 임포트합니다.
-import NotificationsModal from '../components/NotificationsModal'; // 새로운 알림 모달 컴포넌트
+import { colors } from '../constants/color'; 
+import NotificationsModal from '../components/NotificationsModal'; 
+import useAuth from '../hooks/queries/useAuth';
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
@@ -16,7 +18,7 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigator() {
   const [modalVisible, setModalVisible] = React.useState(false);
-
+  const {isLogin} = useAuth();
   return (
     <>
       <Tab.Navigator
@@ -29,13 +31,13 @@ function TabNavigator() {
           headerTitle: () => (
             <Image
               source={logo}
-              style={{ width: 100, height: 40 }} // 이미지 크기를 조정합니다.
+              style={{ width: 100, height: 40 }} 
               resizeMode="contain"
             />
           ),
-          headerTitleAlign: 'center', // 제목을 중앙 정렬합니다.
+          headerTitleAlign: 'flex-start',
           headerRight: () => (
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
+            isLogin && <TouchableOpacity onPress={() => setModalVisible(true)}>
               <Ionicons name="notifications-outline" size={25} color={colors.BLACK} style={{ marginRight: 15 }} />
             </TouchableOpacity>
           ),
@@ -55,10 +57,10 @@ function TabNavigator() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: colors.BLACK,
+          tabBarActiveTintColor: colors.BLUE_300,
           tabBarInactiveTintColor: colors.GRAY_300,
           tabBarStyle: {
-            height: 70, // 탭 바 높이를 증가시켜 위아래 간격을 넓힙니다.
+            height: 70, 
             display: 'flex',
           },
           tabBarItemStyle: {

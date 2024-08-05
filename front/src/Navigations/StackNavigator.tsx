@@ -12,10 +12,13 @@ import AccountBook from '../components/AccountBook';
 import QRCodeScannerScreen from '../components/QRCodeScannerScreen';
 import MapScreen from '../components/MapScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import useAuth from '../hooks/queries/useAuth';
+import MyInfo from '../components/MyInfo';
+import Login from '../components/Login';
+import ChangePassword from '../components/ChangePassword';
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
-
 const Stack = createStackNavigator();
 
 export type StackParamList = {
@@ -27,9 +30,12 @@ export type StackParamList = {
   [stackNavigations.ACCOUNTBOOK]: undefined;
   [stackNavigations.MAPSCREEN]: undefined;
   [stackNavigations.QRCODESCANNERSCREEN]: undefined;
+  [stackNavigations.MYINFO]: undefined;
+  [stackNavigations.CHANGE_PASSWORD]: undefined;
 };
 
 function StackNavigator() {
+  const {isLogin} = useAuth();
   return (
     <Stack.Navigator
       screenOptions={({ navigation }) => ({
@@ -38,16 +44,16 @@ function StackNavigator() {
           backgroundColor: 'white', 
           shadowColor: 'gray',
         },
-        headerTitle: () => (
-          <Image
-            source={logo}
-            style={{ width: 100, height: 40 }} // 이미지 크기를 조정합니다.
-            resizeMode="contain"
-          />
-        ),
-        headerTitleAlign: 'center', // 제목을 중앙 정렬합니다.
+        // headerTitle: () => (
+        //   <Image
+        //     source={logo}
+        //     style={{ width: 100, height: 40 }}
+        //     resizeMode="contain"
+        //   />
+        // ),
+        headerTitleAlign: 'center',
         headerRight: () => (
-          <TouchableOpacity onPress={() => { /* 알림 모달을 여는 로직을 여기에 추가 */ }}>
+          isLogin && <TouchableOpacity onPress={() => { /* 알림 모달을 여는 로직을 여기에 추가 */ }}>
             <Ionicons name="notifications-outline" size={24} color="black" style={{ marginRight: 15 }} />
           </TouchableOpacity>
         ),
@@ -63,24 +69,40 @@ function StackNavigator() {
         component={AuthHome}
       />
       <Stack.Screen
+        name={stackNavigations.LOGIN}
+        component={Login}
+      />
+      <Stack.Screen
         name={stackNavigations.SIGNUP}
         component={Signup}
       />
       <Stack.Screen
         name={stackNavigations.FEED}
         component={Feed}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={stackNavigations.ACCOUNTBOOK}
         component={AccountBook}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={stackNavigations.QRCODESCANNERSCREEN}
         component={QRCodeScannerScreen}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={stackNavigations.MAPSCREEN}
         component={MapScreen}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name={stackNavigations.MYINFO}
+        component={MyInfo}
+      />
+      <Stack.Screen
+        name={stackNavigations.CHANGE_PASSWORD}
+        component={ChangePassword}
       />
     </Stack.Navigator>
   );

@@ -1,7 +1,9 @@
+// FeedStackNavigator.tsx
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Feed from '../components/Feed';
 import QRCodeScannerScreen from '../components/QRCodeScannerScreen';
+import MyInfo from '../components/MyInfo';
 
 const Stack = createStackNavigator();
 
