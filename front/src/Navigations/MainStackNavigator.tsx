@@ -8,7 +8,7 @@ import QRCodeScannerScreen from '../components/QRCodeScannerScreen';
 export type MainStackParamList = {
   [stackNavigations.FEED]: undefined;
   [stackNavigations.ACCOUNTBOOK]: undefined;
-  [stackNavigations.QRCODESCANNERSCREEN]: undefined; // QR 스캔 페이지 타입 추가
+  [stackNavigations.QRCODESCANNERSCREEN]: undefined;
 };
 
 function MainStackNavigator() {

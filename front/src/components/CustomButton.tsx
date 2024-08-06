@@ -1,3 +1,5 @@
+// CustomButton.tsx
+
 import React from 'react';
 import {
   StyleSheet,
@@ -6,6 +8,7 @@ import {
   PressableProps,
   Dimensions,
 } from 'react-native';
+import { colors } from '../constants/color';
 
 interface CustomButtonProps extends PressableProps {
   label: string;
@@ -33,17 +36,17 @@ function CustomButton({
 
 const styles = StyleSheet.create({
   container : {
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     paddingVertical: 10,
-    marginVertical: 5, // 추가: 세로 마진
-    borderRadius: 4,
+    marginVertical: 5,
+    borderRadius: 20,
     justifyContent : 'center'
   },
   filled : {
-    backgroundColor : '#C63B64',
+    backgroundColor : colors.BLUE_300,
   },
   outlined : {
-    borderColor : '#C63B64',
+    borderColor : colors.BLUE_300,
     borderWidth : 1,
   },
   large : {
@@ -63,10 +66,10 @@ const styles = StyleSheet.create({
     fontWeight : "700",
   },
   filledText : {
-    color : "white"
+    color : colors.BLACK
   },
   outlinedText : {
-    color : '#C63B64'
+    color : colors.BLACK
   }
 });
 

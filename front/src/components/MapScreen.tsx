@@ -3,7 +3,8 @@ import { View, StyleSheet, PermissionsAndroid, Platform } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-import Config from 'react-native-config'; // 환경변수로 Google API 키를 관리
+import { colors } from '../constants/color';
+
 
 async function requestLocationPermission() {
   try {
@@ -94,6 +95,7 @@ const MapScreen: React.FC = () => {
             }}
             title={marker.name}
             description={marker.vicinity}
+            pinColor={colors.BLUE_200}
           />
         ))}
       </MapView>

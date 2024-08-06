@@ -1,3 +1,4 @@
+// NotificationsModal.tsx
 import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList } from 'react-native';
 import { colors } from '../constants/color';

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// MyPage.tsx
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Switch, Modal, Image, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import useAuth from '../hooks/queries/useAuth';
@@ -6,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { removeEncryptedStorage } from '../utils/encryptStorage';
 import { stackNavigations } from '../constants';
 import { colors } from '../constants/color';
+import { getUserInfo } from '../api/auth';
 
 function MyPage() {
   const { isLogin, logout } = useAuth();
@@ -13,13 +15,30 @@ function MyPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [username, setUsername] = useState<string | null>(null); // State for username
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userInfo = await getUserInfo();
+        console.log(userInfo.data)
+        setUsername(userInfo.data.username);
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+      }
+    };
+
+    if (isLogin) {
+      fetchUserInfo();
+    }
+  }, [isLogin]);
 
   const handleLogout = async () => {
     await removeEncryptedStorage('accessToken');
     logout();
     navigation.reset({
       index: 0,
-      routes: [{ name: 'FeedStack' }],
+      routes: [{ name: stackNavigations.MAIN }],
     });
   };
 
@@ -39,6 +58,10 @@ function MyPage() {
     setIsModalVisible(false);
   };
 
+  const handleMyInfoPress = () => {
+    navigation.navigate(stackNavigations.MYINFO);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
@@ -46,7 +69,7 @@ function MyPage() {
         <View style={styles.profileTextContainer}>
           {isLogin ? (
             <>
-              <Text style={styles.username}>사용자 이름</Text>
+              <Text style={styles.username}>{username || '닉네임'}</Text>
               <TouchableOpacity style={styles.authButton} onPress={handleLogout}>
                 <Icon name="log-out-outline" size={14} color={colors.BLACK} style={styles.authButtonIcon} />
                 <Text style={styles.authButtonText}>로그아웃</Text>
@@ -55,7 +78,7 @@ function MyPage() {
           ) : (
             <>
               <Text style={styles.loginPrompt}>로그인하고 시작하기</Text>
-              <TouchableOpacity style={styles.authButton} onPress={() => navigation.navigate(stackNavigations.AUTH_HOME)}>
+              <TouchableOpacity style={styles.authButton} onPress={() => navigation.navigate(stackNavigations.LOGIN)}>
                 <Icon name="log-in-outline" size={14} color={colors.BLACK} style={styles.authButtonIcon} />
                 <Text style={styles.authButtonText}>로그인</Text>
               </TouchableOpacity>
@@ -67,17 +90,17 @@ function MyPage() {
       <View style={styles.menuContainer}>
         <View style={styles.rowMenu}>
           <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
-            <Icon name="wallet-outline" size={24} color="#000" />
+            <Icon name="wallet-outline" size={24} color={colors.BLUE_300} />
             <Text style={styles.menuText}>나의 지갑</Text>
           </TouchableOpacity>
           <View style={styles.separator} />
           <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
-            <Icon name="information-circle-outline" size={24} color="#000" />
+            <Icon name="phone-portrait" size={24} color={colors.BLUE_300} />
             <Text style={styles.menuText}>서비스 안내</Text>
           </TouchableOpacity>
           <View style={styles.separator} />
           <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
-            <Icon name="headset-outline" size={24} color="#000" />
+            <Icon name="headset-outline" size={24} color={colors.BLUE_300} />
             <Text style={styles.menuText}>고객 센터</Text>
           </TouchableOpacity>
         </View>
@@ -87,16 +110,26 @@ function MyPage() {
               <Icon name="moon-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>다크 모드</Text>
             </View>
-            <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
+            <Switch
+              value={isDarkMode}
+              onValueChange={toggleDarkMode}
+              trackColor={{ false: colors.GRAY_300, true: colors.BLUE_300 }}
+              thumbColor={isDarkMode ? colors.BLUE_300 : '#f4f3f4'}
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={toggleNotification}>
             <View style={styles.verticalMenuTextContainer}>
               <Icon name="notifications-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>알림 설정</Text>
             </View>
-            <Switch value={isNotificationEnabled} onValueChange={toggleNotification} />
+            <Switch
+              value={isNotificationEnabled}
+              onValueChange={toggleNotification}
+              trackColor={{ false: colors.GRAY_200, true: colors.BLUE_300 }}
+              thumbColor={isNotificationEnabled ? colors.BLUE_300 : '#f4f3f4'}
+            />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.verticalMenuItem} onPress={() => {}}>
+          <TouchableOpacity style={styles.verticalMenuItem} onPress={handleMyInfoPress}>
             <View style={styles.verticalMenuTextContainer}>
               <Icon name="person-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>나의 정보</Text>
@@ -205,7 +238,6 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   verticalMenu: {
-    backgroundColor: colors.GRAY_200,
     borderRadius: 10,
     paddingVertical: 10,
   },
