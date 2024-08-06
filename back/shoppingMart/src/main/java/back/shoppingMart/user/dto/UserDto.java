@@ -19,7 +19,6 @@ public class UserDto {
     private String profileImg;
     private Boolean isAdult;
 
-
     @Builder
     public UserDto(Long id, String username, String password, String email, String roles, LocalDate birthDate, String provider, String providerId, String profileImg, Boolean isAdult) {
         this.id = id;
