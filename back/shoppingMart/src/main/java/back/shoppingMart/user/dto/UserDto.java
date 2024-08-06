@@ -35,6 +35,7 @@ public class UserDto {
     }
 
 
+
     public static UserDto of(String username) {
         return new UserDto(null, username, null, null,null,null,null, null, null, null);
     }
