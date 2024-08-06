@@ -29,13 +29,15 @@ public class User {
     private LocalDate birthDate;
     private Boolean isAdult;
     private String provider;
+    private String providerId;
+    private String profileImg;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Purchase> purchases = new ArrayList<>();
 
     @Builder
-    private User(Long id, String username, String password, String email, String roles, LocalDate birthDate, String provider) {
+    private User(Long id, String username, String password, String email, String roles, LocalDate birthDate, String provider, String providerId, String profileImg) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -43,7 +45,8 @@ public class User {
         this.roles = roles;
         this.birthDate = birthDate;
         this.provider = provider;
-
+        this.providerId = providerId;
+        this.profileImg = profileImg;
     }
 
     public User() {

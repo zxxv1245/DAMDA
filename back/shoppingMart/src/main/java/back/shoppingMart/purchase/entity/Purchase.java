@@ -28,7 +28,7 @@ public class Purchase {
 
     private LocalDate purchaseDate;
 
-    private double totalPrice = 0;
+    private Integer totalPrice = 0;
 
     // 연관 관계 메서드
     public void setUser(User user) {
@@ -39,7 +39,7 @@ public class Purchase {
     public void calculateAndSetTotalPrice() {
         if (totalPrice == 0) {
             this.totalPrice = purchaseProducts.stream()
-                    .mapToDouble(PurchaseProduct::getTotalPrice)
+                    .mapToInt(PurchaseProduct::getTotalPrice)
                     .sum();
         }
     }

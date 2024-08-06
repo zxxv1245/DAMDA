@@ -7,7 +7,7 @@ public class ProductDto {
     private Long id;
     private String serialNumber;
     private String productName;
-    private Float productPrice;
+    private Integer productPrice;
     private String productLocation;
     private Boolean productAdult;
     private String productDescription;
@@ -20,7 +20,7 @@ public class ProductDto {
     }
 
     // 모든 필드를 포함하는 생성자
-    public ProductDto(Long id, String serialNumber, String productName, Float productPrice, String productLocation, Boolean productAdult, String productDescription, String productImage, String detectName, Integer productBarcode) {
+    public ProductDto(Long id, String serialNumber, String productName, Integer productPrice, String productLocation, Boolean productAdult, String productDescription, String productImage, String detectName, Integer productBarcode) {
         this.id = id;
         this.serialNumber = serialNumber;
         this.productName = productName;

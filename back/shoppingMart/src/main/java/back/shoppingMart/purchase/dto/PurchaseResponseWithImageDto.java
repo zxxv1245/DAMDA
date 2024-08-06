@@ -10,9 +10,9 @@ public class PurchaseResponseWithImageDto {
     private Long purchaseId;
     private LocalDate purchaseDate;
     private List<PurchaseProductWithImageDto> purchaseProducts;
-    private double totalPrice;
+    private Integer totalPrice;
 
-    public PurchaseResponseWithImageDto(Long purchaseId, LocalDate purchaseDate, List<PurchaseProductWithImageDto> purchaseProducts, double totalPrice) {
+    public PurchaseResponseWithImageDto(Long purchaseId, LocalDate purchaseDate, List<PurchaseProductWithImageDto> purchaseProducts, Integer totalPrice) {
         this.purchaseId = purchaseId;
         this.purchaseDate = purchaseDate;
         this.purchaseProducts = purchaseProducts;

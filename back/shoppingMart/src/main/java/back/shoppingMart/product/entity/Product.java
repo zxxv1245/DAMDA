@@ -17,7 +17,7 @@ public class Product {
 
     private String serialNumber;
     private String productName;
-    private Float productPrice;
+    private Integer productPrice;
     private String productLocation;
     private Boolean productAdult;
     private String productDescription;

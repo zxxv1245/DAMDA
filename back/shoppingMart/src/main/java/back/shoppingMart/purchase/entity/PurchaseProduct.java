@@ -29,13 +29,13 @@ public class PurchaseProduct {
     private Purchase purchase;
 
 
-    private int count;
+    private Integer count;
 
-    private double singlePrice;
+    private Integer singlePrice;
 
-    public double getTotalPrice() {
-        double totalPrice = 0.0;
-        double price = product.getProductPrice();
+    public Integer getTotalPrice() {
+        double totalPrice = 0;
+        Integer price = product.getProductPrice();
         DiscountType discount = product.getDiscount().getDiscountType();
 
         switch (discount) {
@@ -54,12 +54,13 @@ public class PurchaseProduct {
                 break;
         }
 
-        return totalPrice;
+        int result = (int) totalPrice;
+        return result;
     }
 
-    public double calculateSinglePrice() {
-        double singlePrice = 0.0;
-        double price = product.getProductPrice();
+    public Integer calculateSinglePrice() {
+        double singlePrice = 0;
+        Integer price = product.getProductPrice();
         DiscountType discount = product.getDiscount().getDiscountType();
 
         switch (discount) {
@@ -77,8 +78,8 @@ public class PurchaseProduct {
                 singlePrice = price;
                 break;
         }
-
-        return singlePrice;
+        int result = (int) singlePrice;
+        return result;
     }
 
 

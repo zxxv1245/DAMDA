@@ -68,6 +68,7 @@ public class UserController {
         return ResponseUtils.ok(emailExist, MsgType.DUPLICATION_TEST_COMPLETE);
     }
 
+
     @PostMapping("/emails/verification-requests")
     public ResponseEntityDto<Void> sendMessage(@RequestParam("email") @Valid @CustomEmail String email) {
         userService.sendCodeToEmail(email);

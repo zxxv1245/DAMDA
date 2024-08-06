@@ -13,9 +13,9 @@ public class PurchaseResponseDto {
     private Long purchaseId;
     private LocalDate purchaseDate;
     private List<PurchaseProductDto> purchaseProducts;
-    private double totalPrice;
+    private Integer totalPrice;
 
-    public PurchaseResponseDto(Long purchaseId, LocalDate purchaseDate, List<PurchaseProductDto> purchaseProducts, double totalPrice) {
+    public PurchaseResponseDto(Long purchaseId, LocalDate purchaseDate, List<PurchaseProductDto> purchaseProducts, Integer totalPrice) {
         this.purchaseId = purchaseId;
         this.purchaseDate = purchaseDate;
         this.purchaseProducts = purchaseProducts;

@@ -8,5 +8,5 @@ import java.util.List;
 public class PurchaseRequestDto {
 
     private List<PurchaseProductDto> purchaseProduct;
-    private Double totalPrice;
+    private Integer totalPrice;
 }

@@ -48,7 +48,7 @@ public class PurchaseService {
                 purchase.calculateAndSetTotalPrice();
                 purchaseRepository.save(purchase);
             }
-            double totalPrice = purchase.getTotalPrice();
+            Integer totalPrice = purchase.getTotalPrice();
 
             return new PurchaseResponseDto(
                     purchase.getId(),
@@ -65,7 +65,7 @@ public class PurchaseService {
     public double calculateTotalPrice(List<Purchase> purchases) {
         purchases.forEach(Purchase::calculateAndSetTotalPrice);
         return purchases.stream()
-                .mapToDouble(Purchase::getTotalPrice)
+                .mapToInt(Purchase::getTotalPrice)
                 .sum();
     }
 
@@ -111,7 +111,7 @@ public class PurchaseService {
                         purchaseRepository.save(purchase);
                     }
 
-                    double totalPrice = purchase.getTotalPrice();
+                    Integer totalPrice = purchase.getTotalPrice();
 
                     return new PurchaseResponseDto(
                             purchase.getId(),
@@ -142,7 +142,7 @@ public class PurchaseService {
                         purchaseRepository.save(purchase);
                     }
 
-                    double totalPrice = purchase.getTotalPrice();
+                    Integer totalPrice = purchase.getTotalPrice();
 
                     return new PurchaseResponseWithImageDto(
                             purchase.getId(),

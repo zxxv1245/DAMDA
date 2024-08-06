@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 @Data
 public class PurchaseProductDto {
     private String productName;
-    private int count;
-    private double totalPrice;
-    private double singlePrice;
+    private Integer count;
+    private Integer totalPrice;
+    private Integer singlePrice;
 
 
-    public PurchaseProductDto(String productName, int count, double totalPrice, double singlePrice) {
+    public PurchaseProductDto(String productName, Integer count, Integer totalPrice, Integer singlePrice) {
         this.productName = productName;
         this.count = count;
         this.totalPrice = totalPrice;
