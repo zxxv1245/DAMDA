@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     color: colors.GRAY_700,
   },
   passwordForm : {
-    backgroundColor : colors.BLUE_300,
+    backgroundColor : colors.BLUE_250,
   },
   pressableContainer : {
     paddingHorizontal: 10,

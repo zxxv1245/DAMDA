@@ -2,12 +2,17 @@ import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { CameraScreen } from 'react-native-camera-kit';
 import { colors } from '../constants/color';
+import { useNavigation } from '@react-navigation/native';
 
 const QRCodeScannerScreen = () => {
+  const navigation = useNavigation();
   const onSuccess = (event) => {
     const qrData = event.nativeEvent.codeStringValue;
-    console.log(qrData); // QR 코드 데이터를 콘솔에 출력
+    // console.log(qrData); // QR 코드 데이터를 콘솔에 출력
     Alert.alert('QR code found', qrData); // QR 코드 데이터로 Alert 표시
+    if (qrData) {
+      navigation.navigate('Payment', { qrData }); // QR 데이터와 함께 Payment 페이지로 이동
+    }
   };
 
   return (

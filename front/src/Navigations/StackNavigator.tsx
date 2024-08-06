@@ -16,6 +16,10 @@ import useAuth from '../hooks/queries/useAuth';
 import MyInfo from '../components/MyInfo';
 import Login from '../components/Login';
 import ChangePassword from '../components/ChangePassword';
+import ServiceCenter from '../components/ServiceCenter';
+import ServiceInformation from '../components/ServiceInformation';
+import MyCard from '../components/MyCard';
+import Payment from '../components/Payment';
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
@@ -32,6 +36,10 @@ export type StackParamList = {
   [stackNavigations.QRCODESCANNERSCREEN]: undefined;
   [stackNavigations.MYINFO]: undefined;
   [stackNavigations.CHANGE_PASSWORD]: undefined;
+  [stackNavigations.SERVICE_CENTER]: undefined;
+  [stackNavigations.SERVICE_INFORMATION]: undefined;
+  [stackNavigations.MYCARD]: undefined;
+  [stackNavigations.PAYMENT]: undefined;
 };
 
 function StackNavigator() {
@@ -103,6 +111,22 @@ function StackNavigator() {
       <Stack.Screen
         name={stackNavigations.CHANGE_PASSWORD}
         component={ChangePassword}
+      />
+      <Stack.Screen
+        name={stackNavigations.SERVICE_CENTER}
+        component={ServiceCenter}
+      />
+      <Stack.Screen
+        name={stackNavigations.SERVICE_INFORMATION}
+        component={ServiceInformation}
+      />
+      <Stack.Screen
+        name={stackNavigations.MYCARD}
+        component={MyCard}
+      />
+      <Stack.Screen
+        name={stackNavigations.PAYMENT}
+        component={Payment}
       />
     </Stack.Navigator>
   );

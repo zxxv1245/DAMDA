@@ -39,7 +39,9 @@ function useForm<T>({ initialValue }: useFormProps<T>) {
   const validate = (): boolean => {
     const newErrors: Record<string, string | undefined> = {};
 
-    if (!values.email.includes('@')) {
+    if (!values.email) {
+      newErrors.email = '이메일을 입력해주세요';
+    } else if (!values.email.includes('@')) {
       newErrors.email = '올바르지 않은 이메일 형식입니다';
     }
     if (values.password.trim() === '') {
@@ -71,7 +73,8 @@ function useForm<T>({ initialValue }: useFormProps<T>) {
         setErrors(prevErrors => ({ ...prevErrors, email: undefined }));
       }
     } catch (error) {
-      console.error('Error checking email:', error);
+      setErrors(prevErrors => ({ ...prevErrors, email: '이미 사용 중인 이메일입니다' }))
+      // console.error('Error checking email:', error);
     } finally {
       setIsEmailChecking(false);
     }

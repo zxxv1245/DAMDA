@@ -25,7 +25,7 @@ const fetchPurchases = async (purchase_date: string): Promise<PurchaseResponseDt
     });
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching purchases:', error);
+    // console.error('Error fetching purchases:', error);
     throw error;
   }
 };
@@ -40,7 +40,7 @@ const fetchPurchaseDates = async (year: number, month: number): Promise<string[]
     });
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching purchase dates:', error);
+    // console.error('Error fetching purchase dates:', error);
     throw error;
   }
 };
@@ -55,9 +55,20 @@ const fetchTotalPriceByMonth = async (year: number, month: number): Promise<numb
     });
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching total price:', error);
+    // console.error('Error fetching total price:', error);
     throw error;
   }
 };
 
-export { fetchPurchases, fetchPurchaseDates, fetchTotalPriceByMonth };
+const fetchRecentPurchases = async () => {
+  try {
+    const response = await axiosInstance.get('/api/v1/myPurchase/recent');
+    console.log('Recent purchases data:', response.data); // 콘솔에 데이터 출력
+    return response.data.data;
+  } catch (error) {
+    // console.error('Error fetching recent purchases:', error);
+    throw error;
+  }
+};
+
+export { fetchPurchases, fetchPurchaseDates, fetchTotalPriceByMonth,fetchRecentPurchases };

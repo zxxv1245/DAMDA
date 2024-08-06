@@ -1,6 +1,6 @@
 // MyPage.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Switch, Modal, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Switch, Modal, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import useAuth from '../hooks/queries/useAuth';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -61,7 +61,18 @@ function MyPage() {
   const handleMyInfoPress = () => {
     navigation.navigate(stackNavigations.MYINFO);
   };
-
+  const handleServiceCenterPress = () => {
+    navigation.navigate(stackNavigations.SERVICE_CENTER);
+  };
+  const handleServiceInformationPress = () => {
+    navigation.navigate(stackNavigations.SERVICE_INFORMATION);
+  };
+  const handleMyCardPress = () => {
+    navigation.navigate(stackNavigations.MYCARD);
+  };
+  const handlePaymentPress = () => {
+    navigation.navigate(stackNavigations.PAYMENT);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
@@ -89,17 +100,17 @@ function MyPage() {
 
       <View style={styles.menuContainer}>
         <View style={styles.rowMenu}>
-          <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+          <TouchableOpacity style={styles.menuItem} onPress={handleMyCardPress}>
             <Icon name="wallet-outline" size={24} color={colors.BLUE_300} />
             <Text style={styles.menuText}>나의 지갑</Text>
           </TouchableOpacity>
           <View style={styles.separator} />
-          <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+          <TouchableOpacity style={styles.menuItem} onPress={handleServiceInformationPress}>
             <Icon name="phone-portrait" size={24} color={colors.BLUE_300} />
             <Text style={styles.menuText}>서비스 안내</Text>
           </TouchableOpacity>
           <View style={styles.separator} />
-          <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+          <TouchableOpacity style={styles.menuItem} onPress={handleServiceCenterPress}>
             <Icon name="headset-outline" size={24} color={colors.BLUE_300} />
             <Text style={styles.menuText}>고객 센터</Text>
           </TouchableOpacity>
@@ -143,6 +154,13 @@ function MyPage() {
             </View>
             <Icon name="chevron-forward-outline" size={20} color="#000" />
           </TouchableOpacity>
+          <TouchableOpacity style={styles.verticalMenuItem} onPress={handlePaymentPress}>
+            <View style={styles.verticalMenuTextContainer}>
+              <Icon name="information-circle-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
+              <Text style={styles.verticalMenuText}>결제하기</Text>
+            </View>
+            <Icon name="chevron-forward-outline" size={20} color="#000" />
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -157,7 +175,6 @@ function MyPage() {
           <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
             <Icon name="close" size={30} color="#fff" />
           </TouchableOpacity>
-          <Image source={require('../assets/spray.png')} style={styles.modalImage} />
         </View>
       </Modal>
     </View>
@@ -167,7 +184,7 @@ function MyPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.WHITE,
   },
   profileContainer: {
     flexDirection: 'row',
@@ -187,11 +204,11 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
+    color: colors.BLACK,
   },
   loginPrompt: {
     fontSize: 18,
-    color: '#000',
+    color: colors.BLACK,
   },
   authButton: {
     flexDirection: 'row',
@@ -225,7 +242,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     width: 1,
-    backgroundColor: '#ddd',
+    backgroundColor: colors.GRAY_250,
   },
   menuItem: {
     flex: 1,
@@ -235,7 +252,7 @@ const styles = StyleSheet.create({
   menuText: {
     marginTop: 10,
     fontSize: 14,
-    color: '#000',
+    color: colors.BLACK,
   },
   verticalMenu: {
     borderRadius: 10,
@@ -248,7 +265,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: colors.GRAY_400,
   },
   verticalMenuTextContainer: {
     flexDirection: 'row',
@@ -256,7 +273,7 @@ const styles = StyleSheet.create({
   },
   verticalMenuText: {
     fontSize: 16,
-    color: '#000',
+    color: colors.BLACK,
     marginLeft: 10,
   },
   verticalMenuIcon: {
