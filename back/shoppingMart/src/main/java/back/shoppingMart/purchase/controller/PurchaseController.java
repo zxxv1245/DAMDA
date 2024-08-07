@@ -69,10 +69,10 @@ public class PurchaseController {
     }
 
     @PostMapping("/savePurchase")
-    public ResponseEntityDto<Void> savePurchase(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ResponseEntityDto<Purchase> savePurchase(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                                @RequestBody PurchaseRequestDto purchaseRequestDto) {
-        purchaseService.savePurchase(principalDetails.getUser().getId(), purchaseRequestDto);
-        return ResponseUtils.ok(MsgType.PURCHASE_SAVED);
+        Purchase purchase = purchaseService.savePurchase(principalDetails.getUser().getId(), purchaseRequestDto);
+        return ResponseUtils.ok(purchase, MsgType.PURCHASE_SAVED);
     }
 
 }

@@ -27,6 +27,7 @@ import java.util.Date;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // /login 요청을 하면 로그인 시도를 하기 위해서 실행
     @Override
@@ -63,8 +64,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     // 커스텀 로그인 설정
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, String loginUrl){
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,JwtTokenProvider jwtTokenProvider, String loginUrl){
         this.authenticationManager =authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
         setFilterProcessesUrl(loginUrl);
     }
 
@@ -76,13 +78,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        // RSA 방식이 아니라 Hash 암호 방식
-        String jwtToken = JWT.create()
-                .withSubject("로그인 토큰") // 토큰 이름
-                .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) // 토큰 만료 시간 => 현재 시간 + 10분
-                .withClaim("id", principalDetails.getUser().getId())  // 비공개 claim, 내가 넣고 싶은 value값
-                .withClaim("email", principalDetails.getUser().getEmail())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));  // 내 서버가 아는 고유의 값
+        String jwtToken = jwtTokenProvider.generate(principalDetails.getUser().getEmail(), new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME));
+//        String jwtToken = JWT.create()
+//                .withSubject("로그인 토큰") // 토큰 이름
+//                .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) // 토큰 만료 시간 => 현재 시간 + 10분
+//                .withClaim("id", principalDetails.getUser().getId())  // 비공개 claim, 내가 넣고 싶은 value값
+//                .withClaim("email", principalDetails.getUser().getEmail())
+//                .sign(Algorithm.HMAC512(JwtProperties.SECRET));  // 내 서버가 아는 고유의 값
 
         // 사용자한테 응답할 response 헤더에
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);

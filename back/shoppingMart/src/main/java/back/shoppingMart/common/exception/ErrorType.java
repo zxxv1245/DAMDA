@@ -7,6 +7,7 @@ import lombok.Getter;
 public enum ErrorType {
 
     //-----------------------------------------------------
+    USER_NOT_FOUND(400, "유저를 찾지 못했습니다."),
     CONTENT_IS_NULL(400, "입력되지 않은 정보가 있습니다."),
     DUPLICATED_EMAIL(400, "중복된 이메일입니다."),
     NO_EMAIL_INPUT(400, "이메일을 입력하지 않았습니다."),

@@ -23,14 +23,15 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nickname;
     private String username;
     private String password;
     private String email;
     private String roles; // USER, ADMIN
     private LocalDate birthDate;
     private Boolean isAdult;
-    private String provider;
-    private String providerId;
+    private OAuthProvider oAuthProvider;
+    private String phoneNumber;
     private String profileImg;
 
     @JsonIgnore
@@ -38,15 +39,16 @@ public class User {
     private List<Purchase> purchases = new ArrayList<>();
 
     @Builder
-    private User(Long id, String username, String password, String email, String roles, LocalDate birthDate, String provider, String providerId, String profileImg) {
+    private User(Long id, String nickname, String username, String password, String email, String roles, LocalDate birthDate, OAuthProvider oAuthProvider, String phoneNumber, String profileImg) {
         this.id = id;
+        this.nickname = nickname;
         this.username = username;
         this.password = password;
         this.email = email;
         this.roles = roles;
         this.birthDate = birthDate;
-        this.provider = provider;
-        this.providerId = providerId;
+        this.oAuthProvider= oAuthProvider;
+        this.phoneNumber = phoneNumber;
         this.profileImg = profileImg;
     }
 

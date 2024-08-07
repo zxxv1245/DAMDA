@@ -50,7 +50,13 @@ public class UserService {
         if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
             throw new CustomException(ErrorType.NO_PSW_INPUT);
         }
+        if (userDto.getNickname() == null || userDto.getNickname().isEmpty()) {
+            throw new CustomException(ErrorType.NO_USERNAME_INPUT);
+        }
         if (userDto.getUsername() == null || userDto.getUsername().isEmpty()) {
+            throw new CustomException(ErrorType.NO_USERNAME_INPUT);
+        }
+        if (userDto.getPhoneNumber() == null || userDto.getPhoneNumber().isEmpty()) {
             throw new CustomException(ErrorType.NO_USERNAME_INPUT);
         }
         if (userDto.getBirthDate() == null) {
@@ -61,9 +67,11 @@ public class UserService {
         User user = new User();
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
+        user.setNickname(userDto.getNickname());
         user.setUsername(userDto.getUsername());
         user.setBirthDate(userDto.getBirthDate());
         user.setRoles("ROLE_USER");
+        user.setPhoneNumber(userDto.getPhoneNumber());
         return userRepository.save(user);
     }
 
@@ -83,16 +91,18 @@ public class UserService {
     // Id로 유저 정보를 조회
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
-        return new UserDto(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getRoles(), user.getBirthDate(), user.getProvider(), user.getProviderId(), user.getProfileImg(), user.getIsAdult());
+        return new UserDto(user.getId(), user.getNickname(), user.getUsername(), user.getPassword(), user.getEmail(), user.getRoles(), user.getBirthDate(), user.getOAuthProvider(), user.getProfileImg(), user.getPhoneNumber(), user.getIsAdult());
     }
 
     // 회원 정보 수정 로직
     public UserDto updateUser(Long id, UserDto userDto) {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
-        user.setEmail(userDto.getEmail());
+        user.setUsername(userDto.getUsername());
         user.setBirthDate(userDto.getBirthDate());
+        user.setNickname(userDto.getNickname());
+        user.setPhoneNumber(userDto.getPhoneNumber());
         User updatedUser = userRepository.save(user);
-        return new UserDto(updatedUser.getId(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getEmail(), updatedUser.getRoles(), updatedUser.getBirthDate(), updatedUser.getProvider(),user.getProviderId(), user.getProfileImg(), updatedUser.getIsAdult());
+        return new UserDto(updatedUser.getId(), updatedUser.getNickname(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getEmail(), updatedUser.getRoles(), updatedUser.getBirthDate(), updatedUser.getOAuthProvider(), user.getProfileImg(), updatedUser.getPhoneNumber(), updatedUser.getIsAdult());
     }
 
     // 회원 탈퇴 로직

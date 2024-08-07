@@ -1,5 +1,6 @@
 package back.shoppingMart.user.dto;
 
+import back.shoppingMart.user.entity.OAuthProvider;
 import back.shoppingMart.user.entity.User;
 import lombok.Builder;
 import lombok.Data;
@@ -10,35 +11,33 @@ import java.time.LocalDate;
 public class UserDto {
     private Long id;
     private String username;
+    private String nickname;
     private String password;
     private String email;
     private String roles;
     private LocalDate birthDate;
-    private String provider;
-    private String providerId;
+    private OAuthProvider oAuthProvider;
     private String profileImg;
+    private String phoneNumber;
     private Boolean isAdult;
 
     @Builder
-    public UserDto(Long id, String username, String password, String email, String roles, LocalDate birthDate, String provider, String providerId, String profileImg, Boolean isAdult) {
+    public UserDto(Long id, String username, String nickname, String password, String email, String roles, LocalDate birthDate, OAuthProvider oAuthProvider , String profileImg, String phoneNumber, Boolean isAdult) {
         this.id = id;
+        this.nickname = nickname;
         this.username = username;
         this.password = password;
         this.email = email;
         this.roles = roles;
         this.birthDate = birthDate;
-        this.provider = provider;
-        this.providerId = providerId;
+        this.oAuthProvider = oAuthProvider;
         this.profileImg = profileImg;
+        this.phoneNumber = phoneNumber;
         this.isAdult = isAdult;
 
     }
 
 
-
-    public static UserDto of(String username) {
-        return new UserDto(null, username, null, null,null,null,null, null, null, null);
-    }
 
 
 }

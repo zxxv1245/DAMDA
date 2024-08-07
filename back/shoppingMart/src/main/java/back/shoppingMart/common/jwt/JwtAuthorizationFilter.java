@@ -23,10 +23,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository,JwtTokenProvider jwtTokenProvider) {
         super(authenticationManager);
         this.userRepository = userRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
 
     }
 
@@ -49,25 +51,25 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 토큰 검증으로 통해 정상적인 사용자인지 확인
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX,"");
 
-        String email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
-                .getClaim("email").asString();
+        String email = jwtTokenProvider.extractSubject(jwtToken);
 
         // 서명이 정상적으로 됨
         if (email != null) {
             User userEntity = userRepository.findByEmail(email);
+            if (userEntity != null) {
+                // JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다
+                PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
-            // JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다
-            PrincipalDetails principalDetails = new PrincipalDetails((userEntity));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-
-            // 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-        }
-        else {
+                // 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                throw new CustomException(ErrorType.USER_NOT_FOUND);
+            }
+        } else {
             throw new CustomException(ErrorType.NOT_VALID_TOKEN);
         }
+
         chain.doFilter(request,response);
     }
 
