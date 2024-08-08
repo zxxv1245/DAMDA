@@ -1,5 +1,7 @@
 package back.shoppingMart.common.jwt;
 
+import back.shoppingMart.common.auth.AuthTokens;
+import back.shoppingMart.common.auth.AuthTokensGenerator;
 import back.shoppingMart.user.dto.LoginRequestDto;
 import back.shoppingMart.common.auth.PrincipalDetails;
 
@@ -28,6 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuthTokensGenerator authTokensGenerator;
 
     // /login 요청을 하면 로그인 시도를 하기 위해서 실행
     @Override
@@ -64,9 +67,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     // 커스텀 로그인 설정
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,JwtTokenProvider jwtTokenProvider, String loginUrl){
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,JwtTokenProvider jwtTokenProvider, AuthTokensGenerator authTokensGenerator, String loginUrl){
         this.authenticationManager =authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.authTokensGenerator = authTokensGenerator;
         setFilterProcessesUrl(loginUrl);
     }
 
@@ -77,8 +81,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("successfulAuthentication 실행됨 : 인증 완료");
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+        AuthTokens authTokens = authTokensGenerator.generate(principalDetails.getUser().getEmail());
 
-        String jwtToken = jwtTokenProvider.generate(principalDetails.getUser().getEmail(), new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME));
+
 //        String jwtToken = JWT.create()
 //                .withSubject("로그인 토큰") // 토큰 이름
 //                .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) // 토큰 만료 시간 => 현재 시간 + 10분
@@ -87,6 +92,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //                .sign(Algorithm.HMAC512(JwtProperties.SECRET));  // 내 서버가 아는 고유의 값
 
         // 사용자한테 응답할 response 헤더에
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+authTokens.getAccessToken());
     }
 }

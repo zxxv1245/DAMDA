@@ -2,6 +2,7 @@ package back.shoppingMart.common.response;
 
 
 import back.shoppingMart.common.exception.ErrorResponse;
+import org.springframework.http.HttpHeaders;
 
 public class ResponseUtils {
 
@@ -24,4 +25,11 @@ public class ResponseUtils {
                 .build();
     }
 
+    public static <T> ResponseEntityDto<T> okWithHeaders(T data, MsgType msg, HttpHeaders headers) {
+        return ResponseEntityDto.<T>builder()
+                .data(data)
+                .msg(msg.getMsg())
+                .headers(headers)
+                .build();
+    }
 }

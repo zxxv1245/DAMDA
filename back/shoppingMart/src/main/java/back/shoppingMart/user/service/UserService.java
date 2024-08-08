@@ -91,7 +91,7 @@ public class UserService {
     // Id로 유저 정보를 조회
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
-        return new UserDto(user.getId(), user.getNickname(), user.getUsername(), user.getPassword(), user.getEmail(), user.getRoles(), user.getBirthDate(), user.getOAuthProvider(), user.getProfileImg(), user.getPhoneNumber(), user.getIsAdult());
+        return new UserDto(user.getId(), user.getUsername(), user.getNickname(), user.getPassword(), user.getEmail(), user.getRoles(), user.getBirthDate(), user.getOAuthProvider(), user.getProfileImg(), user.getPhoneNumber(), user.getIsAdult());
     }
 
     // 회원 정보 수정 로직

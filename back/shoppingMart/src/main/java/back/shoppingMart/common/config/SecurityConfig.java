@@ -1,5 +1,6 @@
 package back.shoppingMart.common.config;
 
+import back.shoppingMart.common.auth.AuthTokensGenerator;
 import back.shoppingMart.common.jwt.JwtAuthenticationFilter;
 import back.shoppingMart.common.jwt.JwtAuthorizationFilter;
 import back.shoppingMart.common.jwt.JwtTokenProvider;
@@ -24,6 +25,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration; // 인증 설정
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuthTokensGenerator authTokensGenerator;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +41,7 @@ public class SecurityConfig {
 
         // 서버는 CORS 정책에서 벗어날 수 있다.
         http.addFilterBefore(corsFilter, JwtAuthenticationFilter.class);
-        http.addFilter(new JwtAuthenticationFilter(authenticationManager,jwtTokenProvider, "/api/v1/login"));
+        http.addFilter(new JwtAuthenticationFilter(authenticationManager,jwtTokenProvider, authTokensGenerator,"/api/v1/login"));
         http.addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, jwtTokenProvider));
 
         // form 로그인 사용하지 않는다

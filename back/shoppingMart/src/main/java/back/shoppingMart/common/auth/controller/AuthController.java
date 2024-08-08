@@ -7,6 +7,7 @@ import back.shoppingMart.common.response.MsgType;
 import back.shoppingMart.common.response.ResponseEntityDto;
 import back.shoppingMart.common.response.ResponseUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,10 @@ public class AuthController {
 
     @PostMapping("/kakao")
     public ResponseEntityDto<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) {
-        return ResponseUtils.ok(oAuthLoginService.login(params), MsgType.LOGIN_SUCCESSFULLY);
+        AuthTokens authTokens = oAuthLoginService.login(params);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + authTokens.getAccessToken());
+
+        return ResponseUtils.okWithHeaders(authTokens, MsgType.LOGIN_SUCCESSFULLY, headers);
     }
 }

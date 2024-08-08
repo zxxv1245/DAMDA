@@ -15,20 +15,20 @@ public class OAuthLoginService {
 
     public AuthTokens login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-        Long memberId = findOrCreateUser(oAuthInfoResponse);
-        return authTokensGenerator.generate(memberId);
+        String email = findOrCreateUser(oAuthInfoResponse);
+        return authTokensGenerator.generate(email);
     }
 
-    private Long findOrCreateUser(OAuthInfoResponse oAuthInfoResponse) {
+    private String findOrCreateUser(OAuthInfoResponse oAuthInfoResponse) {
         User user = userRepository.findByEmail(oAuthInfoResponse.getEmail());
         if (user != null) {
-            return user.getId();
+            return user.getEmail();
         } else {
             return newUser(oAuthInfoResponse);
         }
     }
 
-    private Long newUser(OAuthInfoResponse oAuthInfoResponse) {
+    private String newUser(OAuthInfoResponse oAuthInfoResponse) {
         User user = User.builder()
                 .email(oAuthInfoResponse.getEmail())
                 .username(oAuthInfoResponse.getUsername())
@@ -36,6 +36,6 @@ public class OAuthLoginService {
                 .roles("ROLE_USER")
                 .build();
 
-        return userRepository.save(user).getId();
+        return userRepository.save(user).getEmail();
     }
 }
