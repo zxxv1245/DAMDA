@@ -13,14 +13,12 @@ public class ResponseEntityDto<T> {
     private T data;
     private String msg;
     private ErrorResponse error;
-    private HttpHeaders headers;
 
     @Builder
-    public ResponseEntityDto(T data, String msg, ErrorResponse error, HttpHeaders headers) {
+    public ResponseEntityDto(T data, String msg, ErrorResponse error) {
         this.data = data;
         this.msg = msg;
         this.error = error;
-        this.headers = headers;
     }
 }
 

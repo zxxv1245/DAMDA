@@ -6,6 +6,7 @@ import back.shoppingMart.common.auth.service.OAuthLoginService;
 import back.shoppingMart.common.response.MsgType;
 import back.shoppingMart.common.response.ResponseEntityDto;
 import back.shoppingMart.common.response.ResponseUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +21,10 @@ public class AuthController {
     private final OAuthLoginService oAuthLoginService;
 
     @PostMapping("/kakao")
-    public ResponseEntityDto<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) {
+    public ResponseEntityDto<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params, HttpServletResponse response) {
         AuthTokens authTokens = oAuthLoginService.login(params);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + authTokens.getAccessToken());
+        response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authTokens.getAccessToken());
 
-        return ResponseUtils.okWithHeaders(authTokens, MsgType.LOGIN_SUCCESSFULLY, headers);
+        return ResponseUtils.ok(authTokens, MsgType.LOGIN_SUCCESSFULLY);
     }
 }
