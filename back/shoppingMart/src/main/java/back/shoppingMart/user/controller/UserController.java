@@ -75,6 +75,7 @@ public class UserController {
         return ResponseUtils.ok(MsgType.EMAIL_SUCCESSFULLY_SENT);
     }
 
+
     @GetMapping("/emails/verifications")
     public ResponseEntityDto<EmailVerificationResult> verificationEmail(@RequestParam("email") @Valid @CustomEmail String email,
                                             @RequestParam("code") String authCode) {
