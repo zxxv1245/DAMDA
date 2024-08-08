@@ -24,7 +24,7 @@ public class AuthController {
     public ResponseEntityDto<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params, HttpServletResponse response) {
         AuthTokens authTokens = oAuthLoginService.login(params);
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authTokens.getAccessToken());
-
+        response.addHeader("Refresh-Token", "Bearer " + authTokens.getRefreshToken());
         return ResponseUtils.ok(authTokens, MsgType.LOGIN_SUCCESSFULLY);
     }
 }

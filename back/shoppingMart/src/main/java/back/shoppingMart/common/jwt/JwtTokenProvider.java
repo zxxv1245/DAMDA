@@ -1,5 +1,7 @@
 package back.shoppingMart.common.jwt;
 
+import back.shoppingMart.common.exception.CustomException;
+import back.shoppingMart.common.exception.ErrorType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -43,7 +45,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(accessToken)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            return e.getClaims();
+            throw new CustomException(ErrorType.TOKEN_EXPIRED);
         }
     }
 }

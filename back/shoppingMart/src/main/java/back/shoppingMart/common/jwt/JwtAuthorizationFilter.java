@@ -1,8 +1,11 @@
 package back.shoppingMart.common.jwt;
 
+import back.shoppingMart.common.auth.AuthTokens;
+import back.shoppingMart.common.auth.AuthTokensGenerator;
 import back.shoppingMart.common.auth.PrincipalDetails;
 import back.shoppingMart.common.exception.CustomException;
 import back.shoppingMart.common.exception.ErrorType;
+import back.shoppingMart.common.redis.RedisService;
 import back.shoppingMart.user.entity.User;
 import back.shoppingMart.user.repository.UserRepository;
 import com.auth0.jwt.JWT;
@@ -24,11 +27,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
+    private final AuthTokensGenerator authTokensGenerator;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository,JwtTokenProvider jwtTokenProvider) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository,JwtTokenProvider jwtTokenProvider, RedisService redisService, AuthTokensGenerator authTokensGenerator) {
         super(authenticationManager);
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.redisService =redisService;
+        this.authTokensGenerator =authTokensGenerator;
 
     }
 
@@ -49,29 +56,73 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         // 토큰 검증으로 통해 정상적인 사용자인지 확인
-        String jwtToken = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX,"");
+        String jwtToken = jwtHeader.replace(JwtProperties.TOKEN_PREFIX, "");
 
-        String email = jwtTokenProvider.extractSubject(jwtToken);
+        try {
+            String email = jwtTokenProvider.extractSubject(jwtToken);
+            validateAndAuthenticateUser(email);
+            chain.doFilter(request, response);
+        } catch (CustomException e) {
+            if (e.getErrorType() == ErrorType.TOKEN_EXPIRED) {
+                System.out.println("유효하지 않음");
+                handleInvalidToken(request, response);
+            } else {
+                throw e;
+            }
+        }
 
-        // 서명이 정상적으로 됨
+    }
+
+    private void validateAndAuthenticateUser(String email) throws IOException, ServletException {
         if (email != null) {
             User userEntity = userRepository.findByEmail(email);
             if (userEntity != null) {
-                // JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다
                 PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-
-                // 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 throw new CustomException(ErrorType.USER_NOT_FOUND);
             }
-        } else {
-            throw new CustomException(ErrorType.NOT_VALID_TOKEN);
         }
-
-        chain.doFilter(request,response);
     }
 
 
+
+    private void handleInvalidToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String refreshTokenHeader = request.getHeader("Refresh-Token");
+        if (refreshTokenHeader != null && refreshTokenHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
+            String refreshToken = refreshTokenHeader.replace(JwtProperties.TOKEN_PREFIX, "");
+            System.out.println("헤더 리프레시 토큰 : "+refreshToken);
+            try {
+                String email = jwtTokenProvider.extractSubject(refreshToken);
+                System.out.println(email);
+                String storedRefreshToken = redisService.getValues("Refresh-Token" + email);
+                System.out.println("Refresh-Token" + email);
+                System.out.println("조회한 리프레시 토큰"+ storedRefreshToken);
+                if (storedRefreshToken != null && storedRefreshToken.equals(refreshToken)) {
+                    User userEntity = userRepository.findByEmail(email);
+                    if (userEntity != null) {
+                        AuthTokens newAuthTokens = authTokensGenerator.generate(email);
+                        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + newAuthTokens.getAccessToken());
+                        response.addHeader(JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + newAuthTokens.getRefreshToken());
+                        System.out.println(newAuthTokens.getAccessToken());
+                        validateAndAuthenticateUser(email);
+                    } else {
+                        throw new CustomException(ErrorType.USER_NOT_FOUND);
+                    }
+                } else {
+                    System.out.println("Stored refresh token is null or does not match");
+                    throw new CustomException(ErrorType.NOT_VALID_TOKEN);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace(); // 로그에 예외 출력
+                System.out.println("Exception during refresh token handling: " + ex.getMessage());
+                throw new CustomException(ErrorType.NOT_VALID_TOKEN);
+            }
+        } else {
+            System.out.println("Refresh token header is missing or invalid");
+            throw new CustomException(ErrorType.NOT_VALID_TOKEN);
+        }
+
+    }
 }

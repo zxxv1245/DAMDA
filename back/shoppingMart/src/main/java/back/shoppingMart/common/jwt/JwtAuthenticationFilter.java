@@ -93,5 +93,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // 사용자한테 응답할 response 헤더에
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+authTokens.getAccessToken());
+        response.addHeader(JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX+authTokens.getRefreshToken());
     }
 }
