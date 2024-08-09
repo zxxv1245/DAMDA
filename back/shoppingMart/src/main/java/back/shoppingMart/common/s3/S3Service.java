@@ -55,6 +55,7 @@ public class S3Service {
         return amazonS3Client.getUrl(bucket, fileName).toString(); // File의 URL return
     }
 
+
     private void removeNewFile(File targetFile){
 
         String name = targetFile.getName();
