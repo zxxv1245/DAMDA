@@ -15,7 +15,7 @@ targetSdkVersion 34 으로 변경
 kotlin_version을 kotlinVersion 으로 변경
 
 2. front/android/build.gradle
-
+```
 buildscript {
     ext {
         buildToolsVersion = "34.0.0"
@@ -35,11 +35,12 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
+```
 
 apply plugin: "com.facebook.react.rootproject"
 
-3. front/android/app/build.gradle
-
+## 3. front/android/app/build.gradle
+```
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
@@ -135,9 +136,10 @@ tasks.whenTaskAdded { task ->
         task.dependsOn "copyReactNativeVectorIconFonts"
     }
 }
+```
 
-4. front/android/app/src/main/AndroidManifest.xml
-
+## 4. front/android/app/src/main/AndroidManifest.xml
+```
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools">
 
@@ -173,9 +175,10 @@ xmlns:tools="http://schemas.android.com/tools">
       </activity>
     </application>
 </manifest>
+```
 
-5. front/android/app/src/main/java/com/front/MainActivity.kt
-
+## 5. front/android/app/src/main/java/com/front/MainActivity.kt
+```
 package com.front
 
 import com.facebook.react.ReactActivity
@@ -205,9 +208,10 @@ class MainActivity : ReactActivity() {
     super.onCreate(null)
   }
 }
+```
 
-6. front/android/app/src/main/java/com/front/MainApplication.kt
-
+## 6. front/android/app/src/main/java/com/front/MainApplication.kt
+```
 package com.front
 
 import android.app.Application
@@ -250,7 +254,7 @@ class MainApplication : Application(), ReactApplication {
     }
   }
 }
-
+```
 
 
 
