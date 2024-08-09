@@ -4,6 +4,6 @@ import back.shoppingMart.user.entity.OAuthProvider;
 
 public interface OAuthInfoResponse {
     String getEmail();
-    String getUsername();
+    String getNickname();
     OAuthProvider getOAuthProvider();
 }

@@ -1,4 +1,4 @@
-package back.shoppingMart.common.auth.kakao;
+package back.shoppingMart.common.auth.naver;
 
 import back.shoppingMart.common.auth.OAuthInfoResponse;
 import back.shoppingMart.user.entity.OAuthProvider;
@@ -8,36 +8,30 @@ import lombok.Getter;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class KakaoInfoResponse implements OAuthInfoResponse {
+public class NaverInfoResponse implements OAuthInfoResponse {
 
-    @JsonProperty("kakao_account")
-    private KakaoAccount kakaoAccount;
+    @JsonProperty("response")
+    private Response response;
 
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
-    static class KakaoAccount {
-        private KakaoProfile profile;
+    static class Response {
         private String email;
-    }
-
-    @Getter
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    static class KakaoProfile {
         private String nickname;
     }
 
     @Override
     public String getEmail() {
-        return kakaoAccount.email;
+        return response.email;
     }
 
     @Override
     public String getNickname() {
-        return kakaoAccount.profile.nickname;
+        return response.nickname;
     }
 
     @Override
     public OAuthProvider getOAuthProvider() {
-        return OAuthProvider.KAKAO;
+        return OAuthProvider.NAVER;
     }
 }

@@ -2,6 +2,7 @@ package back.shoppingMart.common.auth.controller;
 
 import back.shoppingMart.common.auth.AuthTokens;
 import back.shoppingMart.common.auth.kakao.KakaoLoginParams;
+import back.shoppingMart.common.auth.naver.NaverLoginParams;
 import back.shoppingMart.common.auth.service.OAuthLoginService;
 import back.shoppingMart.common.response.MsgType;
 import back.shoppingMart.common.response.ResponseEntityDto;
@@ -27,4 +28,12 @@ public class AuthController {
         response.addHeader("Refresh-Token", "Bearer " + authTokens.getRefreshToken());
         return ResponseUtils.ok(authTokens, MsgType.LOGIN_SUCCESSFULLY);
     }
+    @PostMapping("/naver")
+    public ResponseEntityDto<AuthTokens> loginNaver(@RequestBody NaverLoginParams params, HttpServletResponse response) {
+        AuthTokens authTokens = oAuthLoginService.login(params);
+        response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authTokens.getAccessToken());
+        response.addHeader("Refresh-Token", "Bearer " + authTokens.getRefreshToken());
+        return ResponseUtils.ok(authTokens, MsgType.LOGIN_SUCCESSFULLY);
+    }
+
 }

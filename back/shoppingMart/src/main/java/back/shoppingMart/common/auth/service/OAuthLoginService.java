@@ -31,7 +31,7 @@ public class OAuthLoginService {
     private String newUser(OAuthInfoResponse oAuthInfoResponse) {
         User user = User.builder()
                 .email(oAuthInfoResponse.getEmail())
-                .username(oAuthInfoResponse.getUsername())
+                .nickname(oAuthInfoResponse.getNickname())
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .roles("ROLE_USER")
                 .build();
