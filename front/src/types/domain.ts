@@ -30,7 +30,7 @@ interface Profile {
   nickname: string | null;
   imageUri: string | null;
   kakaoImageUri: string | null;
-  loginType: 'email' | 'kakao' | 'apple';
+  loginType: 'email' | 'kakao' | 'naver';
 }
 
 export type {MarkerColor,Category,ImageUri,Marker,Post,Profile};

@@ -3,12 +3,10 @@ import React from 'react';
 import { Text } from 'react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DayOfWeeks from "./DayOfWeeks";
 import { getDateWithSeparator, isSameAsCurrentDate, MonthYear } from "../utils/date";
 import { FlatList } from "react-native-gesture-handler";
 import DateBox from "./DateBox";
-import YearSelector from "./YearSelector";
 import useModal from "../hooks/useModal";
 
 interface CalendarProps {
@@ -33,10 +31,8 @@ function Calendar({ monthYear, selectedDate, onChangeMonth, onPressDate, purchas
         <Pressable onPress={() => onChangeMonth(-1)} style={styles.monthButtonContainer}>
           <Icons name="arrow-back" size={25} color={colors.BLACK} />
         </Pressable>
-        <Pressable style={styles.monthYearContainer} onPress={YearSelector.show}>
+        <Pressable style={styles.monthYearContainer}>
           <Text style={styles.titleText}>{year}년 {month}월</Text>
-          <MaterialIcons
-            name="keyboard-arrow-down" size={23} color={colors.GRAY_500} />
         </Pressable>
         <Pressable onPress={() => onChangeMonth(+1)} style={styles.monthButtonContainer}>
           <Icons name="arrow-forward" size={25} color={colors.BLACK} />
@@ -62,11 +58,6 @@ function Calendar({ monthYear, selectedDate, onChangeMonth, onPressDate, purchas
           numColumns={7}
         />
       </View>
-      <YearSelector 
-      isVisible = {yearSelector.isVisible}
-      currentYear = {year}
-      onChangeYear = {handleChangeYear}
-      hide = {yearSelector.hide}/>
     </>
   )
 }

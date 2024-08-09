@@ -8,10 +8,12 @@ import { stackNavigations } from '../constants';
 import { removeEncryptedStorage } from '../utils';
 
 function MyInfo() {
-  const { isLogin, logout } = useAuth();
+  const { isLogin } = useAuth();
   const [username, setUsername] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [birthDate, setBirthDate] = useState<string | null>(null);
+  const [nickname, setnickname] = useState<string | null>(null);
+  const [phoneNumber, setphoneNumber] = useState<string | null>(null);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -21,6 +23,8 @@ function MyInfo() {
         setUsername(userInfo.data.username);
         setEmail(userInfo.data.email);
         setBirthDate(userInfo.data.birthDate);
+        setnickname(userInfo.data.nickname);
+        setphoneNumber(userInfo.data.phoneNumber);
       } catch (error) {
         console.error('Failed to fetch user info:', error);
       }
@@ -35,7 +39,6 @@ function MyInfo() {
     console.log("회원 탈퇴 버튼 클릭 성공")
     await removeEncryptedStorage('accessToken');
     await deleteAccount();
-    logout();
     navigation.reset({
       index: 0,
       routes: [{ name: stackNavigations.MAIN }],
@@ -49,13 +52,25 @@ function MyInfo() {
         <Text style={styles.value}>{email}</Text>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.label}>닉네임</Text>
+        <Text style={styles.label}>이름</Text>
         <Text style={styles.value}>{username}</Text>
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.label}>닉네임</Text>
+        <Text style={styles.value}>{nickname}</Text>
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.label}>핸드폰 번호</Text>
+        <Text style={styles.value}>{phoneNumber}</Text>
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.label}>생년월일</Text>
         <Text style={styles.value}>{birthDate}</Text>
       </View>
+      <Pressable style={[styles.passwordForm, styles.pressableContainer]} onPress={() => navigation.navigate(stackNavigations.MYINFO_UPDATE)}>
+        <Text style={styles.pressableText}>회원정보 수정</Text> 
+        {/* /api/v1/user/update */}
+      </Pressable>
       <Pressable style={[styles.passwordForm, styles.pressableContainer]} onPress={() => navigation.navigate(stackNavigations.CHANGE_PASSWORD)}>
         <Text style={styles.pressableText}>비밀번호 변경</Text>
       </Pressable>
@@ -80,7 +95,8 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 8,
     padding: 16,
-    backgroundColor: colors.GRAY_200,
+    backgroundColor: colors.WHITE,
+    borderWidth: 1,
     borderRadius: 20,
   },
   label : {

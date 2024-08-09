@@ -1,7 +1,6 @@
-// TabNavigator.tsx
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, TouchableOpacity, View, Modal, Text, StyleSheet } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import FeedStackNavigator from './FeedStackNavigator'; 
 import AccountBook from '../components/AccountBook';
 import QRCodeScannerScreen from '../components/QRCodeScannerScreen';
@@ -10,6 +9,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors } from '../constants/color'; 
 import NotificationsModal from '../components/NotificationsModal'; 
 import useAuth from '../hooks/queries/useAuth';
+import { useNavigation } from '@react-navigation/native';
+import { stackNavigations } from '../constants'; // 여기서 임포트
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
@@ -18,7 +19,9 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigator() {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const {isLogin} = useAuth();
+  const { isLogin } = useAuth();
+  const navigation = useNavigation();
+
   return (
     <>
       <Tab.Navigator
@@ -29,11 +32,13 @@ function TabNavigator() {
             shadowColor: 'gray' 
           },
           headerTitle: () => (
-            <Image
-              source={logo}
-              style={{ width: 100, height: 40 }} 
-              resizeMode="contain"
-            />
+            <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: stackNavigations.MAIN }] })}>
+              <Image
+                source={logo}
+                style={{ width: 100, height: 40 }} 
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
           ),
           headerTitleAlign: 'flex-start',
           headerRight: () => (
@@ -45,11 +50,11 @@ function TabNavigator() {
           tabBarIcon: ({ color, size }) => {
             let iconName;
 
-            if (route.name === 'FeedStack') {
+            if (route.name === stackNavigations.FEEDSTACK) {
               iconName = 'home-outline';
-            } else if (route.name === 'QR결제') {
+            } else if (route.name === stackNavigations.QRCODESCANNERSCREEN) {
               iconName = 'qr-code-outline';
-            } else if (route.name === '가계부') {
+            } else if (route.name === stackNavigations.ACCOUNTBOOK) {
               iconName = 'calendar-clear-outline';
             } else if (route.name === '마이페이지') {
               iconName = 'person-outline';
@@ -69,9 +74,9 @@ function TabNavigator() {
           },
         })}
       >
-        <Tab.Screen name="FeedStack" component={FeedStackNavigator} />
-        <Tab.Screen name="QR결제" component={QRCodeScannerScreen} />
-        <Tab.Screen name="가계부" component={AccountBook} />
+        <Tab.Screen name={stackNavigations.FEEDSTACK} component={FeedStackNavigator} />
+        <Tab.Screen name={stackNavigations.QRCODESCANNERSCREEN} component={QRCodeScannerScreen} />
+        <Tab.Screen name={stackNavigations.ACCOUNTBOOK} component={AccountBook} />
         <Tab.Screen name="마이페이지" component={MyPage} />
       </Tab.Navigator>
 

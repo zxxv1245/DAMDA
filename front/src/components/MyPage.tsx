@@ -15,14 +15,14 @@ function MyPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [username, setUsername] = useState<string | null>(null); // State for username
+  const [nickname, setNickname] = useState<string | null>(null); // State for nickname
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const userInfo = await getUserInfo();
         console.log(userInfo.data)
-        setUsername(userInfo.data.username);
+        setNickname(userInfo.data.nickname);
       } catch (error) {
         console.error('Failed to fetch user info:', error);
       }
@@ -80,7 +80,7 @@ function MyPage() {
         <View style={styles.profileTextContainer}>
           {isLogin ? (
             <>
-              <Text style={styles.username}>{username || '닉네임'}</Text>
+              <Text style={styles.nickname}>{nickname || '로그인을 해주세요'}</Text>
               <TouchableOpacity style={styles.authButton} onPress={handleLogout}>
                 <Icon name="log-out-outline" size={14} color={colors.BLACK} style={styles.authButtonIcon} />
                 <Text style={styles.authButtonText}>로그아웃</Text>
@@ -118,7 +118,7 @@ function MyPage() {
         <View style={styles.verticalMenu}>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={toggleDarkMode}>
             <View style={styles.verticalMenuTextContainer}>
-              <Icon name="moon-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
+              <Icon name="moon-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>다크 모드</Text>
             </View>
             <Switch
@@ -130,36 +130,36 @@ function MyPage() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={toggleNotification}>
             <View style={styles.verticalMenuTextContainer}>
-              <Icon name="notifications-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
+              <Icon name="notifications-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>알림 설정</Text>
             </View>
             <Switch
               value={isNotificationEnabled}
               onValueChange={toggleNotification}
               trackColor={{ false: colors.GRAY_200, true: colors.BLUE_300 }}
-              thumbColor={isNotificationEnabled ? colors.BLUE_300 : '#f4f3f4'}
+              thumbColor={isNotificationEnabled ? colors.BLUE_300 : colors.GRAY_450}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={handleMyInfoPress}>
             <View style={styles.verticalMenuTextContainer}>
-              <Icon name="person-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
+              <Icon name="person-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>나의 정보</Text>
             </View>
-            <Icon name="chevron-forward-outline" size={20} color="#000" />
+            <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={handleSprayPress}>
             <View style={styles.verticalMenuTextContainer}>
-              <Icon name="information-circle-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
+              <Icon name="information-circle-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>스프레이</Text>
             </View>
-            <Icon name="chevron-forward-outline" size={20} color="#000" />
+            <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={handlePaymentPress}>
             <View style={styles.verticalMenuTextContainer}>
-              <Icon name="information-circle-outline" size={20} color="#000" style={styles.verticalMenuIcon} />
+              <Icon name="information-circle-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>결제하기</Text>
             </View>
-            <Icon name="chevron-forward-outline" size={20} color="#000" />
+            <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
           </TouchableOpacity>
         </View>
       </View>
@@ -173,7 +173,7 @@ function MyPage() {
       >
         <View style={styles.modalContainer}>
           <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
-            <Icon name="close" size={30} color="#fff" />
+            <Icon name="close" size={30} color={colors.WHITE} />
           </TouchableOpacity>
         </View>
       </Modal>
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  username: {
+  nickname: {
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.BLACK,
