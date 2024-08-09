@@ -136,14 +136,135 @@ tasks.whenTaskAdded { task ->
     }
 }
 
+4. front/android/app/src/main/AndroidManifest.xml
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <application
+      android:name=".MainApplication"
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:allowBackup="true"
+      android:theme="@style/AppTheme"
+      android:usesCleartextTraffic="true">
+      <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="본인 구글 맵 API"/>
+      <activity
+        android:name=".MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true"
+        android:theme="@style/SplashScreenTheme"> <!-- 여기에 테마 추가 -->
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity>
+    </application>
+</manifest>
+
+5. front/android/app/src/main/java/com/front/MainActivity.kt
+
+package com.front
+
+import com.facebook.react.ReactActivity
+import android.os.Bundle
+import com.facebook.react.ReactActivityDelegate
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
+import com.facebook.react.defaults.DefaultReactActivityDelegate
+import org.devio.rn.splashscreen.SplashScreen
+
+class MainActivity : ReactActivity() {
+
+  /**
+   * Returns the name of the main component registered from JavaScript. This is used to schedule
+   * rendering of the component.
+   */
+  override fun getMainComponentName(): String = "front"
+
+  /**
+   * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]
+   * which allows you to enable New Architecture with a single boolean flags [fabricEnabled]
+   */
+  override fun createReactActivityDelegate(): ReactActivityDelegate =
+      DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+  
+  override fun onCreate(savedInstanceState: Bundle?) {
+    SplashScreen.show(this)
+    super.onCreate(null)
+  }
+}
+
+6. front/android/app/src/main/java/com/front/MainApplication.kt
+
+package com.front
+
+import android.app.Application
+import com.facebook.react.PackageList
+import com.facebook.react.ReactApplication
+import com.facebook.react.ReactHost
+import com.facebook.react.ReactNativeHost
+import com.facebook.react.ReactPackage
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
+import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
+import com.facebook.react.defaults.DefaultReactNativeHost
+import com.facebook.soloader.SoLoader
+
+class MainApplication : Application(), ReactApplication {
+
+  override val reactNativeHost: ReactNativeHost =
+      object : DefaultReactNativeHost(this) {
+        override fun getPackages(): List<ReactPackage> =
+            PackageList(this).packages.apply {
+              // Packages that cannot be autolinked yet can be added manually here, for example:
+            }
+
+        override fun getJSMainModuleName(): String = "index"
+
+        override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
+
+        override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+      }
+
+  override val reactHost: ReactHost
+    get() = getDefaultReactHost(applicationContext, reactNativeHost)
+
+  override fun onCreate() {
+    super.onCreate()
+    SoLoader.init(this, false)
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      // If you opted-in for the New Architecture, we load the native entry point for this app.
+      load()
+    }
+  }
+}
 
 
 
+
+
+
+## 빌드 후 시작하는 방법
 cd android
 ./gradlew clean
 cd ..
 npx react-native run-android
 
+## apk 추출 하는 방법
+cd android
+./gradlew assembleRelease
 
 npx react-native start --reset-cache
 

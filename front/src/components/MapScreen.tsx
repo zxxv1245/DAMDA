@@ -66,7 +66,7 @@ const MapScreen: React.FC = () => {
   const fetchNearbyMarts = async (latitude, longitude) => {
     try {
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=3000&type=TYPES =['supermarket', 'department_store', 'shopping_mall']&keyword=['롯데마트', '하나로마트', '이마트', '홈플러스']&key=AIzaSyD9c-ic01zBgyq5SscE5bKnbZIgdZ-SOus`
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=3000&type=TYPES =['supermarket', 'department_store', 'shopping_mall']&keyword=['롯데마트', '하나로마트', '이마트', '홈플러스']&key=구글 맵 키`
       );
       if (response.data.results) {
         setMarkers(response.data.results);

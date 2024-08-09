@@ -18,7 +18,7 @@ import { colors } from '../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import { stackNavigations } from '../constants';
 
-const KAKAO_REST_API_KEY = `8e644af4ae32404b66874db91b2f325e`;
+const KAKAO_REST_API_KEY = `본인키`;
 const REDIRECT_URI = `https://i11c103.p.ssafy.io/oauth/kakao/callback`;
 const INJECTED_JAVASCRIPT = "window.ReactNativeWebView.postMessage('')";
 
