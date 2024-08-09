@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   productItem: {
     paddingVertical: 5,
     borderLeftWidth: 3,
-    borderLeftColor: colors.BLUE_500,
+    borderLeftColor: colors.BLUE_250,
     marginVertical: 5,
     paddingLeft: 10,
   },

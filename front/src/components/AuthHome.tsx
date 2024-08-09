@@ -27,11 +27,11 @@ function AuthHome({ navigation }: AuthHomeProps) {
       },
       onError: (error) => {
         if (error.response?.status === 401) {
-          console.error('Login error response data:', error.response?.data); // 에러 응답 데이터 로그 추가
-          console.error('Login error response status:', error.response?.status); // 에러 응답 상태 로그 추가
+          // console.error('Login error response data:', error.response?.data); // 에러 응답 데이터 로그 추가
+          // console.error('Login error response status:', error.response?.status); // 에러 응답 상태 로그 추가
           setIsModalVisible(true);
         } else {
-          console.error('Login error:', error);
+          // console.error('Login error:', error);
         }
       },
     });
@@ -40,25 +40,21 @@ function AuthHome({ navigation }: AuthHomeProps) {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Text style={styles.title}>로그인</Text>
+        <Text style = {styles.labelText}>이메일 주소</Text>
         <InputField
-          placeholder='이메일'
+          placeholder='example@naver.com'
           error={values.email.trim() === '' ? '이메일을 입력하세요' : undefined}
           touched={touched.email}
           {...getTextInputProps('email')}
         />
+        <Text style = {styles.labelText}>비밀번호</Text>
         <InputField
-          placeholder='비밀번호'
+          placeholder='영문/숫자/특수문자 포함 6자리 이상'
           error={values.password.trim() === '' ? '비밀번호를 입력하세요' : undefined}
           touched={touched.password}
           {...getTextInputProps('password')}
           secureTextEntry
         />
-        <View style={styles.forgotContainer}>
-          <Text>아이디 찾기</Text>
-          <Text style={styles.separator}> | </Text>
-          <Text>비밀번호 찾기</Text>
-        </View>
         <CustomButton
           label="로그인"
           variant='filled'
@@ -69,6 +65,11 @@ function AuthHome({ navigation }: AuthHomeProps) {
           variant='outlined'
           onPress={() => navigation.navigate(stackNavigations.SIGNUP)}
         />
+        <View style={styles.forgotContainer}>
+          <Text>아이디 찾기</Text>
+          <Text style={styles.separator}> | </Text>
+          <Text>비밀번호 찾기</Text>
+        </View>
       </View>
       <Modal
         visible={isModalVisible}
@@ -93,7 +94,6 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 16,
   },
   title: {
@@ -133,6 +133,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'blue',
   },
+  labelText : { 
+    marginVertical : 10
+  }
 });
 
 export default AuthHome;

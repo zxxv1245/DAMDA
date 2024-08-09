@@ -1,3 +1,4 @@
+// auth.ts
 import axiosInstance from './axios';
 import { setEncryptStorage, removeEncryptedStorage, getEncryptedStorage } from '../utils/encryptStorage';
 import { setHeader } from '../utils/header';
@@ -106,5 +107,37 @@ const changePassword = async (data: RequestChangePassword): Promise<void> => {
   }
 };
 
-export { postSignup, postLogin, getUserInfo, deleteAccount, checkEmailExists,changePassword };
+const sendVerificationRequest = async (email: string): Promise<void> => {
+  try {
+    const response = await axiosInstance.post('/api/v1/emails/verification-requests', null, {
+      params: { email }
+    });
+    // console.log('Verification request response:', response.data);
+  } catch (error) {
+    // console.error('Error sending verification email:', error);
+    if (axios.isAxiosError(error)) {
+      // console.error('Response data:', error.response?.data);
+      // console.error('Response status:', error.response?.status);
+    }
+    throw error;
+  }
+};
+
+const verifyCode = async (email: string, code: string): Promise<void> => {
+  try {
+    const response = await axiosInstance.get('/api/v1/emails/verifications', {
+      params: { email, code }
+    });
+    // console.log('Verification response:', response.data);
+  } catch (error) {
+    // console.error('Error verifying code:', error);
+    if (axios.isAxiosError(error)) {
+      // console.error('Response data:', error.response?.data);
+      // console.error('Response status:', error.response?.status);
+    }
+    throw error;
+  }
+};
+
+export { postSignup, postLogin, getUserInfo, deleteAccount, checkEmailExists,changePassword,sendVerificationRequest,verifyCode };
 export type { RequestUser, RequestUserSignup, ResponseToken,RequestChangePassword };

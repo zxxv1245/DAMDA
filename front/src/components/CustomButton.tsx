@@ -1,76 +1,62 @@
 // CustomButton.tsx
-
 import React from 'react';
-import {
-  StyleSheet,
-  Pressable,
-  Text,
-  PressableProps,
-  Dimensions,
-} from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, TouchableOpacityProps } from 'react-native';
 import { colors } from '../constants/color';
 
-interface CustomButtonProps extends PressableProps {
+interface CustomButtonProps extends TouchableOpacityProps {
   label: string;
   variant?: 'filled' | 'outlined';
-  size?: 'large' | 'medium';
+  textStyle?: object;
+  style?: object;
 }
 
-const deviceHeight = Dimensions.get('screen').height;
-
-
-function CustomButton({
-  label,
-  variant = 'filled',
-  size = 'large',
-  ...props
-}: CustomButtonProps) {
+const CustomButton = ({ label, variant = 'filled', textStyle, style, ...props }: CustomButtonProps) => {
   return (
-    <Pressable
-      style={[styles.container, styles[variant], styles[size]]}
-      {...props}>
-      <Text style={[styles.text, styles[`${variant}Text`]]}>{label}</Text>
-    </Pressable>
-  )
-}
+    <TouchableOpacity
+      style={[
+        styles.button,
+        variant === 'outlined' && styles.outlined,
+        style
+      ]}
+      {...props}
+    >
+      <Text style={[styles.buttonText, variant === 'outlined' && styles.outlinedText, textStyle]}>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
-  container : {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    marginVertical: 5,
+  button: {
+    backgroundColor: colors.BLUE_300,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginVertical : 5,
     borderRadius: 20,
-    justifyContent : 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  filled : {
-    backgroundColor : colors.BLUE_300,
+  outlined: {
+    backgroundColor: 'transparent',
+    borderColor: colors.BLUE_300,
+    borderWidth: 1,
   },
-  outlined : {
-    borderColor : colors.BLUE_300,
-    borderWidth : 1,
+  buttonText: {
+    color: colors.WHITE,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
-  large : {
-    width : '100%',
-    paddingVertical: deviceHeight > 700 ? 15 : 12,
-    alignItems : 'center',
-    justifyContent : 'center'
+  outlinedText: {
+    color: colors.BLUE_300,
   },
-  medium : {
-    width : '100%',
-    paddingVertical: deviceHeight > 700 ? 12 : 8,
-    alignItems : 'center',
-    justifyContent : 'center'
+  smallButton: {
+    paddingVertical: 8, // 상하 패딩을 줄입니다.
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  text : {
-    fontSize : 16,
-    fontWeight : "700",
-  },
-  filledText : {
-    color : colors.BLACK
-  },
-  outlinedText : {
-    color : colors.BLACK
-  }
 });
 
 export default CustomButton;

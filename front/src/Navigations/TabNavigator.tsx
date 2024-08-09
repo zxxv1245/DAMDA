@@ -57,7 +57,7 @@ function TabNavigator() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: colors.BLUE_300,
+          tabBarActiveTintColor: colors.BLUE_250,
           tabBarInactiveTintColor: colors.GRAY_300,
           tabBarStyle: {
             height: 70, 
