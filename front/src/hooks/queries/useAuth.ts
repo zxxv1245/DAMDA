@@ -5,7 +5,7 @@ import { removeHeader, setHeader } from "../../utils/header";
 import queryClient from "../../api/queryClient";
 import { queryKeys } from "../../constants/keys";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { postLogin, postSignup } from "../../api/auth";
+import { kakaoLogin, naverLogin, postLogin, postSignup } from "../../api/auth";
 import { UseMutationCustomOptions } from "../../types/common";
 
 function useAuth() {
@@ -35,6 +35,44 @@ function useAuth() {
     },
   });
 
+  const kakaoLoginMutation = useMutation({
+    mutationFn: kakaoLogin,
+    onSuccess: async ({ accessToken }) => {
+      try {
+        // accessToken이 존재하는지 확인
+        if (!accessToken) {
+          throw new Error('AccessToken is undefined or null');
+        }
+  
+        await setEncryptStorage('accessToken', accessToken);
+        setHeader('Authorization', `Bearer ${accessToken}`);
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        queryClient.setQueryData([queryKeys.AUTH, 'isLogin'], true);
+      } catch (error) {
+        console.error('Error during onSuccess processing:', error.message);
+      }
+    },
+  });
+
+  const naverLoginMutation = useMutation({
+    mutationFn: naverLogin,
+    onSuccess: async ({ accessToken }) => {
+      try {
+        // accessToken이 존재하는지 확인
+        if (!accessToken) {
+          throw new Error('AccessToken is undefined or null');
+        }
+  
+        await setEncryptStorage('accessToken', accessToken);
+        setHeader('Authorization', `Bearer ${accessToken}`);
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        queryClient.setQueryData([queryKeys.AUTH, 'isLogin'], true);
+      } catch (error) {
+        console.error('Error during onSuccess processing:', error.message);
+      }
+    },
+  });
+
   const logout = useCallback(async () => {
     removeHeader('Authorization');
     await removeEncryptedStorage('accessToken');
@@ -46,7 +84,7 @@ function useAuth() {
     checkLoginStatus();
   }, []);
 
-  return { signupMutation, loginMutation, isLogin, logout, checkLoginStatus };
+  return { signupMutation, loginMutation,kakaoLoginMutation,naverLoginMutation, isLogin, logout, checkLoginStatus };
 }
 
 export default useAuth;

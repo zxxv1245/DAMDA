@@ -19,17 +19,17 @@ function Login({ navigation }: LoginProps) {
   return (
     <View style={styles.container}>
       <Image source={LoginLogo} style={styles.loginLogo} />
-      <Pressable style={[styles.kakaoLogin, styles.pressableContainer]} onPress={() => {}}>
+      <Pressable style={[styles.kakaoLogin, styles.pressableContainer]} onPress={() => {navigation.navigate(stackNavigations.KAKAO_LOGIN)}}>
         <Image source={KakaoLogo} style = {styles.kakaoLogo}/>
         <Text style={styles.pressableText}>카카오 로그인</Text>
       </Pressable>
-      <Pressable style={[styles.naverLogin, styles.pressableContainer]} onPress={() => {}}>
+      <Pressable style={[styles.naverLogin, styles.pressableContainer]} onPress={() => {navigation.navigate(stackNavigations.NAVER_LOGIN)}}>
         <Image source={NaverLogo} style = {styles.naverLogo}/>
         <Text style={styles.pressableText}>네이버 로그인</Text>
       </Pressable>
       <Pressable style={[styles.googleLogin, styles.pressableContainer]} onPress={() => {}}>
         <Image source={GoogleLogo} style = {styles.googleLogo}/>
-        <Text style={styles.pressableText}>구글 로그인</Text>
+        <Text style={styles.pressableText}>구글 로그인(준비중)</Text>
       </Pressable>
       <View style={styles.forgotContainer}>
           <Text onPress={() => navigation.navigate(stackNavigations.AUTH_HOME)}>로그인</Text>

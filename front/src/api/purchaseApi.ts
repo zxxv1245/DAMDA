@@ -62,8 +62,13 @@ const fetchTotalPriceByMonth = async (year: number, month: number): Promise<numb
 
 const fetchRecentPurchases = async () => {
   try {
-    const response = await axiosInstance.get('/api/v1/myPurchase/recent');
-    console.log('Recent purchases data:', response.data); // 콘솔에 데이터 출력
+    const token = await getEncryptedStorage('accessToken');
+    const response = await axiosInstance.get('/api/v1/myPurchase/recent', {
+      headers : {
+        Authorization : token,
+      }
+    });
+    console.log('Recent purchases data:', response.data);
     return response.data.data;
   } catch (error) {
     // console.error('Error fetching recent purchases:', error);
@@ -71,4 +76,29 @@ const fetchRecentPurchases = async () => {
   }
 };
 
-export { fetchPurchases, fetchPurchaseDates, fetchTotalPriceByMonth,fetchRecentPurchases };
+// purchaseData
+const savePurchases = async (Data) => {
+  try {
+    const token = await getEncryptedStorage('accessToken');
+
+    const response = await axiosInstance.post('/api/v1/myPurchase/savePurchase', Data, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log("success")
+  } catch (error) {
+    console.error("error : ", error.response)
+    throw error;
+  }
+};
+
+// Usage example
+
+
+
+// 
+
+
+export { fetchPurchases, fetchPurchaseDates, fetchTotalPriceByMonth,fetchRecentPurchases,savePurchases };

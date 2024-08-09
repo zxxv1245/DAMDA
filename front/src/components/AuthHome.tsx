@@ -7,6 +7,7 @@ import useAuth from '../hooks/queries/useAuth';
 import { stackNavigations } from '../constants';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../Navigations/StackNavigator';
+import { colors } from '../constants/color';
 
 type AuthHomeProps = StackScreenProps<
   StackParamList,
@@ -49,7 +50,7 @@ function AuthHome({ navigation }: AuthHomeProps) {
         />
         <Text style = {styles.labelText}>비밀번호</Text>
         <InputField
-          placeholder='영문/숫자/특수문자 포함 6자리 이상'
+          placeholder='비밀번호를 입력해주세요'
           error={values.password.trim() === '' ? '비밀번호를 입력하세요' : undefined}
           touched={touched.password}
           {...getTextInputProps('password')}
@@ -79,7 +80,7 @@ function AuthHome({ navigation }: AuthHomeProps) {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>아이디 또는 비밀번호를 확인해주세요</Text>
-            <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+            <TouchableOpacity style={[styles.button, styles.buttonClose]} onPress={() => setIsModalVisible(false)}>
               <Text style={styles.closeButton}>닫기</Text>
             </TouchableOpacity>
           </View>
@@ -109,6 +110,9 @@ const styles = StyleSheet.create({
   separator: {
     marginHorizontal: 50,
   },
+  labelText : { 
+    marginVertical : 10
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: colors.WHITE,
     padding: 40,
     borderRadius: 10,
     width: width * 0.8,
@@ -129,13 +133,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   closeButton: {
-    marginTop: 20,
-    fontSize: 18,
-    color: 'blue',
+    color: colors.WHITE,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
-  labelText : { 
-    marginVertical : 10
-  }
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: colors.BLUE_250,
+  },
 });
 
 export default AuthHome;

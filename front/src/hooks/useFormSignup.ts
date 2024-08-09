@@ -38,7 +38,8 @@ function useForm<T>({ initialValue }: useFormProps<T>) {
 
   const validate = (): boolean => {
     const newErrors: Record<string, string | undefined> = {};
-
+    const regexPw = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/g;
+    
     if (!values.email) {
       newErrors.email = '이메일을 입력해주세요';
     } else if (!values.email.includes('@')) {
@@ -46,17 +47,29 @@ function useForm<T>({ initialValue }: useFormProps<T>) {
     }
     if (values.password.trim() === '') {
       newErrors.password = '비밀번호를 입력하세요';
+    } else if (values.password.length < 6) {
+      newErrors.password = '비밀번호가 너무 짧습니다'
+    } else if (regexPw.test(values.password) === false) {
+      newErrors.password = '비밀번호에 영문/숫자/특수문자를 모두 포함해주세요'
     }
     if (values.passwordConfirm.trim() === '' || values.password !== values.passwordConfirm) {
       newErrors.passwordConfirm = '비밀번호가 일치하지 않습니다';
-    }
+    } 
     if (values.username.trim() === '') {
-      newErrors.username = '닉네임을 입력하세요';
+      newErrors.username = '이름을 입력하세요';
     }
-    if (values.birthDate.trim() === '' || values.birthDate.length !== 8) {
-      newErrors.birthDate = '생년월일 8자리를 입력하세요';
+    if (values.nickname.trim() === '') {
+      newErrors.nickname = '닉네임을 입력하세요';
     }
-
+    if (values.phoneNumber.trim() === '') {
+      newErrors.phoneNumber = '핸드폰 번호을 입력하세요';
+    }
+    if (values.phoneNumber.length > 11) {
+      newErrors.phoneNumber = '핸드폰 번호를 11자리만 입력해주세요';
+    }
+    if (values.phoneNumber.length < 11) {
+      newErrors.phoneNumber = '핸드폰 번호 11자리를 입력해주세요';
+    }
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;

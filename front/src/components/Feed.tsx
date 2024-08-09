@@ -42,7 +42,6 @@ function Feed() {
         if (isLogin) {
           const purchases = await fetchRecentPurchases();
           setRecentPurchases(purchases);
-          console.log('Recent purchases:', purchases[0].purchaseProducts[1]); // 콘솔에 데이터 출력
         }
       } catch (error) {
         // console.error('Error fetching recent purchases:', error);
@@ -59,7 +58,7 @@ function Feed() {
     <View style={styles.container}>
       {isLogin ? (
         <>
-          <TouchableOpacity style={styles.header} onPress={() => navigation.navigate('가계부')}>
+          <TouchableOpacity style={styles.header} onPress={() => navigation.navigate('AccountBook')}>
             <View>
               <Text style={styles.title}>이번 달 사용 금액</Text>
               {loading ? (
@@ -126,7 +125,7 @@ function Feed() {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.largeButton]}
-            onPress={() => navigation.navigate('QR결제')}
+            onPress={() => navigation.navigate('QRCodeScannerScreen')}
           >
             <View style={styles.buttonContent}>
               <View style={styles.textContainer}>

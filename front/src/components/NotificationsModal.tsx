@@ -57,11 +57,11 @@ const styles = StyleSheet.create({
   modalView: {
     width: '90%', // 너비를 90%로 설정
     height: '50%', // 높이를 화면의 1/2로 설정
-    backgroundColor: 'white',
+    backgroundColor: colors.WHITE,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: colors.BLACK,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -92,10 +92,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonClose: {
-    backgroundColor: colors.BLACK,
+    backgroundColor: colors.BLUE_250,
   },
   textStyle: {
-    color: 'white',
+    color: colors.WHITE,
     fontWeight: 'bold',
     textAlign: 'center',
   },

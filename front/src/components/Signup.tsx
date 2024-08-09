@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, TextInput } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TextInput, Modal, Dimensions,TouchableOpacity,Button } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import InputField from './InputField';
 import CustomButton from './CustomButton';
@@ -10,7 +10,8 @@ import useFormSignup from '../hooks/useFormSignup';
 import useAuth from '../hooks/queries/useAuth';
 import { sendVerificationRequest, verifyCode } from '../api/auth';
 import { colors } from '../constants/color';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import DatePicker from 'react-native-date-picker';
+import { format,parseISO } from 'date-fns';
 
 type SignupProps = StackScreenProps<
   StackParamList,
@@ -22,31 +23,31 @@ function Signup({ navigation }: SignupProps) {
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
 
-  const { values, touched, errors, getTextInputProps, validate, isEmailChecking } = useFormSignup({ initialValue: { email: '', password: '', passwordConfirm: '', username: '', birthDate: '' } });
+  const { values, touched, errors, getTextInputProps, validate, isEmailChecking } = useFormSignup({ initialValue: { email: '', password: '', passwordConfirm: '', username: '', nickname : '', phoneNumber : ''} });
   const { signupMutation } = useAuth();
-
-  const formatDate = (dateString: string): string => {
-    if (dateString.length === 8) {
-      return `${dateString.slice(0, 4)}-${dateString.slice(4, 6)}-${dateString.slice(6, 8)}`;
-    }
-    return dateString;
-  };
 
   const handleSubmit = () => {
     if (validate() && !isEmailChecking && !errors.email && isVerified) {
-      const { email, password, username, birthDate } = values;
-      const formattedBirthDate = formatDate(birthDate);
-
+      const { email, password, username,nickname,phoneNumber} = values;
+      console.log(date)
+      const birthDate = format(date,'yyyy-MM-dd')
+      console.log(birthDate)
       signupMutation.mutate(
-        { email, password, username, birthDate: formattedBirthDate },
+        { email, password, username, nickname, phoneNumber, birthDate },
         {
           onSuccess: () => {
             console.log('Signup successful');
             navigation.navigate(stackNavigations.AUTH_HOME);
           },
           onError: (error) => {
-            console.error('Signup error:', error);
+            if (error.response?.status === 400) {
+              setIsModalVisible(true);
+            }
+            // console.error('Signup error:', error.response?.status);
           },
         }
       );
@@ -68,9 +69,11 @@ function Signup({ navigation }: SignupProps) {
 
   const handleVerifyCode = async () => {
     try {
-      await verifyCode(values.email, verificationCode);
-      setIsVerified(true);
-      setEmailVerified(true);
+      const dataSuccess = await verifyCode(values.email, verificationCode);
+      if (dataSuccess) {
+        setIsVerified(true);
+        setEmailVerified(true);
+      }
     } catch (error) {
       console.error('Error verifying code:', error);
     }
@@ -138,24 +141,59 @@ function Signup({ navigation }: SignupProps) {
           />
         </View>
         <View style={styles.fieldContainer}>
-          <Text style={styles.labelText}>닉네임</Text>
+          <Text style={styles.labelText}>이름</Text>
           <InputField
-            placeholder='ex) 담다'
+            placeholder='ex) 이주호'
             error={touched.username && errors.username}
             touched={touched.username}
             {...getTextInputProps('username')}
           />
-          
         </View>
         <View style={styles.fieldContainer}>
-          <Text style={styles.labelText}>생년월일</Text>
+          <Text style={styles.labelText}>닉네임</Text>
           <InputField
-            placeholder='ex) 19980804'
-            error={touched.birthDate && errors.birthDate}
-            touched={touched.birthDate}
-            {...getTextInputProps('birthDate')}
+            placeholder='ex) 담다'
+            error={touched.nickname && errors.nickname}
+            touched={touched.nickname}
+            {...getTextInputProps('nickname')}
           />
-          
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.labelText}>핸드폰 번호</Text>
+          <InputField
+            placeholder="'-'없이 숫자 11자리만 입력"
+            error={touched.phoneNumber && errors.phoneNumber}
+            touched={touched.phoneNumber}
+            {...getTextInputProps('phoneNumber')}
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+        <View style={styles.birthDateContainer}>
+          <Text style={styles.dateText}>생년월일: {format(date, 'yyyy-MM-dd')}</Text>
+          <CustomButton
+            label="선택"
+            onPress={() => setOpen(true)}
+            style={styles.smallButton}
+          />
+          <DatePicker
+            modal
+            open={open}
+            date={date}
+            mode="date"
+            locale="ko"
+            onConfirm={(date) => {
+              setOpen(false);
+              setDate(date);
+            }}
+            onCancel={() => {
+              setOpen(false);
+            }}
+            title="생년월일 선택"
+            confirmText="확인" 
+            cancelText="취소"  
+            theme="light"
+          />
+        </View>  
         </View>
         <CustomButton
           label="회원가입"
@@ -163,10 +201,26 @@ function Signup({ navigation }: SignupProps) {
           onPress={handleSubmit}
           disabled={Object.keys(errors).length > 0 || isEmailChecking || !isVerified}
         />
+        <Modal
+          visible={isModalVisible}
+          transparent
+          animationType="slide"
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>입력이 잘못되었습니다.</Text>
+              <TouchableOpacity style={[styles.button, styles.buttonClose]} onPress={() => setIsModalVisible(false)}>
+                <Text style={styles.closeButton}>닫기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -205,7 +259,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   smallButton: {
-    paddingVertical: 8, // 상하 패딩을 줄입니다.
+    paddingVertical: 8, 
     paddingHorizontal: 20,
     marginLeft: 10,
     backgroundColor: colors.BLUE_250,
@@ -235,7 +289,51 @@ const styles = StyleSheet.create({
     color: colors.GRAY_500,
     marginBottom: 10,
     textDecorationLine: 'underline',
-  }
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: colors.WHITE,
+    padding: 40,
+    borderRadius: 10,
+    width: width * 0.8,
+    maxWidth: 400,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  closeButton: {
+    color: colors.WHITE,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: colors.BLUE_250,
+  },
+  birthDateContainer: {
+    flexDirection : 'row',
+    padding: 16,
+  },
+  dateText: {
+    flex : 1,
+    fontSize: 16,
+    color: colors.GRAY_500 ,
+    alignItems : 'center',
+    marginTop : 10,
+  },
+  
 });
 
 export default Signup;
