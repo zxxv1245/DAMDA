@@ -1,14 +1,21 @@
+```
 npm install react-native
+```
 
-
+```
 npx react-native init front
+```
 
-
+```
 npx react-native run-android
+```
 
+```
 npm i
+```
 
 주의(안드로이드 빌드 전 할 것)
+
 1. react-native-camera-kit 라이브러리에서 
 react-native-camera-kit/android/build.gardle
 targetSdkVersion 34 으로 변경
@@ -261,19 +268,41 @@ class MainApplication : Application(), ReactApplication {
 
 
 ## 빌드 후 시작하는 방법
+
+```
 cd android
 ./gradlew clean
 cd ..
 npx react-native run-android
+```
 
 ## apk 추출 하는 방법
+ - front/android/app 에서 키스토어 파일 생성
+```
+keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+```
+
+ - front/android/gradle.properties 에 추가
+```
+MYAPP_RELEASE_STORE_FILE=C:\\Users\\경로\\Desktop\\front\\android\\app\\my-release-key.keystore
+MYAPP_RELEASE_KEY_ALIAS=my-key-alias
+MYAPP_RELEASE_STORE_PASSWORD= 비밀번호
+MYAPP_RELEASE_KEY_PASSWORD= 비밀번호
+
+```
+
+
+```
 cd android
 ./gradlew assembleRelease
+```
 
+### 캐시 정리
+
+```
 npx react-native start --reset-cache
-
 npm cache clean --force
-
+```
 
 
 
