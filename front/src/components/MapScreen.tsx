@@ -26,7 +26,6 @@ async function requestLocationPermission() {
       }
     }
   } catch (err) {
-    console.warn(err);
   }
 }
 
@@ -56,7 +55,6 @@ const MapScreen: React.FC = () => {
         fetchNearbyMarts(latitude, longitude); // 현재 위치로 근처 마트를 검색
       },
       error => {
-        console.log(error);
         fetchNearbyMarts(35.205236, 126.811752);
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -70,10 +68,8 @@ const MapScreen: React.FC = () => {
       );
       if (response.data.results) {
         setMarkers(response.data.results);
-        console.log(response.data)
       }
     } catch (error) {
-      console.log(error);
     }
   };
 

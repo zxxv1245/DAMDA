@@ -44,7 +44,7 @@ function Feed() {
           setRecentPurchases(purchases);
         }
       } catch (error) {
-        // console.error('Error fetching recent purchases:', error);
+
       }
     };
 

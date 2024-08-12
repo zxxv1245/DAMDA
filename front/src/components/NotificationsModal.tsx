@@ -9,10 +9,8 @@ interface NotificationsModalProps {
 }
 
 const NotificationsModal: React.FC<NotificationsModalProps> = ({ modalVisible, setModalVisible }) => {
-  // 예제 알림 데이터
   const notifications = [
     { id: '1', message: '새로운 알림입니다.' },
-    // 알림 데이터 추가 가능
   ];
 
   return (

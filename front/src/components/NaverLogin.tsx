@@ -18,7 +18,7 @@ import { colors } from '../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import { stackNavigations } from '../constants';
 
-const NAVER_CLIENT_ID = `l0cqm4pgQ4wuD1HERUj1`;
+const NAVER_CLIENT_ID = `YOUR_KEY`;
 const REDIRECT_URI = `https://i11c103.p.ssafy.io/oauth/naver/callback`;
 const state = "damda"
 const INJECTED_JAVASCRIPT = "window.ReactNativeWebView.postMessage('')";
@@ -37,7 +37,7 @@ function NaverLogin() {
           setIsLoading(false); 
           navigation.reset({
             index: 0,
-            routes: [{ name: stackNavigations.MYINFO_UPDATE }],
+            routes: [{ name: stackNavigations.MAIN }],
           });
         },
         onError: () => {

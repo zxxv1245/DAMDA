@@ -5,7 +5,6 @@ import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import { colors } from '../constants/color';
 
 interface DayOfWeeksProps {
-
 }
 
 function DayOfWeeks({}: DayOfWeeksProps) {

@@ -20,19 +20,13 @@ function AuthHome({ navigation }: AuthHomeProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSubmit = () => {
-    console.log('Login attempt with values:', values); // 로그 추가
     loginMutation.mutate(values, {
       onSuccess: (data) => {
-        console.log('Login successful:', data);
         navigation.replace(stackNavigations.MAIN);
       },
       onError: (error) => {
         if (error.response?.status === 401) {
-          // console.error('Login error response data:', error.response?.data); // 에러 응답 데이터 로그 추가
-          // console.error('Login error response status:', error.response?.status); // 에러 응답 상태 로그 추가
           setIsModalVisible(true);
-        } else {
-          // console.error('Login error:', error);
         }
       },
     });

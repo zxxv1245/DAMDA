@@ -18,7 +18,7 @@ import { colors } from '../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import { stackNavigations } from '../constants';
 
-const KAKAO_REST_API_KEY = `8e644af4ae32404b66874db91b2f325e`;
+const KAKAO_REST_API_KEY = `YOUR_KEY`;
 const REDIRECT_URI = `https://i11c103.p.ssafy.io/oauth/kakao/callback`;
 const INJECTED_JAVASCRIPT = "window.ReactNativeWebView.postMessage('')";
 
@@ -31,17 +31,17 @@ function KakaoLogin() {
   const handleOnMessage = (event: WebViewMessageEvent) => {
     if (event.nativeEvent.url.includes(`${REDIRECT_URI}?code=`)) {
       const authorizationCode = event.nativeEvent.url.replace(`${REDIRECT_URI}?code=`, '');
-
+      console.log('카카오 코드',authorizationCode)
       kakaoLoginMutation.mutate(authorizationCode, {
         onSuccess: () => {
-          setIsLoading(false); // 로딩 상태 해제
+          setIsLoading(false);
           navigation.reset({
             index: 0,
-            routes: [{ name: stackNavigations.MYINFO_UPDATE }], // 로그인 후 이동할 화면 설정
+            routes: [{ name: stackNavigations.MYINFO_UPDATE }], 
           });
         },
         onError: () => {
-          setIsLoading(false); // 오류 발생 시에도 로딩 상태 해제
+          setIsLoading(false);
         },
       });
     }

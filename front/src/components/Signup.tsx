@@ -33,9 +33,7 @@ function Signup({ navigation }: SignupProps) {
   const handleSubmit = () => {
     if (validate() && !isEmailChecking && !errors.email && isVerified) {
       const { email, password, username,nickname,phoneNumber} = values;
-      console.log(date)
       const birthDate = format(date,'yyyy-MM-dd')
-      console.log(birthDate)
       signupMutation.mutate(
         { email, password, username, nickname, phoneNumber, birthDate },
         {
@@ -47,7 +45,6 @@ function Signup({ navigation }: SignupProps) {
             if (error.response?.status === 400) {
               setIsModalVisible(true);
             }
-            // console.error('Signup error:', error.response?.status);
           },
         }
       );
@@ -63,7 +60,6 @@ function Signup({ navigation }: SignupProps) {
       setIsCodeSent(true);
       await sendVerificationRequest(values.email);
     } catch (error) {
-      console.error('Error sending verification email:', error);
     }
   };
 
