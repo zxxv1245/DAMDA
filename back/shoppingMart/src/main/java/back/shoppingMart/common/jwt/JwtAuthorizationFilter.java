@@ -8,8 +8,7 @@ import back.shoppingMart.common.exception.ErrorType;
 import back.shoppingMart.common.redis.RedisService;
 import back.shoppingMart.user.entity.User;
 import back.shoppingMart.user.repository.UserRepository;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -107,6 +106,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                         response.addHeader(JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + newAuthTokens.getRefreshToken());
                         System.out.println(newAuthTokens.getAccessToken());
                         validateAndAuthenticateUser(email);
+
                     } else {
                         throw new CustomException(ErrorType.USER_NOT_FOUND);
                     }

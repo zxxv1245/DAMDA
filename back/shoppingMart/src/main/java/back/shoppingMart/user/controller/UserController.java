@@ -12,7 +12,6 @@ import back.shoppingMart.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +43,7 @@ public class UserController {
     // 회원 정보 수정
     @PutMapping("/user/update")
     public ResponseEntityDto<UserDto> updateUser(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                 @RequestPart UserDto userDto) {
+                                                 @RequestBody UserDto userDto) {
         UserDto updatedUser = userService.updateUser(principalDetails.getUser().getId(), userDto);
         return ResponseUtils.ok(updatedUser, MsgType.UPDATED_SUCCESSFULLY);
     }
