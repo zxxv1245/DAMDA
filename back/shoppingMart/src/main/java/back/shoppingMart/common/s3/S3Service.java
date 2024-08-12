@@ -56,6 +56,7 @@ public class S3Service {
     }
 
 
+
     private void removeNewFile(File targetFile){
 
         String name = targetFile.getName();
