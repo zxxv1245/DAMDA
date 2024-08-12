@@ -5,6 +5,7 @@ import back.shoppingMart.common.exception.ErrorType;
 import back.shoppingMart.common.mail.EmailVerificationResult;
 import back.shoppingMart.common.mail.MailService;
 import back.shoppingMart.common.redis.RedisService;
+import back.shoppingMart.common.s3.S3Service;
 import back.shoppingMart.user.repository.UserRepository;
 import back.shoppingMart.user.dto.ChangePasswordDto;
 import back.shoppingMart.user.dto.UserDto;
@@ -16,7 +17,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
@@ -33,7 +36,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MailService mailService;
-
+    private final S3Service s3Service;
     private final RedisService redisService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -95,13 +98,33 @@ public class UserService {
     }
 
     // 회원 정보 수정 로직
-    public UserDto updateUser(Long id, UserDto userDto) {
+    public UserDto updateUser(Long id, UserDto userDto)  {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
         user.setUsername(userDto.getUsername());
         user.setBirthDate(userDto.getBirthDate());
         user.setNickname(userDto.getNickname());
         user.setPhoneNumber(userDto.getPhoneNumber());
         User updatedUser = userRepository.save(user);
+
+        return new UserDto(updatedUser.getId(), updatedUser.getNickname(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getEmail(), updatedUser.getRoles(), updatedUser.getBirthDate(), updatedUser.getOAuthProvider(), user.getProfileImg(), updatedUser.getPhoneNumber(), updatedUser.getIsAdult());
+    }
+
+    // 회원 프로필 사진 수정 로직
+    public UserDto updateUserProfile(Long id, MultipartFile image) throws IOException {
+        User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
+
+        // 기존 프로필 이미지가 있는 경우 삭제
+        if (user.getProfileImg() != null && !user.getProfileImg().isEmpty()) {
+            deleteImageFromS3(user.getProfileImg());
+        }
+
+        if (!image.isEmpty()){
+
+            String profileImages = s3Service.upload(image, "profileImages");
+            user.setProfileImg(profileImages);
+        }else user.setProfileImg(null);
+        User updatedUser = userRepository.save(user);
+
         return new UserDto(updatedUser.getId(), updatedUser.getNickname(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getEmail(), updatedUser.getRoles(), updatedUser.getBirthDate(), updatedUser.getOAuthProvider(), user.getProfileImg(), updatedUser.getPhoneNumber(), updatedUser.getIsAdult());
     }
 
@@ -151,6 +174,15 @@ public class UserService {
         boolean authResult = redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode);
 
         return EmailVerificationResult.of(authResult);
+    }
+
+    // S3에서 파일 삭제
+    private void deleteImageFromS3(String imageUrl) {
+        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1); // 파일 이름 추출
+        System.out.println(fileName);
+        String dirName = "profileImages"; // 업로드된 폴더명
+
+        s3Service.deleteFile(dirName + "/" + fileName);
     }
 }
 

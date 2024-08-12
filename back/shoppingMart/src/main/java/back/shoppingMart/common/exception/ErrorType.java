@@ -23,6 +23,7 @@ public enum ErrorType {
     UNABLE_TO_SEND_EMAIL(500, "이메일 전송을 실패했습니다."),
     NOT_FOUND_PRODUCT(400,"없는 상품입니다."),
     TOKEN_EXPIRED(400,"유효하지 않은 토큰입니다."),
+    FILE_CONVERT_FAIL(415,"변환 실패하였습니다."),
     NO_SUCH_ALGORITHM(500, "알 수 없는 알고리즘입니다.");
 
     //---------------------------------------------------------------------
