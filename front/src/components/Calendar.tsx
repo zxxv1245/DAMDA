@@ -7,7 +7,6 @@ import DayOfWeeks from "./DayOfWeeks";
 import { getDateWithSeparator, isSameAsCurrentDate, MonthYear } from "../utils/date";
 import { FlatList } from "react-native-gesture-handler";
 import DateBox from "./DateBox";
-import useModal from "../hooks/useModal";
 
 interface CalendarProps {
   monthYear: MonthYear;
@@ -19,11 +18,6 @@ interface CalendarProps {
 
 function Calendar({ monthYear, selectedDate, onChangeMonth, onPressDate, purchaseDates }: CalendarProps) {
   const { month, year, lastDate, firstDOW } = monthYear;
-  const yearSelector = useModal()
-  const handleChangeYear = (selectYear: number) => {
-    onChangeMonth((selectYear - year) * 12);
-    yearSelector.hide();
-  };
 
   return (
     <>

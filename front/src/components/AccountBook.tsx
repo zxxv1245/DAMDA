@@ -4,8 +4,6 @@ import { StyleSheet, SafeAreaView, Text, View, FlatList } from 'react-native';
 import Calendar from "./Calendar";
 import { getMonthYearDetails, getNewMonthYear, getDateWithSeparator, formatDateWithDay, MonthYear } from "../utils/date";
 import { fetchPurchases, fetchPurchaseDates, PurchaseResponseDto } from '../api/purchaseApi';
-import YearSelector from "./YearSelector";
-import useModal from "../hooks/useModal";
 
 interface AccountBookProps {
 }
@@ -30,7 +28,6 @@ function AccountBook({onChangeMonth }: AccountBookProps) {
 
   const handleChangeYear = (selectYear: number) => {
     onChangeMonth((selectYear - year) * 12);
-    yearSelector.hide();
   };
 
 
@@ -95,7 +92,6 @@ function AccountBook({onChangeMonth }: AccountBookProps) {
                     <View style={styles.productItem} key={`${item.id}-${product.productName}-${index}`}>
                       <Text style={styles.productName}>{product.productName} {product.count}개</Text>
                       <Text style={styles.productPrice}>{product.totalPrice.toLocaleString()}원</Text>
-                      <Text style={styles.productStore}>롯데마트 첨단점</Text>
                     </View>
                   ))}
                 </View>
@@ -171,10 +167,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.GRAY_700,
   },
-  productStore: {
-    fontSize: 12,
-    color: colors.GRAY_500,
-  },
+
 });
 
 export default AccountBook;

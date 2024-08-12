@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     color: colors.BLUE_300,
   },
   smallButton: {
-    paddingVertical: 8, // 상하 패딩을 줄입니다.
+    paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 20,
     alignItems: 'center',

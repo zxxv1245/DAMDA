@@ -27,7 +27,6 @@ function MyInfoUpdate() {
         setNickname(userInfo.data.nickname);
         setPhoneNumber(userInfo.data.phoneNumber);
       } catch (error) {
-        console.error('Failed to fetch user info:', error);
       }
     };
 
@@ -44,7 +43,6 @@ function MyInfoUpdate() {
         routes: [{ name: stackNavigations.MAIN }],
       });
     } catch (error) {
-      console.error('Failed to update user info:', error);
     }
   };
 

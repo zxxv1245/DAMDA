@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Switch, Modal, Dimensions } f
 import { useNavigation } from '@react-navigation/native';
 import useAuth from '../hooks/queries/useAuth';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { removeEncryptedStorage } from '../utils/encryptStorage';
 import { stackNavigations } from '../constants';
 import { colors } from '../constants/color';
 import { getUserInfo } from '../api/auth';
@@ -21,10 +20,8 @@ function MyPage() {
     const fetchUserInfo = async () => {
       try {
         const userInfo = await getUserInfo();
-        console.log(userInfo.data)
         setNickname(userInfo.data.nickname);
       } catch (error) {
-        console.error('Failed to fetch user info:', error);
       }
     };
 
@@ -34,7 +31,6 @@ function MyPage() {
   }, [isLogin]);
 
   const handleLogout = async () => {
-    await removeEncryptedStorage('accessToken');
     logout();
     navigation.reset({
       index: 0,
@@ -151,13 +147,6 @@ function MyPage() {
             <View style={styles.verticalMenuTextContainer}>
               <Icon name="information-circle-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>스프레이</Text>
-            </View>
-            <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.verticalMenuItem} onPress={handlePaymentPress}>
-            <View style={styles.verticalMenuTextContainer}>
-              <Icon name="information-circle-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
-              <Text style={styles.verticalMenuText}>결제하기</Text>
             </View>
             <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
           </TouchableOpacity>

@@ -1,38 +1,45 @@
-// axios.ts
 import axios from 'axios';
-import { getEncryptedStorage, removeEncryptedStorage } from '../utils';
-import { NavigationContainerRef, useNavigation } from '@react-navigation/native';
-import { stackNavigations } from '../constants';
-import { StackParamList } from '../Navigations/StackNavigator';
+import { getEncryptStorage, setEncryptStorage } from '../utils/encryptStorage';
 
 const axiosInstance = axios.create({
   baseURL: 'https://i11c103.p.ssafy.io',
   withCredentials: true,
 });
 
-let navigationRef: React.RefObject<NavigationContainerRef<StackParamList>> | null = null;
-
-export const setNavigationRef = (ref: React.RefObject<NavigationContainerRef<StackParamList>>) => {
-  navigationRef = ref;
-};
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    if (error.response && error.response.status === 401) {
-      await removeEncryptedStorage('accessToken');
-      delete axiosInstance.defaults.headers.common['Authorization'];
-      
-      if (navigationRef && navigationRef.current) {
-        navigationRef.current.reset({
-          index: 0,
-          routes: [{ name: stackNavigations.LOGIN }],
-        });
+// 요청 인터셉터
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    if (config.headers['Requires-Auth']) {
+      const accessToken = await getEncryptStorage('accessToken');
+      const refreshToken = await getEncryptStorage('refreshToken');
+      if (accessToken) {
+        config.headers['Authorization'] = accessToken;
+      }
+      if (refreshToken) {
+        config.headers['Refresh-Token'] = refreshToken;
       }
     }
+
+    return config;
+  },
+  (error) => {
     return Promise.reject(error);
   }
 );
 
+// 응답 인터셉터
+axiosInstance.interceptors.response.use(
+  async (response) => {
+    const newAccessToken = response.headers['authorization'];
+    if (newAccessToken) {
+
+      await setEncryptStorage('accessToken', newAccessToken);
+    }
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;

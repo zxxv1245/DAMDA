@@ -26,7 +26,6 @@ function MyInfo() {
         setnickname(userInfo.data.nickname);
         setphoneNumber(userInfo.data.phoneNumber);
       } catch (error) {
-        console.error('Failed to fetch user info:', error);
       }
     };
 
@@ -36,7 +35,6 @@ function MyInfo() {
   }, [isLogin]);
 
   const handleDeleteAccount = async() => {
-    console.log("회원 탈퇴 버튼 클릭 성공")
     await removeEncryptedStorage('accessToken');
     await deleteAccount();
     navigation.reset({

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, Dimensions, Modal, Pressable } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, Dimensions, Modal, Pressable, Image } from 'react-native';
 import CustomButton from './CustomButton';
 import { colors } from '../constants/color';
 import { stackNavigations } from '../constants';
@@ -10,6 +10,8 @@ import { getUserInfo } from '../api/auth';
 interface PaymentProps {
   route: any;
 }
+
+const jjanggo = require('../assets/jjanggo.png');
 
 function Payment({ route }: PaymentProps) {
   const [isAdult, setIsAdult] = useState<boolean | null>(null);
@@ -31,14 +33,12 @@ function Payment({ route }: PaymentProps) {
 
   const items = chunkArray(arrQrData, 3);
 
-  // purchaseProduct 형식으로 데이터를 변환합니다
   const purchaseProduct = items.map(item => ({
     productName: item[0],
     count: parseInt(item[1], 10),
     totalPrice: parseInt(item[2], 10)
   }));
 
-  // 총 가격을 계산합니다
   const totalPrice = purchaseProduct.reduce((acc, item) => acc + item.totalPrice, 0);
 
   const handleSubmit = async () => {
@@ -54,7 +54,6 @@ function Payment({ route }: PaymentProps) {
         setModalVisible(true);
       }
     } catch (error) {
-      console.error('Failed to complete purchase:', error);
     }
   }
 
@@ -94,7 +93,8 @@ function Payment({ route }: PaymentProps) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>성인이 포함 되어 있습니다!</Text>
+            <Image source={jjanggo} style = {styles.jjanggo}/>
+            <Text style={styles.modalText}>성인 용품이 포함 되어 있습니다!</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
@@ -198,10 +198,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
+    fontSize : 20,
     marginBottom: 15,
     textAlign: 'center',
     color : colors.RED_500
   },
+  jjanggo : {
+
+  }
 });
 
 export default Payment;
