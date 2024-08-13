@@ -11,10 +11,12 @@ import back.shoppingMart.user.dto.ChangePasswordDto;
 import back.shoppingMart.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 
 @RestController
@@ -43,6 +45,13 @@ public class UserController {
     public ResponseEntityDto<UserDto> updateUser(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                  @RequestBody UserDto userDto) {
         UserDto updatedUser = userService.updateUser(principalDetails.getUser().getId(), userDto);
+        return ResponseUtils.ok(updatedUser, MsgType.UPDATED_SUCCESSFULLY);
+    }
+    // 회원 프로필 이미지 수정
+    @PostMapping(value = "/user/update/profileImg", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntityDto<UserDto> updateUser(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                 @RequestPart(value = "image") MultipartFile image) throws IOException {
+        UserDto updatedUser = userService.updateUserProfile(principalDetails.getUser().getId(), image);
         return ResponseUtils.ok(updatedUser, MsgType.UPDATED_SUCCESSFULLY);
     }
 

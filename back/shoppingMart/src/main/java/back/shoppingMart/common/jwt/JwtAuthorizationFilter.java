@@ -8,8 +8,7 @@ import back.shoppingMart.common.exception.ErrorType;
 import back.shoppingMart.common.redis.RedisService;
 import back.shoppingMart.user.entity.User;
 import back.shoppingMart.user.repository.UserRepository;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -65,7 +65,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         } catch (CustomException e) {
             if (e.getErrorType() == ErrorType.TOKEN_EXPIRED) {
                 System.out.println("유효하지 않음");
-                handleInvalidToken(request, response);
+                handleInvalidToken(request, response, chain);
             } else {
                 throw e;
             }
@@ -88,7 +88,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 
 
-    private void handleInvalidToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void handleInvalidToken(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String refreshTokenHeader = request.getHeader("Refresh-Token");
         if (refreshTokenHeader != null && refreshTokenHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             String refreshToken = refreshTokenHeader.replace(JwtProperties.TOKEN_PREFIX, "");
@@ -102,11 +102,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 if (storedRefreshToken != null && storedRefreshToken.equals(refreshToken)) {
                     User userEntity = userRepository.findByEmail(email);
                     if (userEntity != null) {
-                        AuthTokens newAuthTokens = authTokensGenerator.generate(email);
-                        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + newAuthTokens.getAccessToken());
-                        response.addHeader(JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + newAuthTokens.getRefreshToken());
-                        System.out.println(newAuthTokens.getAccessToken());
+                        long now = (new Date()).getTime();
+                        Date accessTokenExpiredAt = new Date(now + 1000 * 60);
+                        String accessToken = jwtTokenProvider.generate(email, accessTokenExpiredAt);
+                        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
                         validateAndAuthenticateUser(email);
+                        chain.doFilter(request, response);
+
                     } else {
                         throw new CustomException(ErrorType.USER_NOT_FOUND);
                     }
