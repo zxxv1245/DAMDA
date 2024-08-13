@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable,Image, TouchableOpacity } from 'react-native';
 import { colors } from '../constants/color';
 import useAuth from '../hooks/queries/useAuth';
-import { deleteAccount, getUserInfo } from '../api/auth';
+import { deleteAccount, getUserInfo, saveProfileImage } from '../api/auth';
 import { useNavigation } from '@react-navigation/native';
 import { stackNavigations } from '../constants';
-import { removeEncryptedStorage } from '../utils';
+import { removeEncryptStorage } from '../utils';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 function MyInfo() {
   const { isLogin } = useAuth();
@@ -14,6 +16,7 @@ function MyInfo() {
   const [birthDate, setBirthDate] = useState<string | null>(null);
   const [nickname, setnickname] = useState<string | null>(null);
   const [phoneNumber, setphoneNumber] = useState<string | null>(null);
+  const [profileImg, setProfileImg] = useState<any | null>(null); 
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -25,6 +28,7 @@ function MyInfo() {
         setBirthDate(userInfo.data.birthDate);
         setnickname(userInfo.data.nickname);
         setphoneNumber(userInfo.data.phoneNumber);
+        setProfileImg(userInfo.data.profileImg);
       } catch (error) {
       }
     };
@@ -35,7 +39,8 @@ function MyInfo() {
   }, [isLogin]);
 
   const handleDeleteAccount = async() => {
-    await removeEncryptedStorage('accessToken');
+    await removeEncryptStorage('accessToken');
+    await removeEncryptStorage('refreshToken');
     await deleteAccount();
     navigation.reset({
       index: 0,
@@ -43,8 +48,23 @@ function MyInfo() {
     });
   }
 
+  const handleProfileImg = async () => {
+    launchImageLibrary({ mediaType: 'photo', quality: 1 }, async (response) => {
+      const image = response.assets[0];
+      await saveProfileImage(image);
+      navigation.replace(stackNavigations.MYINFO);
+    });
+  };
+
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={handleProfileImg} style = {styles.TouchContainer}>
+        {profileImg ? 
+          <Image source={{uri : profileImg}} style = {styles.profileImg}/> :
+          <Icon name="person-circle-outline" size={80} color={colors.GRAY_500} style={styles.profileIcon} />
+          }
+      </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.label}>이메일</Text>
         <Text style={styles.value}>{email}</Text>
@@ -67,7 +87,6 @@ function MyInfo() {
       </View>
       <Pressable style={[styles.passwordForm, styles.pressableContainer]} onPress={() => navigation.navigate(stackNavigations.MYINFO_UPDATE)}>
         <Text style={styles.pressableText}>회원정보 수정</Text> 
-        {/* /api/v1/user/update */}
       </Pressable>
       <Pressable style={[styles.passwordForm, styles.pressableContainer]} onPress={() => navigation.navigate(stackNavigations.CHANGE_PASSWORD)}>
         <Text style={styles.pressableText}>비밀번호 변경</Text>
@@ -123,6 +142,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: colors.BLACK,
+  },
+  profileIcon: {
+    marginRight: 20,
+  },
+  profileImg : {
+    width : 80,
+    height : 80,
+    borderRadius : 40,
+  },
+  TouchContainer : {
+    marginBottom : 20,
   }
 });
 

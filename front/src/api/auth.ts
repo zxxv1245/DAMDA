@@ -1,4 +1,5 @@
 import axiosInstance from './axios';
+import ImageResizer from 'react-native-image-resizer';
 
 type RequestUser = {
   email: string;
@@ -110,7 +111,34 @@ const verifyCode = async (email: string, code: string): Promise<boolean> => {
   const { data } = await axiosInstance.get('/api/v1/emails/verifications', {
     params: { email, code },
   });
-  console.log(data.data)
+  return data.data.success;
+};
+
+// 프로필 이미지 저장
+const saveProfileImage = async (image : any): Promise<boolean> => {
+  console.log('이미지',image)
+  const resizedImage = await ImageResizer.createResizedImage(
+    image.uri,
+    1000, // 원하는 너비
+    1000, // 원하는 높이 (aspect ratio 유지됨)
+    'JPEG', // 포맷
+    80 // 압축 품질 (0~100)
+  );
+
+  const formData = new FormData();
+  formData.append('image', {
+    uri: resizedImage.uri,
+    type: 'image/jpeg', // 리사이징 후 포맷에 맞춰 변경
+    name: resizedImage.name || `profile_${Date.now()}.jpg`,
+  });
+
+  console.log('폼 데이터', formData)
+  const data= await axiosInstance.post('/api/v1/user/update/profileImg', formData,{
+    headers : {
+      'Requires-Auth': 'true',
+      'Content-Type': 'multipart/form-data',
+    }
+  });
   return data.data.success;
 };
 
@@ -125,7 +153,8 @@ export {
   verifyCode, 
   updateUserInfo, 
   kakaoLogin, 
-  naverLogin 
+  naverLogin,
+  saveProfileImage 
 };
 
 export type { 
