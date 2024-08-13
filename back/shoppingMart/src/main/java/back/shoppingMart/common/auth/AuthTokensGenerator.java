@@ -21,6 +21,7 @@ public class AuthTokensGenerator {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
 
+
     public AuthTokens generate(String email) {
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
