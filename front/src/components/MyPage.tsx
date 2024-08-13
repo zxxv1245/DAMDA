@@ -12,7 +12,6 @@ function MyPage() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [nickname, setNickname] = useState<string | null>(null);
   const [profileImg, setProfileImg] = useState<any | null>(null); 
@@ -41,8 +40,8 @@ function MyPage() {
     setIsDarkMode(previousState => !previousState);
   };
 
-  const toggleNotification = () => {
-    setIsNotificationEnabled(previousState => !previousState);
+  const handleAnnouncementPress = () => {
+    navigation.navigate(stackNavigations.ANNOUNCEMENT);
   };
 
   const handleSprayPress = () => {
@@ -57,8 +56,8 @@ function MyPage() {
     navigation.navigate(stackNavigations.MYINFO);
   };
 
-  const handleServiceCenterPress = () => {
-    navigation.navigate(stackNavigations.SERVICE_CENTER);
+  const handleQuizPress = () => {
+    navigation.navigate(stackNavigations.QUIZ);
   };
 
   const handleServiceInformationPress = () => {
@@ -109,9 +108,9 @@ function MyPage() {
             <Text style={styles.menuText}>서비스 안내</Text>
           </TouchableOpacity>
           <View style={styles.separator} />
-          <TouchableOpacity style={styles.menuItem} onPress={handleServiceCenterPress}>
-            <Icon name="headset-outline" size={24} color={colors.BLUE_300} />
-            <Text style={styles.menuText}>고객 센터</Text>
+          <TouchableOpacity style={styles.menuItem} onPress={handleQuizPress}>
+            <Icon name="help" size={24} color={colors.BLUE_300} />
+            <Text style={styles.menuText}>퀴즈</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.verticalMenu}>
@@ -127,17 +126,12 @@ function MyPage() {
               thumbColor={isDarkMode ? colors.BLUE_300 : '#f4f3f4'}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.verticalMenuItem} onPress={toggleNotification}>
+          <TouchableOpacity style={styles.verticalMenuItem} onPress={handleAnnouncementPress}>
             <View style={styles.verticalMenuTextContainer}>
               <Icon name="notifications-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
-              <Text style={styles.verticalMenuText}>알림 설정</Text>
+              <Text style={styles.verticalMenuText}>공지사항</Text>
             </View>
-            <Switch
-              value={isNotificationEnabled}
-              onValueChange={toggleNotification}
-              trackColor={{ false: colors.GRAY_200, true: colors.BLUE_300 }}
-              thumbColor={isNotificationEnabled ? colors.BLUE_300 : colors.GRAY_450}
-            />
+            <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={handleMyInfoPress}>
             <View style={styles.verticalMenuTextContainer}>
@@ -166,6 +160,7 @@ function MyPage() {
           <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
             <Icon name="close" size={30} color={colors.WHITE} />
           </TouchableOpacity>
+          <Image source={require('../assets/spray.png')} style={styles.modalImage} />
         </View>
       </Modal>
     </View>

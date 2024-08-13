@@ -11,7 +11,7 @@ import useAuth from '../hooks/queries/useAuth';
 import { sendVerificationRequest, verifyCode } from '../api/auth';
 import { colors } from '../constants/color';
 import DatePicker from 'react-native-date-picker';
-import { format,parseISO } from 'date-fns';
+import { format } from 'date-fns';
 
 type SignupProps = StackScreenProps<
   StackParamList,
@@ -85,7 +85,7 @@ function Signup({ navigation }: SignupProps) {
             error={touched.email && errors.email}
             touched={touched.email}
             {...getTextInputProps('email')}
-            editable={!emailVerified} // 이메일 인증 완료 후 수정 불가
+            editable={!emailVerified} 
           />
         </View>
         <CustomButton
@@ -119,7 +119,7 @@ function Signup({ navigation }: SignupProps) {
         <View style={styles.fieldContainer}>
           <Text style={styles.labelText}>비밀번호</Text>
           <InputField
-            placeholder='영문/숫자/특수문자 포함 6자리 이상'
+            placeholder='영문/숫자/특수문자 포함 6자리 이상 입력'
             error={touched.password && errors.password}
             touched={touched.password}
             {...getTextInputProps('password')}
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   fieldContainer: {
-    minHeight: 70, // 필드 컨테이너의 최소 높이 설정
+    minHeight: 70,
     marginBottom: 10,
   },
   labelText: {

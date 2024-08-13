@@ -1,7 +1,6 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MainStackNavigator from './MainStackNavigator';
-import Article from '../components/Article';
 import { stackNavigations } from '../constants';
 
 function DrawerNavigator() {

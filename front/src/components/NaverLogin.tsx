@@ -37,7 +37,7 @@ function NaverLogin() {
           setIsLoading(false); 
           navigation.reset({
             index: 0,
-            routes: [{ name: stackNavigations.MAIN }],
+            routes: [{ name: stackNavigations.MYINFO_UPDATE }],
           });
         },
         onError: () => {

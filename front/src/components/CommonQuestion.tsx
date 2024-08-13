@@ -1,17 +1,17 @@
-import { StyleSheet, View, Text } from 'react-native';
 import React from 'react';
+import {StyleSheet, View,Text} from 'react-native';
 import { colors } from '../constants/color';
 
-interface MyCardProps {}
+interface CommonQuestionProps {
 
-function MyCard({}: MyCardProps) {
+}
 
-
+function CommonQuestion({}: CommonQuestionProps) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.cardText}>등록된 카드가 없어요</Text>
+    <View style = {styles.container}>
+      <Text style = {styles.cardText}>아직 자주 묻는 질문이 존재하지 않아요!</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MyCard;
+export default CommonQuestion;

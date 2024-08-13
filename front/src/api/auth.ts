@@ -119,16 +119,16 @@ const saveProfileImage = async (image : any): Promise<boolean> => {
   console.log('이미지',image)
   const resizedImage = await ImageResizer.createResizedImage(
     image.uri,
-    1000, // 원하는 너비
-    1000, // 원하는 높이 (aspect ratio 유지됨)
-    'JPEG', // 포맷
-    80 // 압축 품질 (0~100)
+    1000, 
+    1000, 
+    'JPEG', 
+    80 
   );
 
   const formData = new FormData();
   formData.append('image', {
     uri: resizedImage.uri,
-    type: 'image/jpeg', // 리사이징 후 포맷에 맞춰 변경
+    type: 'image/jpeg', 
     name: resizedImage.name || `profile_${Date.now()}.jpg`,
   });
 

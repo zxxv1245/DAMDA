@@ -5,29 +5,31 @@ import useAuth from '../hooks/queries/useAuth';
 import { getUserInfo, updateUserInfo } from '../api/auth';
 import { useNavigation } from '@react-navigation/native';
 import { stackNavigations } from '../constants';
-import InputField from '../components/InputField'; // InputField 컴포넌트 임포트
+import InputField from '../components/InputField'; 
+import CustomButton from './CustomButton';
+import DatePicker from 'react-native-date-picker';
+import { format } from 'date-fns';
 
 function MyInfoUpdate() {
   const { isLogin } = useAuth();
   const [username, setUsername] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [birthDate, setBirthDate] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string | null>(null);
   const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
   const navigation = useNavigation();
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        const userInfo = await getUserInfo();
-        setUsername(userInfo.data.username);
-        setEmail(userInfo.data.email);
-        setBirthDate(userInfo.data.birthDate);
-        setNickname(userInfo.data.nickname);
-        setPhoneNumber(userInfo.data.phoneNumber);
-      } catch (error) {
-      }
+      const userInfo = await getUserInfo();
+      setUsername(userInfo.data.username);
+      setEmail(userInfo.data.email);
+      setNickname(userInfo.data.nickname);
+      setPhoneNumber(userInfo.data.phoneNumber);
+      setDate(new Date(userInfo.data.birthDate));
     };
 
     if (isLogin) {
@@ -35,14 +37,23 @@ function MyInfoUpdate() {
     }
   }, [isLogin]);
 
+  useEffect(() => {
+    // username, nickname, phoneNumber 중 하나라도 null 또는 빈 값이면 저장 버튼을 비활성화
+    setIsSaveButtonEnabled(!!username && !!nickname && !!phoneNumber);
+  }, [username, nickname, phoneNumber]);
+
   const handleSave = async () => {
+    if (!isSaveButtonEnabled) return; // 버튼이 비활성화 상태라면 함수 실행하지 않음
+
     try {
+      const birthDate = format(date, 'yyyy-MM-dd');
       await updateUserInfo({ username, birthDate, nickname, phoneNumber });
       navigation.reset({
         index: 0,
         routes: [{ name: stackNavigations.MAIN }],
       });
     } catch (error) {
+      // 오류 처리
     }
   };
 
@@ -86,17 +97,37 @@ function MyInfoUpdate() {
           error={touched.phoneNumber && !phoneNumber ? '핸드폰 번호를 입력해주세요.' : ''}
         />
       </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.labelText}>생년월일</Text>
-        <InputField
-          value={birthDate}
-          onChangeText={setBirthDate}
-          onBlur={() => handleBlur('birthDate')}
-          placeholder="생년월일 (예: 1990-01-01)"
-          error={touched.birthDate && !birthDate ? '생년월일을 입력해주세요.' : ''}
+      <View style={styles.birthDateContainer}>
+        <Text style={styles.dateText}>생년월일: {format(date, 'yyyy-MM-dd')}</Text>
+        <CustomButton
+          label="선택"
+          onPress={() => setOpen(true)}
+          style={styles.smallButton}
+        />
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          mode="date"
+          locale="ko"
+          onConfirm={(date) => {
+            setOpen(false);
+            setDate(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+          title="생년월일 선택"
+          confirmText="확인" 
+          cancelText="취소"  
+          theme="light"
         />
       </View>
-      <Pressable style={[styles.saveButton, styles.pressableContainer]} onPress={handleSave}>
+      <Pressable 
+        style={[styles.saveButton, !isSaveButtonEnabled && styles.disabledButton]} 
+        onPress={handleSave}
+        disabled={!isSaveButtonEnabled} // 버튼 비활성화 조건 추가
+      >
         <Text style={styles.saveButtonText}>저장</Text>
       </Pressable>
     </View>
@@ -114,10 +145,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 8,
   },
-  disabledInput: {
-    backgroundColor: colors.GRAY_200,
-    color: colors.GRAY_700,
-  },
   saveButton: {
     backgroundColor: colors.BLUE_250,
     paddingHorizontal: 10,
@@ -127,6 +154,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+  },
+  disabledButton: {
+    backgroundColor: colors.GRAY_300,
   },
   saveButtonText: {
     fontSize: 16,
@@ -140,7 +170,24 @@ const styles = StyleSheet.create({
   emailText: {
     marginVertical: 5,
     color: colors.GRAY_700,
-    fontSize: 18
+    fontSize: 18,
+  },
+  smallButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginLeft: 10,
+    backgroundColor: colors.BLUE_250,
+  },
+  birthDateContainer: {
+    flexDirection: 'row',
+    padding: 16,
+  },
+  dateText: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.GRAY_500,
+    alignItems: 'center',
+    marginTop: 10,
   },
 });
 
