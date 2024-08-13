@@ -1,7 +1,6 @@
-// MyPage.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Switch, Modal, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity, Switch, Modal, Dimensions, Image } from 'react-native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import useAuth from '../hooks/queries/useAuth';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { stackNavigations } from '../constants';
@@ -11,24 +10,24 @@ import { getUserInfo } from '../api/auth';
 function MyPage() {
   const { isLogin, logout } = useAuth();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [nickname, setNickname] = useState<string | null>(null); // State for nickname
+  const [nickname, setNickname] = useState<string | null>(null);
+  const [profileImg, setProfileImg] = useState<any | null>(null); 
+
+  const fetchUserInfo = async () => {
+    const userInfo = await getUserInfo();
+    setNickname(userInfo.data.nickname);
+    setProfileImg(userInfo.data.profileImg);
+  };
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const userInfo = await getUserInfo();
-        setNickname(userInfo.data.nickname);
-      } catch (error) {
-      }
-    };
-
-    if (isLogin) {
+    if (isLogin && isFocused) {
       fetchUserInfo();
     }
-  }, [isLogin]);
+  }, [isLogin, isFocused]);
 
   const handleLogout = async () => {
     logout();
@@ -57,22 +56,26 @@ function MyPage() {
   const handleMyInfoPress = () => {
     navigation.navigate(stackNavigations.MYINFO);
   };
+
   const handleServiceCenterPress = () => {
     navigation.navigate(stackNavigations.SERVICE_CENTER);
   };
+
   const handleServiceInformationPress = () => {
     navigation.navigate(stackNavigations.SERVICE_INFORMATION);
   };
+
   const handleMyCardPress = () => {
     navigation.navigate(stackNavigations.MYCARD);
   };
-  const handlePaymentPress = () => {
-    navigation.navigate(stackNavigations.PAYMENT);
-  };
+
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
+        {profileImg ? 
+        <Image source={{uri : profileImg}} style = {styles.profileImg}/> :
         <Icon name="person-circle-outline" size={80} color={colors.GRAY_500} style={styles.profileIcon} />
+        }
         <View style={styles.profileTextContainer}>
           {isLogin ? (
             <>
@@ -153,7 +156,6 @@ function MyPage() {
         </View>
       </View>
 
-      {/* 모달 컴포넌트 추가 */}
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -186,9 +188,15 @@ const styles = StyleSheet.create({
   profileIcon: {
     marginRight: 20,
   },
+  profileImg : {
+    width : 80,
+    height : 80,
+    borderRadius : 50,
+  },
   profileTextContainer: {
     flex: 1,
     justifyContent: 'center',
+    marginLeft : 15,
   },
   nickname: {
     fontSize: 18,

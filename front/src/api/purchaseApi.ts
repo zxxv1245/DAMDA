@@ -58,4 +58,5 @@ const savePurchases = async (Data: PurchaseProductDto[]): Promise<void> => {
   });
 };
 
+
 export { fetchPurchases, fetchPurchaseDates, fetchTotalPriceByMonth, fetchRecentPurchases, savePurchases };
