@@ -21,6 +21,7 @@ const stackNavigations = {
   ANNOUNCEMENT : '공지사항',
   MYQNA : '내QnA',
   COMMONQUESTION : '자주 묻는 질문',
+  SERVICESCREEN : '서비스 소개',
 } as const;
 
 export { stackNavigations };

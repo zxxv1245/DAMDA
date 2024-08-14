@@ -12,6 +12,10 @@ interface ServiceInformationProps {
 function ServiceInformation({}: ServiceInformationProps) {
   const navigation = useNavigation();
 
+  const handleServiceScreenPress = () => {
+    navigation.navigate(stackNavigations.SERVICESCREEN);
+  };
+
   const handleCommonQuestionPress = () => {
     navigation.navigate(stackNavigations.COMMONQUESTION);
   };
@@ -23,10 +27,10 @@ function ServiceInformation({}: ServiceInformationProps) {
   return (
     <View style= {styles.container}>
       <View style={styles.verticalMenu}>
-        <TouchableOpacity style={styles.verticalMenuItem} onPress={() => {}}>
+        <TouchableOpacity style={styles.verticalMenuItem} onPress={handleServiceScreenPress}>
           <View style={styles.verticalMenuTextContainer}>
             <Icon name="information-circle-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
-            <Text style={styles.verticalMenuText}>서비스 소개</Text>
+            <Text style={styles.verticalMenuText}>서비스 기능</Text>
           </View>
           <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
         </TouchableOpacity>

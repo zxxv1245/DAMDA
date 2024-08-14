@@ -17,8 +17,8 @@ import useAuth from '../hooks/queries/useAuth';
 import { colors } from '../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import { stackNavigations } from '../constants';
+import { KAKAO_REST_API_KEY } from '@env'; 
 
-const KAKAO_REST_API_KEY = `YOUR_KEY`;
 const REDIRECT_URI = `https://i11c103.p.ssafy.io/oauth/kakao/callback`;
 const INJECTED_JAVASCRIPT = "window.ReactNativeWebView.postMessage('')";
 

@@ -132,7 +132,7 @@ const QuizGame: React.FC = () => {
       ) : (
         <>
           <Text style={styles.timerText}>남은 시간 : {timeLeft}s</Text>
-          <Image source={require('../assets/quiz.png')}/>
+          <Image source={require('../assets/quiz.png')} style = {styles.QuizImg}/>
           <Text style={styles.questionText}>{shuffledQuestions[currentQuestionIndex]?.question}</Text>
           {loading ? (
             <ActivityIndicator size="large" color={colors.BLUE_500} />
@@ -193,6 +193,10 @@ const styles = StyleSheet.create({
     color: colors.BLACK,
     marginBottom: 20,
   },
+  QuizImg : { 
+    width : 200,
+    height : 200,
+  }
 });
 
 export default QuizGame;

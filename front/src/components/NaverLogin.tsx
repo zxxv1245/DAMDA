@@ -17,8 +17,8 @@ import useAuth from '../hooks/queries/useAuth';
 import { colors } from '../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import { stackNavigations } from '../constants';
+import { NAVER_CLIENT_ID } from '@env'; 
 
-const NAVER_CLIENT_ID = `YOUR_KEY`;
 const REDIRECT_URI = `https://i11c103.p.ssafy.io/oauth/naver/callback`;
 const state = "damda"
 const INJECTED_JAVASCRIPT = "window.ReactNativeWebView.postMessage('')";

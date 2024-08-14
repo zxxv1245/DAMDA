@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { View, StyleSheet, Text, Modal } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, Text, Modal, PermissionsAndroid } from 'react-native';
 import { CameraScreen } from 'react-native-camera-kit';
 import { colors } from '../constants/color';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -10,40 +10,77 @@ const QRCodeScannerScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [qrData, setQrData] = useState('');
   const navigation = useNavigation();
-  const [scanning, setScanning] = useState(true);
+  const [scanning, setScanning] = useState(false);
+  const [hasCameraPermission, setHasCameraPermission] = useState(false); // 권한 상태 추가
+
+  // 카메라 권한 요청 함수 (Android만)
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: '카메라 권한',
+          message: 'QR 코드를 스캔하려면 카메라 접근 권한이 필요합니다.',
+          buttonNeutral: '나중에',
+          buttonNegative: '취소',
+          buttonPositive: '확인',
+        }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 권한 요청
+    const checkPermissions = async () => {
+      const hasPermission = await requestCameraPermission();
+      setHasCameraPermission(hasPermission);
+      if (hasPermission) {
+        setScanning(true);
+      }
+    };
+
+    checkPermissions();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      // 화면에 포커스가 올 때 스캐닝을 활성화합니다
-      setScanning(true);
+      // 화면에 포커스가 올 때 스캐닝을 활성화
+      if (hasCameraPermission) {
+        setScanning(true);
+      }
+
       return () => {
-        // 화면을 떠날 때 스캐닝을 비활성화합니다
-        setScanning(false);
+        setScanning(false); // 화면을 떠날 때 스캐닝 비활성화
       };
-    }, [])
+    }, [hasCameraPermission])
   );
 
-
   const onSuccess = (event) => {
-    const data = event.nativeEvent.codeStringValue;
-    setQrData(data);
-    setIsModalVisible(true);
-    setScanning(false);
+    if (scanning) { // 스캐닝 중일 때만 처리
+      setScanning(false); // 스캐닝 중지
+      const data = event.nativeEvent.codeStringValue;
+      setQrData(data);
+      setIsModalVisible(true);
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
-    setScanning(true); 
+    setScanning(true); // 모달을 닫으면 다시 스캐닝 활성화
   };
 
   const handleNavigate = () => {
     setIsModalVisible(false);
-    navigation.navigate(stackNavigations.PAYMENT, {qrData})
+    navigation.navigate(stackNavigations.PAYMENT, { qrData });
   };
 
   return (
     <View style={styles.container}>
-      {!isModalVisible && (
+      {!isModalVisible && scanning && hasCameraPermission && (
         <CameraScreen
           scanBarcode={true}
           onReadCode={onSuccess} 
@@ -93,8 +130,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   squareFrame: {
-    width: 250, // 원하는 프레임의 너비
-    height: 250, // 원하는 프레임의 높이
+    width: 250,
+    height: 250,
     borderWidth: 2,
     borderColor: colors.WHITE,
   },
