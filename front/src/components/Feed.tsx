@@ -11,10 +11,34 @@ import useAuth from '../hooks/queries/useAuth';
 import { fetchTotalPriceByMonth, fetchRecentPurchases } from '../api/purchaseApi';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+const adImages = [
+  require('../assets/C101.png'),
+  require('../assets/C102.png'),
+  require('../assets/C106.png'),
+];
+
 type FeedNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, 'FeedStack'>,
   StackNavigationProp<StackParamList>
 >;
+
+function AdContainer() {
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentAdIndex(prevIndex => (prevIndex + 1) % adImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval); 
+  }, []);
+
+  return (
+    <View style={styles.adContainer}>
+      <Image source={adImages[currentAdIndex]} style={styles.adImage} />
+    </View>
+  );
+}
 
 function Feed() {
   const { isLogin } = useAuth();
@@ -90,7 +114,7 @@ function Feed() {
                         />
                       </View>
                     </View>
-                    <View style = {styles.TextStyles}>
+                    <View style={styles.TextStyles}>
                       <Text style={styles.orderText}>{item.productName}</Text>
                       <Text style={styles.orderPrice}>{item.totalPrice}원</Text>
                     </View>
@@ -137,9 +161,7 @@ function Feed() {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.adContainer}>
-          <Text style={styles.adText}>광고 공간</Text>
-        </View>
+        <AdContainer />
       </View>
     </View>
   );
@@ -308,17 +330,17 @@ const styles = StyleSheet.create({
   },
   adContainer: {
     backgroundColor: colors.GRAY_250,
-    padding: 20,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 120,
+    height: 140,
+    overflow: 'hidden',
   },
-  adText: {
-    fontSize: 18,
-    color: colors.BLACK,
-    fontWeight: 'bold',
+  adImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'stretch'
   },
   headerContent: {
     flexDirection: 'row',

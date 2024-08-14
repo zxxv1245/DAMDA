@@ -25,6 +25,7 @@ import Quiz from '../components/Quiz';
 import Announcement from '../components/Announcement';
 import MyQnA from '../components/MyQnA';
 import CommonQuestion from '../components/CommonQuestion';
+import ServiceScreen from '../components/ServiceScreen';
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
@@ -51,6 +52,7 @@ export type StackParamList = {
   [stackNavigations.ANNOUNCEMENT]: undefined;
   [stackNavigations.MYQNA]: undefined;
   [stackNavigations.COMMONQUESTION]: undefined;
+  [stackNavigations.SERVICESCREEN]: undefined;
   
 };
 
@@ -159,6 +161,10 @@ function StackNavigator() {
         <Stack.Screen
           name={stackNavigations.COMMONQUESTION}
           component={CommonQuestion}
+        />
+        <Stack.Screen
+          name={stackNavigations.SERVICESCREEN}
+          component={ServiceScreen}
         />
       </Stack.Navigator>
 
