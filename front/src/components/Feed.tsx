@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   recentOrders: {
     width: '100%',
-    paddingVertical: 20,
+    paddingVertical: 10,
     backgroundColor: colors.WHITE,
   },
   subTitle: {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colors.GRAY,
-    overflow: 'hidden', // 이미지가 부모 뷰를 벗어나지 않도록
+    overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     left: 5,
     fontSize: 14,
     color: colors.BLACK,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', // 백그라운드 색상 및 투명도 설정
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
     padding: 2,
     borderRadius: 5,
     zIndex: 1,
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   loggedOutContainer: {
     backgroundColor: colors.GRAY_250,
     paddingVertical: 20,
-    paddingHorizontal: 15,
+    paddingHorizontal: 35,
     borderRadius: 15,
     marginTop: 20,
     flex: 1,
@@ -353,12 +353,11 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover', // 이미지를 부모 뷰에 맞게 조정
+    resizeMode: 'cover', 
   },
   TextStyles : {
-    flexDirection: 'row',
-    justifyContent: 'space-between', // 두 Text 컴포넌트를 양쪽 끝에 배치
-    width: '100%',
+    alignItems : 'flex-start',
+    width: '95%',
   }
 });
 

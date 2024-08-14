@@ -10,7 +10,7 @@ interface NotificationsModalProps {
 
 const NotificationsModal: React.FC<NotificationsModalProps> = ({ modalVisible, setModalVisible }) => {
   const notifications = [
-    { id: '1', message: '새로운 알림입니다.' },
+    { id: '1', message: '새로운 알림이 없어요' },
   ];
 
   return (

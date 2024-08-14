@@ -75,6 +75,12 @@ function Payment({ route }: PaymentProps) {
           </View>
         ))}
       </View>
+      
+      <View style={styles.totalPriceContainer}>
+        <Text style={styles.totalPriceLabel}>총 가격:</Text>
+        <Text style={styles.totalPriceValue}>{totalPrice.toLocaleString()}원</Text>
+      </View>
+
       <View style={styles.buttonContainer}>
         <CustomButton
           style={styles.paymentButton}
@@ -93,7 +99,7 @@ function Payment({ route }: PaymentProps) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Image source={jjanggo} style = {styles.jjanggo}/>
+            <Image source={jjanggo} style={styles.jjanggo} />
             <Text style={styles.modalText}>성인 용품이 포함 되어 있습니다!</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
@@ -157,11 +163,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.BLACK,
   },
-  smallButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    marginLeft: 10,
-    backgroundColor: colors.BLUE_250,
+  totalPriceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 20,
+    paddingHorizontal: 10,
+  },
+  totalPriceLabel: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.BLACK,
+  },
+  totalPriceValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.RED_500,
   },
   modalContainer: {
     flex: 1,
@@ -198,14 +215,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    fontSize : 20,
+    fontSize: 20,
     marginBottom: 15,
     textAlign: 'center',
-    color : colors.RED_500
+    color: colors.RED_500,
   },
-  jjanggo : {
-
-  }
 });
 
 export default Payment;

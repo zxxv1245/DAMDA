@@ -14,7 +14,6 @@ import useAuth from '../hooks/queries/useAuth';
 import MyInfo from '../components/MyInfo';
 import Login from '../components/Login';
 import ChangePassword from '../components/ChangePassword';
-import ServiceCenter from '../components/ServiceCenter';
 import ServiceInformation from '../components/ServiceInformation';
 import MyCard from '../components/MyCard';
 import Payment from '../components/Payment';
@@ -22,6 +21,10 @@ import MyInfoUpdate from '../components/MyInfoUpdate';
 import NotificationsModal from '../components/NotificationsModal';
 import KakaoLogin from '../components/KakaoLogin';
 import NaverLogin from '../components/NaverLogin';
+import Quiz from '../components/Quiz';
+import Announcement from '../components/Announcement';
+import MyQnA from '../components/MyQnA';
+import CommonQuestion from '../components/CommonQuestion';
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
@@ -38,13 +41,17 @@ export type StackParamList = {
   [stackNavigations.QRCODESCANNERSCREEN]: undefined;
   [stackNavigations.MYINFO]: undefined;
   [stackNavigations.CHANGE_PASSWORD]: undefined;
-  [stackNavigations.SERVICE_CENTER]: undefined;
   [stackNavigations.SERVICE_INFORMATION]: undefined;
   [stackNavigations.MYCARD]: undefined;
   [stackNavigations.PAYMENT]: undefined;
   [stackNavigations.KAKAO_LOGIN]: undefined;
   [stackNavigations.MYINFO_UPDATE]: undefined;
   [stackNavigations.NAVER_LOGIN]: undefined;
+  [stackNavigations.QUIZ]: undefined;
+  [stackNavigations.ANNOUNCEMENT]: undefined;
+  [stackNavigations.MYQNA]: undefined;
+  [stackNavigations.COMMONQUESTION]: undefined;
+  
 };
 
 function StackNavigator() {
@@ -60,13 +67,6 @@ function StackNavigator() {
             backgroundColor: 'white', 
             shadowColor: 'gray',
           },
-          // headerTitle: () => (
-          //   <Image
-          //     source={logo}
-          //     style={{ width: 100, height: 40 }}
-          //     resizeMode="contain"
-          //   />
-          // ),
           headerTitleAlign: 'center',
           headerRight: () => (
             isLogin && <TouchableOpacity onPress={() => { setModalVisible(true) }}>
@@ -121,10 +121,6 @@ function StackNavigator() {
           component={ChangePassword}
         />
         <Stack.Screen
-          name={stackNavigations.SERVICE_CENTER}
-          component={ServiceCenter}
-        />
-        <Stack.Screen
           name={stackNavigations.SERVICE_INFORMATION}
           component={ServiceInformation}
         />
@@ -147,6 +143,22 @@ function StackNavigator() {
         <Stack.Screen
           name={stackNavigations.NAVER_LOGIN}
           component={NaverLogin}
+        />
+        <Stack.Screen
+          name={stackNavigations.QUIZ}
+          component={Quiz}
+        />
+        <Stack.Screen
+          name={stackNavigations.ANNOUNCEMENT}
+          component={Announcement}
+        />
+        <Stack.Screen
+          name={stackNavigations.MYQNA}
+          component={MyQnA}
+        />
+        <Stack.Screen
+          name={stackNavigations.COMMONQUESTION}
+          component={CommonQuestion}
         />
       </Stack.Navigator>
 

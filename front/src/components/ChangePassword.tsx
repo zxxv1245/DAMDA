@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, Alert} from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import InputField from './InputField';
 import CustomButton from './CustomButton';
 import useFormChangePassword from '../hooks/useFormChangePassword';
@@ -10,7 +10,7 @@ import { stackNavigations } from '../constants';
 interface ChangePasswordProps {}
 
 function ChangePassword({}: ChangePasswordProps) {
-  const { values, touched, errors, getTextInputProps, validate, resetForm } = useFormChangePassword({
+  const { values, touched, errors, isValid, getTextInputProps, validate, resetForm } = useFormChangePassword({
     initialValue: { currentPassword: '', newPassword: '', newPasswordConfirm: '' },
   });
 
@@ -59,6 +59,7 @@ function ChangePassword({}: ChangePasswordProps) {
         label="비밀번호 변경"
         variant='filled'
         onPress={handleSubmit}
+        disabled={!isValid} // 유효하지 않을 때 버튼 비활성화
       />
     </View>
   );

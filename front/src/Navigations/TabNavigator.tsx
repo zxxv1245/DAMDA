@@ -10,9 +10,9 @@ import { colors } from '../constants/color';
 import NotificationsModal from '../components/NotificationsModal'; 
 import useAuth from '../hooks/queries/useAuth';
 import { useNavigation } from '@react-navigation/native';
-import { stackNavigations } from '../constants'; // 여기서 임포트
+import { stackNavigations } from '../constants'; 
 
-// 이미지 파일 경로를 설정합니다.
+
 const logo = require('../assets/logo.png');
 
 const Tab = createBottomTabNavigator();
@@ -46,7 +46,7 @@ function TabNavigator() {
               <Ionicons name="notifications-outline" size={25} color={colors.BLACK} style={{ marginRight: 15 }} />
             </TouchableOpacity>
           ),
-          tabBarShowLabel: false, // 라벨 숨기기
+          tabBarShowLabel: false,
           tabBarIcon: ({ color, size }) => {
             let iconName;
 
@@ -69,8 +69,8 @@ function TabNavigator() {
             display: 'flex',
           },
           tabBarItemStyle: {
-            paddingVertical: 10, // 탭 아이템의 상하 패딩을 조정합니다.
-            marginHorizontal: 15, // 탭 아이템의 좌우 마진을 조정합니다.
+            paddingVertical: 10, 
+            marginHorizontal: 15, 
           },
         })}
       >

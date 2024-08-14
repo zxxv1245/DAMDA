@@ -39,9 +39,9 @@ function MyInfo() {
   }, [isLogin]);
 
   const handleDeleteAccount = async() => {
+    await deleteAccount();
     await removeEncryptStorage('accessToken');
     await removeEncryptStorage('refreshToken');
-    await deleteAccount();
     navigation.reset({
       index: 0,
       routes: [{ name: stackNavigations.MAIN }],
@@ -62,8 +62,9 @@ function MyInfo() {
       <TouchableOpacity onPress={handleProfileImg} style = {styles.TouchContainer}>
         {profileImg ? 
           <Image source={{uri : profileImg}} style = {styles.profileImg}/> :
-          <Icon name="person-circle-outline" size={80} color={colors.GRAY_500} style={styles.profileIcon} />
+          <Icon name="person-circle-outline" size={100} color={colors.GRAY_500}/>
           }
+        <Text style = {styles.profileUpdateText}>사진첩에서 사진 선택</Text>
       </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.label}>이메일</Text>
@@ -143,16 +144,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.BLACK,
   },
-  profileIcon: {
-    marginRight: 20,
-  },
   profileImg : {
-    width : 80,
-    height : 80,
-    borderRadius : 40,
+    width : 100,
+    height : 100,
+    borderRadius : 50,
   },
   TouchContainer : {
     marginBottom : 20,
+  },
+  profileUpdateText : {
+    color : colors.BLUE_500,
+    marginTop : 10,
   }
 });
 
