@@ -6,6 +6,7 @@ import back.shoppingMart.common.mail.EmailVerificationResult;
 import back.shoppingMart.common.mail.MailService;
 import back.shoppingMart.common.redis.RedisService;
 import back.shoppingMart.common.s3.S3Service;
+import back.shoppingMart.user.dto.FindEmailDto;
 import back.shoppingMart.user.repository.UserRepository;
 import back.shoppingMart.user.dto.ChangePasswordDto;
 import back.shoppingMart.user.dto.UserDto;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -150,11 +153,19 @@ public class UserService {
         this.checkIfEmailExists(toEmail);
         String title = "Damda 이메일 인증 번호";
         String authCode = this.createCode();
-        mailService.sendEmail(toEmail, title, authCode);
+
+        // 템플릿에 전달할 변수 설정
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("verificationCode", authCode);
+
+        // email.html 템플릿을 사용하여 이메일 전송
+        mailService.sendEmail(toEmail, title, "email", variables);
+
         // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
         redisService.setValues(AUTH_CODE_PREFIX + toEmail,
                 authCode, Duration.ofMillis(this.authCodeExpirationMillis));
     }
+
     private String createCode() {
         int lenth = 6;
         try {
@@ -184,6 +195,33 @@ public class UserService {
 
         s3Service.deleteFile(dirName + "/" + fileName);
     }
+
+    public String FindEmail(FindEmailDto findEmailDto){
+        User findingUser = userRepository.findByUsernameAndPhoneNumber(findEmailDto.getUsername(), findEmailDto.getPhoneNumber());
+        if (findingUser == null) {
+            throw new CustomException(ErrorType.NOT_FOUND_USER);
+        }
+        return findingUser.getEmail();
+
+    }
+
+    public void sendNewPasswordToEmail(String toEmail) {
+        User user = userRepository.findByEmail(toEmail);
+        if (user == null) {
+            throw new CustomException(ErrorType.NOT_FOUND_USER);
+        }
+        String title = "새로운 비밀번호";
+        String newPassword = this.createCode();
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+
+        // 템플릿에 전달할 변수 설정
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("newPassword", newPassword);
+
+        // passwordEmail.html 템플릿을 사용하여 이메일 전송
+        mailService.sendEmail(toEmail, title, "passwordEmail", variables);
+    }
+
 }
 
 

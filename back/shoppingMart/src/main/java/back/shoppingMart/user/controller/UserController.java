@@ -5,6 +5,7 @@ import back.shoppingMart.common.mail.EmailVerificationResult;
 import back.shoppingMart.common.response.MsgType;
 import back.shoppingMart.common.response.ResponseEntityDto;
 import back.shoppingMart.common.response.ResponseUtils;
+import back.shoppingMart.user.dto.FindEmailDto;
 import back.shoppingMart.user.dto.UserDto;
 import back.shoppingMart.user.service.UserService;
 import back.shoppingMart.user.dto.ChangePasswordDto;
@@ -91,6 +92,18 @@ public class UserController {
         EmailVerificationResult response = userService.verifiedCode(email, authCode);
 
         return ResponseUtils.ok(response, MsgType.EMAIL_SUCCESSFULLY_SENT);
+    }
+
+    @GetMapping("/getEmail")
+    public ResponseEntityDto<String> getEmail(@RequestBody FindEmailDto findEmailDto) {
+        String email = userService.FindEmail(findEmailDto);
+        return ResponseUtils.ok(email, MsgType.EMAIL_SEARCHED_SUCCESSFULLY);
+    }
+
+    @PostMapping("/newPassword")
+    public ResponseEntityDto<Void> sendNewPassword(@RequestParam("email") @Valid @CustomEmail String email) {
+        userService.sendNewPasswordToEmail(email);
+        return ResponseUtils.ok(MsgType.EMAIL_SUCCESSFULLY_SENT);
     }
 
 }
