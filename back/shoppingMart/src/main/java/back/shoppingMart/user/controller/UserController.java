@@ -94,7 +94,7 @@ public class UserController {
         return ResponseUtils.ok(response, MsgType.EMAIL_SUCCESSFULLY_SENT);
     }
 
-    @GetMapping("/getEmail")
+    @PostMapping("/getEmail")
     public ResponseEntityDto<String> getEmail(@RequestBody FindEmailDto findEmailDto) {
         String email = userService.FindEmail(findEmailDto);
         return ResponseUtils.ok(email, MsgType.EMAIL_SEARCHED_SUCCESSFULLY);
