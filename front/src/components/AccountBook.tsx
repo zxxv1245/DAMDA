@@ -6,48 +6,50 @@ import { getMonthYearDetails, getNewMonthYear, getDateWithSeparator, formatDateW
 import { fetchPurchases, fetchPurchaseDates, PurchaseResponseDto } from '../api/purchaseApi';
 
 interface AccountBookProps {
+  onChangeMonth?: (increment: number) => void;
 }
 
-function AccountBook({onChangeMonth }: AccountBookProps) {
+function AccountBook({ onChangeMonth }: AccountBookProps) {
   const currentMonthYear = getMonthYearDetails(new Date());
   const [monthYear, setMonthYear] = useState(currentMonthYear);
-  const [selectedDate, setSelectedDate] = useState(0);
+  const [selectedDates, setSelectedDates] = useState<number[]>([]);
   const [purchases, setPurchases] = useState<PurchaseResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [purchaseDates, setPurchaseDates] = useState<string[]>([]);
-  
+
   const handlePressDate = (date: number) => {
-    setSelectedDate(date);
-  }
+    setSelectedDates(prev => {
+      const newDates = prev.includes(date) ? prev.filter(d => d !== date) : [...prev, date];
+      return newDates.sort((a, b) => a - b); // 날짜를 항상 정렬
+    });
+  };
 
   const handleUpdateMonth = (increment: number) => {
     setMonthYear(prev => getNewMonthYear(prev, increment));
-    setSelectedDate(0);
+    setSelectedDates([]);
     setPurchases([]);
   };
 
-  const handleChangeYear = (selectYear: number) => {
-    onChangeMonth((selectYear - year) * 12);
-  };
-
-
   useEffect(() => {
     const fetchPurchaseData = async () => {
-      if (selectedDate > 0) {
+      if (selectedDates.length > 0) {
         setIsLoading(true);
         try {
-          const purchaseDate = getDateWithSeparator(new Date(monthYear.year, monthYear.month - 1, selectedDate), '-');
-          const data = await fetchPurchases(purchaseDate);
-          setPurchases(data);
-        } 
-        finally {
+          const data = await Promise.all(
+            selectedDates.map(async date => {
+              const purchaseDate = getDateWithSeparator(new Date(monthYear.year, monthYear.month - 1, date), '-');
+              return await fetchPurchases(purchaseDate);
+            })
+          );
+          setPurchases(data.flat());
+        } finally {
           setIsLoading(false);
         }
       }
     };
 
     fetchPurchaseData();
-  }, [selectedDate, monthYear]);
+  }, [selectedDates, monthYear]);
 
   useEffect(() => {
     const fetchPurchaseDatesData = async () => {
@@ -55,8 +57,7 @@ function AccountBook({onChangeMonth }: AccountBookProps) {
       try {
         const dates = await fetchPurchaseDates(monthYear.year, monthYear.month);
         setPurchaseDates(dates);
-      } 
-      finally {
+      } finally {
         setIsLoading(false);
       }
     };
@@ -69,11 +70,12 @@ function AccountBook({onChangeMonth }: AccountBookProps) {
       <Calendar
         monthYear={monthYear}
         onChangeMonth={handleUpdateMonth}
-        selectedDate={selectedDate}
+        selectedDates={selectedDates}
         onPressDate={handlePressDate}
+        setSelectedDates={setSelectedDates} // 드래그 이벤트를 위한 setter 전달
         purchaseDates={purchaseDates}
       />
-      {selectedDate > 0 && (
+      {selectedDates.length > 0 && (
         <View style={styles.listContainer}>
           {isLoading ? (
             <View style={styles.loadingContainer}>
@@ -101,7 +103,6 @@ function AccountBook({onChangeMonth }: AccountBookProps) {
           )}
         </View>
       )}
-      
     </SafeAreaView>
   );
 }
@@ -109,7 +110,7 @@ function AccountBook({onChangeMonth }: AccountBookProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.WHITE
+    backgroundColor: colors.WHITE,
   },
   listContainer: {
     flex: 1,
@@ -139,10 +140,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
-    padding : 10,
-    borderWidth : 1,
-    borderColor : colors.BLACK,
-    borderRadius : 15,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: colors.BLACK,
+    borderRadius: 15,
   },
   itemDate: {
     fontSize: 16,
@@ -167,7 +168,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.GRAY_700,
   },
-
 });
 
 export default AccountBook;

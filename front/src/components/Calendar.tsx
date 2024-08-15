@@ -1,4 +1,3 @@
-import { colors } from "../constants/color";
 import React from 'react';
 import { Text } from 'react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -7,16 +6,17 @@ import DayOfWeeks from "./DayOfWeeks";
 import { getDateWithSeparator, isSameAsCurrentDate, MonthYear } from "../utils/date";
 import { FlatList } from "react-native-gesture-handler";
 import DateBox from "./DateBox";
+import { colors } from '../constants/color';
 
 interface CalendarProps {
   monthYear: MonthYear;
-  selectedDate: number;
+  selectedDates: number[];
   onPressDate: (date: number) => void;
   onChangeMonth: (increment: number) => void;
   purchaseDates: string[];
 }
 
-function Calendar({ monthYear, selectedDate, onChangeMonth, onPressDate, purchaseDates }: CalendarProps) {
+function Calendar({ monthYear, selectedDates, onChangeMonth, onPressDate, purchaseDates }: CalendarProps) {
   const { month, year, lastDate, firstDOW } = monthYear;
 
   return (
@@ -43,7 +43,7 @@ function Calendar({ monthYear, selectedDate, onChangeMonth, onPressDate, purchas
             <DateBox
               date={item.date}
               isToday={isSameAsCurrentDate(year, month, item.date)}
-              selectedDate={selectedDate}
+              selectedDates={selectedDates}
               onPressDate={onPressDate}
               hasPurchase={purchaseDates.includes(getDateWithSeparator(new Date(year, month - 1, item.date), '-'))}
             />
@@ -70,18 +70,18 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   monthButtonContainer: {
-    padding: 10
+    padding: 10,
   },
   titleText: {
     fontSize: 18,
     fontWeight: '500',
-    color: colors.BLACK
+    color: colors.BLACK,
   },
   bodyContainer: {
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.GRAY_500,
-    backgroundColor: colors.GRAY_100
-  }
+    backgroundColor: colors.GRAY_100,
+  },
 });
 
 export default Calendar;

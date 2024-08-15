@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image, Pressable, ScrollView } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image, Pressable, ScrollView, Dimensions } from 'react-native';
 import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -15,6 +15,7 @@ const adImages = [
   require('../assets/C101.png'),
   require('../assets/C102.png'),
   require('../assets/C106.png'),
+  require('../assets/C104.png'),
 ];
 
 type FeedNavigationProp = CompositeNavigationProp<
@@ -24,18 +25,41 @@ type FeedNavigationProp = CompositeNavigationProp<
 
 function AdContainer() {
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const screenWidth = Dimensions.get('window').width;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentAdIndex(prevIndex => (prevIndex + 1) % adImages.length);
-    }, 5000);
+      setCurrentAdIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % adImages.length;
+        scrollViewRef.current?.scrollTo({ x: nextIndex * screenWidth, animated: true });
+        return nextIndex;
+      });
+    }, 4000);
 
-    return () => clearInterval(interval); 
-  }, []);
+    return () => clearInterval(interval);
+  }, [screenWidth]);
+
+  const handleScroll = (event) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.floor(contentOffsetX / screenWidth);
+    setCurrentAdIndex(newIndex);
+  };
 
   return (
     <View style={styles.adContainer}>
-      <Image source={adImages[currentAdIndex]} style={styles.adImage} />
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={handleScroll}
+        style={{ width: screenWidth }}
+      >
+        {adImages.map((image, index) => (
+          <Image key={index} source={image} style={[styles.adImage, { width: screenWidth }]} />
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -103,23 +127,23 @@ function Feed() {
             {recentPurchases.length > 0 ? (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.orderList}>
-                {recentPurchases[0].purchaseProducts.map((item, index) => (
-                  <View key={index} style={styles.orderItemWrapper}>
-                    <View style={styles.orderItem}>
-                      <View style={styles.imageWrapper}>
-                        <Text style={styles.orderDate}>{recentPurchases[0].purchaseDate}</Text>
-                        <Image
-                          style={styles.image}
-                          source={{ uri: `${item.productImage}?timestamp=${new Date().getTime()}` }}
-                        />
+                  {recentPurchases[0].purchaseProducts.map((item, index) => (
+                    <View key={index} style={styles.orderItemWrapper}>
+                      <View style={styles.orderItem}>
+                        <View style={styles.imageWrapper}>
+                          <Text style={styles.orderDate}>{recentPurchases[0].purchaseDate}</Text>
+                          <Image
+                            style={styles.image}
+                            source={{ uri: `${item.productImage}?timestamp=${new Date().getTime()}` }}
+                          />
+                        </View>
+                      </View>
+                      <View style={styles.TextStyles}>
+                        <Text style={styles.orderText}>{item.productName}</Text>
+                        <Text style={styles.orderPrice}>{item.totalPrice}원</Text>
                       </View>
                     </View>
-                    <View style={styles.TextStyles}>
-                      <Text style={styles.orderText}>{item.productName}</Text>
-                      <Text style={styles.orderPrice}>{item.totalPrice}원</Text>
-                    </View>
-                  </View>
-                ))}
+                  ))}
                 </View>
               </ScrollView>
             ) : (

@@ -13,6 +13,25 @@ interface PurchaseResponseDto {
   totalPrice: number;
 }
 
+const fetchProduct = async (): Promise<void> => {
+  const response = await axiosInstance.get('/api/v1/getProduct', {
+    headers: {
+      'Requires-Auth': 'true',
+    },
+  });
+  return response.data.data;
+};
+
+const fetchDiscount = async (): Promise<void> => {
+  const response = await axiosInstance.get('/api/v1/getDiscount', {
+    headers: {
+      'Requires-Auth': 'true',
+    },
+  });
+  console.log(response.data.data);
+  return response.data.data;
+};
+
 const fetchPurchases = async (purchase_date: string): Promise<PurchaseResponseDto[]> => {
   const response = await axiosInstance.get(`/api/v1/myPurchase/${purchase_date}`, {
     headers: {
@@ -59,4 +78,12 @@ const savePurchases = async (Data: PurchaseProductDto[]): Promise<void> => {
 };
 
 
-export { fetchPurchases, fetchPurchaseDates, fetchTotalPriceByMonth, fetchRecentPurchases, savePurchases };
+export { 
+  fetchPurchases, 
+  fetchPurchaseDates, 
+  fetchTotalPriceByMonth, 
+  fetchRecentPurchases, 
+  savePurchases, 
+  fetchProduct, 
+  fetchDiscount 
+};

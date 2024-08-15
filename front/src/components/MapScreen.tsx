@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, PermissionsAndroid, Platform, Modal, Text, Pressable, Image, ActivityIndicator } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -7,8 +7,8 @@ import { colors } from '../constants/color';
 import { GOOGLE_PLACES_API_KEY } from '@env';
 
 async function requestLocationPermission() {
-  try {
-    if (Platform.OS === 'android') {
+  if (Platform.OS === 'android') {
+    try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
@@ -19,15 +19,13 @@ async function requestLocationPermission() {
           buttonPositive: 'OK',
         }
       );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the location');
-      } else {
-        console.log('Location permission denied');
-      }
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
     }
-  } catch (err) {
-    console.warn(err);
   }
+  return true;
 }
 
 const MapScreen: React.FC = () => {
@@ -42,11 +40,12 @@ const MapScreen: React.FC = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [photoUrl, setPhotoUrl] = useState(null);
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initializeMap = async () => {
-      await requestLocationPermission();
+      const hasPermission = await requestLocationPermission();
+      if (!hasPermission) return;
 
       Geolocation.getCurrentPosition(
         position => {
@@ -70,7 +69,7 @@ const MapScreen: React.FC = () => {
     initializeMap();
   }, []);
 
-  const fetchNearbyMarts = async (latitude, longitude) => {
+  const fetchNearbyMarts = useCallback(async (latitude, longitude) => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -84,7 +83,7 @@ const MapScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const handleMarkerPress = (marker) => {
     setSelectedMarker(marker);
@@ -107,32 +106,35 @@ const MapScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        <View style={styles.loadingContainer}>
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        showsUserLocation
+        followsUserLocation
+        region={region}
+        loadingEnabled={true}
+        loadingIndicatorColor={colors.BLUE_250}
+      >
+        {markers.map((marker, index) => (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: marker.geometry.location.lat,
+              longitude: marker.geometry.location.lng,
+            }}
+            title={marker.name}
+            description={marker.vicinity}
+            pinColor={colors.BLUE_200}
+            onPress={() => handleMarkerPress(marker)}
+          />
+        ))}
+      </MapView>
+
+      {loading && (
+        <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color={colors.BLUE_250} />
+          <Text style={styles.loadingText}>마트를 검색 중입니다...</Text>
         </View>
-      ) : (
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          showsUserLocation
-          followsUserLocation
-          region={region}
-        >
-          {markers.map((marker, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: marker.geometry.location.lat,
-                longitude: marker.geometry.location.lng,
-              }}
-              title={marker.name}
-              description={marker.vicinity}
-              pinColor={colors.BLUE_200}
-              onPress={() => handleMarkerPress(marker)}
-            />
-          ))}
-        </MapView>
       )}
 
       <Modal
@@ -174,10 +176,17 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-  loadingContainer: {
-    flex: 1,
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: colors.BLACK,
+    fontWeight: '600',
   },
   modalContainer: {
     flex: 1,
@@ -221,10 +230,10 @@ const styles = StyleSheet.create({
   },
   cartText: {
     fontSize: 20,
-    fontWeight : '700',
+    fontWeight: '700',
     marginBottom: 10,
     color: colors.BLUE_500,
-  }
+  },
 });
 
 export default MapScreen;

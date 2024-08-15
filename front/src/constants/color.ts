@@ -1,3 +1,5 @@
+// colors.ts
+
 const colors = {
   PINK_200: "#FAE2E9",
   PINK_400: "#EC87A5",

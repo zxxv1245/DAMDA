@@ -11,7 +11,6 @@ function MyPage() {
   const { isLogin, logout } = useAuth();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [nickname, setNickname] = useState<string | null>(null);
   const [profileImg, setProfileImg] = useState<any | null>(null); 
@@ -36,10 +35,6 @@ function MyPage() {
     });
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(previousState => !previousState);
-  };
-
   const handleAnnouncementPress = () => {
     navigation.navigate(stackNavigations.ANNOUNCEMENT);
   };
@@ -53,7 +48,11 @@ function MyPage() {
   };
 
   const handleMyInfoPress = () => {
-    navigation.navigate(stackNavigations.MYINFO);
+    if (isLogin) {
+      navigation.navigate(stackNavigations.MYINFO);
+    } else {
+      navigation.navigate(stackNavigations.LOGIN);
+    }
   };
 
   const handleQuizPress = () => {
@@ -65,7 +64,15 @@ function MyPage() {
   };
 
   const handleMyCardPress = () => {
-    navigation.navigate(stackNavigations.MYCARD);
+    if (isLogin) {
+      navigation.navigate(stackNavigations.MYCARD);
+    } else {
+      navigation.navigate(stackNavigations.LOGIN);
+    }
+  };
+
+  const handleAllProductPress = () => {
+    navigation.navigate(stackNavigations.ALLPRODUCT);
   };
 
   return (
@@ -114,18 +121,6 @@ function MyPage() {
           </TouchableOpacity>
         </View>
         <View style={styles.verticalMenu}>
-          <TouchableOpacity style={styles.verticalMenuItem} onPress={toggleDarkMode}>
-            <View style={styles.verticalMenuTextContainer}>
-              <Icon name="moon-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
-              <Text style={styles.verticalMenuText}>다크 모드</Text>
-            </View>
-            <Switch
-              value={isDarkMode}
-              onValueChange={toggleDarkMode}
-              trackColor={{ false: colors.GRAY_300, true: colors.BLUE_300 }}
-              thumbColor={isDarkMode ? colors.BLUE_300 : '#f4f3f4'}
-            />
-          </TouchableOpacity>
           <TouchableOpacity style={styles.verticalMenuItem} onPress={handleAnnouncementPress}>
             <View style={styles.verticalMenuTextContainer}>
               <Icon name="notifications-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
@@ -137,6 +132,13 @@ function MyPage() {
             <View style={styles.verticalMenuTextContainer}>
               <Icon name="person-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
               <Text style={styles.verticalMenuText}>나의 정보</Text>
+            </View>
+            <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.verticalMenuItem} onPress={handleAllProductPress}>
+            <View style={styles.verticalMenuTextContainer}>
+              <Icon name="basket-outline" size={20} color={colors.BLACK} style={styles.verticalMenuIcon} />
+              <Text style={styles.verticalMenuText}>물품 목록</Text>
             </View>
             <Icon name="chevron-forward-outline" size={20} color={colors.BLACK} />
           </TouchableOpacity>

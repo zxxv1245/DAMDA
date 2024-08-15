@@ -22,6 +22,9 @@ const stackNavigations = {
   MYQNA : '내QnA',
   COMMONQUESTION : '자주 묻는 질문',
   SERVICESCREEN : '서비스 소개',
+  FINDEMAIL : '아이디 찾기',
+  FINPASSWORD : '비밀번호 찾기',
+  ALLPRODUCT : '물품 목록',
 } as const;
 
 export { stackNavigations };

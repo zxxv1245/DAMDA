@@ -5,12 +5,10 @@ import { StackParamList } from '../Navigations/StackNavigator';
 import { StackScreenProps } from '@react-navigation/stack';
 import { colors } from '../constants/color';
 
-// 이미지 파일 경로를 설정합니다.
 const LoginLogo = require('../assets/loginLogo.png');
 const KakaoLogo = require('../assets/kakao_logo.png');
 const NaverLogo = require('../assets/naver_logo.png');
 
-// StackScreenProps를 사용하여 props 타입을 정의합니다.
 type LoginProps = StackScreenProps<StackParamList, 'Login'>;
 
 function Login({ navigation }: LoginProps) {
@@ -29,7 +27,7 @@ function Login({ navigation }: LoginProps) {
           <Text onPress={() => navigation.navigate(stackNavigations.AUTH_HOME)}>로그인</Text>
           <Text style={styles.separator}> | </Text>
           <Text onPress={() => navigation.navigate(stackNavigations.SIGNUP)}>회원 가입</Text>
-        </View>
+      </View>
     </View>
   );
 }

@@ -1,3 +1,4 @@
+// StackNavigator.tsx
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Image, TouchableOpacity } from 'react-native';
@@ -26,6 +27,9 @@ import Announcement from '../components/Announcement';
 import MyQnA from '../components/MyQnA';
 import CommonQuestion from '../components/CommonQuestion';
 import ServiceScreen from '../components/ServiceScreen';
+import FindEmail from '../components/FindEmail';
+import FindPassword from '../components/FindPassword';
+import AllProduct from '../components/AllProduct';
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
@@ -53,7 +57,9 @@ export type StackParamList = {
   [stackNavigations.MYQNA]: undefined;
   [stackNavigations.COMMONQUESTION]: undefined;
   [stackNavigations.SERVICESCREEN]: undefined;
-  
+  [stackNavigations.FINDEMAIL]: undefined;
+  [stackNavigations.FINPASSWORD]: undefined;
+  [stackNavigations.ALLPRODUCT]: undefined;
 };
 
 function StackNavigator() {
@@ -165,6 +171,18 @@ function StackNavigator() {
         <Stack.Screen
           name={stackNavigations.SERVICESCREEN}
           component={ServiceScreen}
+        />
+        <Stack.Screen
+          name={stackNavigations.FINDEMAIL}
+          component={FindEmail}
+        />
+        <Stack.Screen
+          name={stackNavigations.FINPASSWORD}
+          component={FindPassword}
+        />
+        <Stack.Screen
+          name={stackNavigations.ALLPRODUCT}
+          component={AllProduct}
         />
       </Stack.Navigator>
 

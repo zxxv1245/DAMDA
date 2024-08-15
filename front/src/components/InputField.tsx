@@ -1,3 +1,4 @@
+// InputField.tsx
 import React, { useRef } from 'react';
 import { StyleSheet, View, TextInput, Dimensions, TextInputProps, Text, Pressable } from 'react-native';
 import { colors } from '../constants/color';

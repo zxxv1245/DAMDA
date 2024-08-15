@@ -13,4 +13,5 @@ const fetchPurchases = async (month: string): Promise<{ [key: string]: Purchase[
   return response.data;
 };
 
+
 export { fetchPurchases };

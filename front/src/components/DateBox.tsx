@@ -4,7 +4,7 @@ import { colors } from '../constants/color';
 
 interface DateBoxProps {
   date: number;
-  selectedDate: number;
+  selectedDates: number[];
   onPressDate: (date: number) => void;
   isToday: boolean;
   hasPurchase: boolean;
@@ -12,23 +12,25 @@ interface DateBoxProps {
 
 const deviceWidth = Dimensions.get('window').width;
 
-function DateBox({ date, selectedDate, onPressDate, isToday, hasPurchase }: DateBoxProps) {
+function DateBox({ date, selectedDates, onPressDate, isToday, hasPurchase }: DateBoxProps) {
+  const isSelected = selectedDates.includes(date);
+
   return (
     <Pressable style={styles.container} onPress={() => onPressDate(date)}>
       {date > 0 &&
         <View style={[
           styles.dateContainer,
-          selectedDate === date && styles.selectedContainer,
-          selectedDate === date && isToday && styles.selectedTodayContainer
+          isSelected && styles.selectedContainer,
+          isSelected && isToday && styles.selectedTodayContainer
         ]}>
           <Text style={[
             styles.dateText,
             isToday && styles.todayText,
-            selectedDate === date && styles.selectedDateText
+            isSelected && styles.selectedDateText
           ]}>
             {date}
           </Text>
-          {hasPurchase && selectedDate !== date && <View style={styles.purchaseDot} />}
+          {hasPurchase && !isSelected && <View style={styles.purchaseDot} />}
         </View>
       }
     </Pressable>
@@ -64,10 +66,10 @@ const styles = StyleSheet.create({
   },
   todayText: {
     color: colors.PINK_700,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   selectedTodayContainer: {
-    backgroundColor: colors.PINK_700
+    backgroundColor: colors.PINK_700,
   },
   purchaseDot: {
     width: 5,
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.RED_500,
     position: 'absolute',
     bottom: -4,
-  }
+  },
 });
 
 export default DateBox;

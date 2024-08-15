@@ -164,32 +164,32 @@ function Signup({ navigation }: SignupProps) {
           />
         </View>
         <View style={styles.fieldContainer}>
-        <View style={styles.birthDateContainer}>
-          <Text style={styles.dateText}>생년월일: {format(date, 'yyyy-MM-dd')}</Text>
-          <CustomButton
-            label="선택"
-            onPress={() => setOpen(true)}
-            style={styles.smallButton}
-          />
-          <DatePicker
-            modal
-            open={open}
-            date={date}
-            mode="date"
-            locale="ko"
-            onConfirm={(date) => {
-              setOpen(false);
-              setDate(date);
-            }}
-            onCancel={() => {
-              setOpen(false);
-            }}
-            title="생년월일 선택"
-            confirmText="확인" 
-            cancelText="취소"  
-            theme="light"
-          />
-        </View>  
+          <View style={styles.birthDateContainer}>
+            <Text style={styles.dateText}>생년월일: {format(date, 'yyyy-MM-dd')}</Text>
+            <CustomButton
+              label="선택"
+              onPress={() => setOpen(true)}
+              style={styles.smallButton}
+            />
+            <DatePicker
+              modal
+              open={open}
+              date={date}
+              mode="date"
+              locale="ko"
+              onConfirm={(date) => {
+                setOpen(false);
+                setDate(date);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+              title="생년월일 선택"
+              confirmText="확인" 
+              cancelText="취소"  
+              theme="light"
+            />
+          </View>  
         </View>
         <CustomButton
           label="회원가입"

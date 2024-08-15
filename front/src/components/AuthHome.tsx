@@ -61,9 +61,9 @@ function AuthHome({ navigation }: AuthHomeProps) {
           onPress={() => navigation.navigate(stackNavigations.SIGNUP)}
         />
         <View style={styles.forgotContainer}>
-          <Text>아이디 찾기</Text>
+          <Text onPress={() => navigation.navigate(stackNavigations.FINDEMAIL)}>아이디 찾기</Text>
           <Text style={styles.separator}> | </Text>
-          <Text>비밀번호 찾기</Text>
+          <Text onPress={() => navigation.navigate(stackNavigations.FINPASSWORD)}>비밀번호 찾기</Text>
         </View>
       </View>
       <Modal

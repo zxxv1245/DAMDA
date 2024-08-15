@@ -99,6 +99,19 @@ const changePassword = async ({ currentPassword, newPassword }: RequestChangePas
   });
 };
 
+// 이메일 찾기
+const findEmail = async ({ username, phoneNumber }: { username: string; phoneNumber: string }): Promise<string> => {
+  const response = await axiosInstance.get('/api/v1/getEmail', { username, phoneNumber });
+  return response.data.email; 
+};
+
+// 비밀번호 찾기
+const findPassword = async (email: string): Promise<void> => {
+  await axiosInstance.post('/api/v1/newPassword', null,{
+    params : {email},
+  });
+};
+
 // 이메일 인증
 const sendVerificationRequest = async (email: string): Promise<void> => {
   await axiosInstance.post('/api/v1/emails/verification-requests', null, {
@@ -154,7 +167,9 @@ export {
   updateUserInfo, 
   kakaoLogin, 
   naverLogin,
-  saveProfileImage 
+  saveProfileImage,
+  findEmail,
+  findPassword
 };
 
 export type { 
@@ -162,5 +177,5 @@ export type {
   RequestUserSignup, 
   ResponseToken, 
   RequestChangePassword, 
-  RequestUpdateUser 
+  RequestUpdateUser,
 };
