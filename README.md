@@ -140,10 +140,14 @@ git clone https://lab.ssafy.com/s11-webmobile3-sub2/S11P12C103.git
 ## 아키텍쳐 📑
 
 <div align="center">
-  ![architecture.png](Picture/arc.PNG)
+  ![architecture.JPG](Picture/architecture.JPG)
 </div>
 
+## ERD 
 
+<div align="center">
+  ![erd.png](Picture/erd.png)
+</div>
 
 ## 회로도 🔋
 <div align="center">
