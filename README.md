@@ -149,15 +149,14 @@ git clone https://lab.ssafy.com/s11-webmobile3-sub2/S11P12C103.git
   ![erd.png](Picture/erd.png)
 </div>
 
-## 회로도 🔋
-<div align="center">
-
-</div>
 <div>
 
 
 
 ## 쇼핑카트
+
+ ![3.PNG](shopping_cart1.jpg)
+ ![3.PNG](shopping_cart2.jpg)
 
 ## 사용자 App 및 Qt 이미지
 <div align="center">
@@ -165,25 +164,61 @@ git clone https://lab.ssafy.com/s11-webmobile3-sub2/S11P12C103.git
 ### 사용자 App 📱
 
   ### 앱의 메인화면
-  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/App_main.png)
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/logo.jpg)
+
+  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/sing_up.jpg)
+
+  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/sign_up1.png)
+
+  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/homepage.jpg)
+
+  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/homepage2.jpg)
+
+  ### 결제 화면
+  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/pay.jpg)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/qr.jpg)
+
+  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/pay_button.jpg)
 
   ### 앱의 가계부 기능
-  ![KakaoTalk_20240802_044144800_02 (1).png](Picture/Product_list.png)
+  ![KakaoTalk_20240802_044144800_02 (1).png](Picture/planner.png)
 
   ### 주변마트찾기 기능
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/Search_Mart.png)
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/find_mart.jpg)
+
+  ### 기타 기능
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/find_pos.PNG)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/find_snack.png)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/change_password.jpg)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/change_mypage.jpg)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/naver_login.jpg)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/login.jpg)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/login2.jpg)
+
+  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/adult.jpg)
 
   ### 사용자 Qt 화면
 
-  ![3.PNG](Picture/3.PNG)
+  ![3.PNG](Picture/qt1.PNG)
 
-  ![2 (1).PNG](Picture/2.PNG)
+  ![2 (1).PNG](Picture/qt2.PNG)
 
-  ![1 (1).PNG](Picture/1.PNG)
+  ![1 (1).PNG](Picture/qt3.PNG)
 
-  ![5 (1).PNG](Picture/5.PNG)
+  ![5 (1).PNG](Picture/qt4.PNG)
 
-  ![4 (1).PNG](Picture/4.PNG)
+  ![4 (1).PNG](Picture/qt5.PNG)
+
+  ![4 (1).PNG](Picture/qt6.PNG)
+
+  ![4 (1).PNG](Picture/qt7.PNG)
 
   ### 기존 쇼핑과 담다의 쇼핑의 차별점 👍
 
@@ -245,7 +280,7 @@ git clone https://lab.ssafy.com/s11-webmobile3-sub2/S11P12C103.git
 <div align="center">
 
 ### 담다 앱 시연 영상
-[![Damda App](http://img.youtube.com/vi/zpk5nVSYzbk/0.jpg)](https://youtu.be/zpk5nVSYzbk)
+[![Damda App](http://img.youtube.com/vi/zpk5nVSYzbk/0.jpg)](https://youtu.be/DVBAKg1N4L8)
 
 </div>
 
