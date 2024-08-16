@@ -50,19 +50,6 @@
 
 
 
-## 시작 가이드
-
-### Requirements
-
-  - Yolov7 ~
-
-### Installation
-
-```
-git clone https://lab.ssafy.com/s11-webmobile3-sub2/S11P12C103.git
-```
-
-
 ## 주요기능 🔍
 <div align="center">
 
