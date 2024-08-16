@@ -164,45 +164,45 @@ git clone https://lab.ssafy.com/s11-webmobile3-sub2/S11P12C103.git
 ### 사용자 App 📱
 
   ### 앱의 메인화면
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/logo.jpg)
+  <img src="Picture/logo.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/sing_up.jpg)
+  <img src="Picture/sing_up.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/sign_up1.png)
+  <img src="Picture/sign_up1.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/homepage.jpg)
+  <img src="Picture/homepage.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/homepage2.jpg)
+  <img src="Picture/homepage2.jpg" alt="Logo" width="200px"/>
 
   ### 결제 화면
-  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/pay.jpg)
+  <img src="Picture/pay.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/qr.jpg)
+  <img src="Picture/qr.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_03 (2).png](Picture/pay_button.jpg)
+  <img src="Picture/pay_button.jpg" alt="Logo" width="200px"/>
 
   ### 앱의 가계부 기능
-  ![KakaoTalk_20240802_044144800_02 (1).png](Picture/planner.png)
+  <img src="Picture/planner.jpg" alt="Logo" width="200px"/>
 
   ### 주변마트찾기 기능
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/find_mart.jpg)
+  <img src="Picture/find_mart.jpg" alt="Logo" width="200px"/>
 
   ### 기타 기능
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/find_pos.PNG)
+  <img src="Picture/find_pos.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/find_snack.png)
+  <img src="Picture/find_snack.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/change_password.jpg)
+  <img src="Picture/change_password.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/change_mypage.jpg)
+  <img src="Picture/change_mypage.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/naver_login.jpg)
+  <img src="Picture/naver_login.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/login.jpg)
+  <img src="Picture/login.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/login2.jpg)
+  <img src="Picture/login2.jpg" alt="Logo" width="200px"/>
 
-  ![KakaoTalk_20240802_044144800_04 (1).png](Picture/adult.jpg)
+  <img src="Picture/adult.jpg" alt="Logo" width="200px"/>
 
   ### 사용자 Qt 화면
 
