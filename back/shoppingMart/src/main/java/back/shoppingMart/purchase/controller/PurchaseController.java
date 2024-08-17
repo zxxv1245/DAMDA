@@ -69,10 +69,19 @@ public class PurchaseController {
     }
 
     @PostMapping("/savePurchase")
-    public ResponseEntityDto<Purchase> savePurchase(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ResponseEntityDto<Void> savePurchase(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                                @RequestBody PurchaseRequestDto purchaseRequestDto) {
-        Purchase purchase = purchaseService.savePurchase(principalDetails.getUser().getId(), purchaseRequestDto);
-        return ResponseUtils.ok(purchase, MsgType.PURCHASE_SAVED);
+        purchaseService.savePurchase(principalDetails.getUser().getId(), purchaseRequestDto);
+        return ResponseUtils.ok(MsgType.PURCHASE_SAVED);
+    }
+
+    @PostMapping("/savePurchase/{purchase_date}")
+    public ResponseEntityDto<Void> savePurchaseAtSpecificDate(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable("purchase_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate purchaseDate,
+            @RequestBody PurchaseRequestDto purchaseRequestDto) {
+        purchaseService.savePurchaseAtSpecificDate(principalDetails.getUser().getId(), purchaseRequestDto, purchaseDate);
+        return ResponseUtils.ok(MsgType.PURCHASE_SAVED);
     }
 
 }

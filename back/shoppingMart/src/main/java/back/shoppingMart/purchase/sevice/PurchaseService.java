@@ -182,4 +182,35 @@ public class PurchaseService {
         return purchaseRepository.save(purchase);
 
     }
+
+    @Transactional
+    public Purchase savePurchaseAtSpecificDate(Long userId, PurchaseRequestDto purchaseRequestDto, LocalDate purchaseDate) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
+
+        Purchase purchase = new Purchase();
+        purchase.setUser(user);
+        purchase.setPurchaseDate(purchaseDate);
+        purchase.setTotalPrice(purchaseRequestDto.getTotalPrice());
+
+        List<PurchaseProduct> purchaseProducts = purchaseRequestDto.getPurchaseProduct().stream().map(dto -> {
+            PurchaseProduct purchaseProduct = new PurchaseProduct();
+            Product product = productRepository.findByProductName(dto.getProductName());
+            if (product == null) {
+                throw new CustomException(ErrorType.NOT_FOUND_PRODUCT);
+            }
+
+            purchaseProduct.setPurchase(purchase);
+            purchaseProduct.setProduct(product);
+            purchaseProduct.setCount(dto.getCount());
+            purchaseProduct.setSinglePrice(purchaseProduct.calculateSinglePrice());
+
+            return purchaseProduct;
+        }).toList();
+
+        purchase.setPurchaseProducts(purchaseProducts);
+        purchase.calculateAndSetTotalPrice(); // 총 가격 계산
+        return purchaseRepository.save(purchase);
+    }
+
 }
