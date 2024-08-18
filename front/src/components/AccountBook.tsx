@@ -1,9 +1,12 @@
 import { colors } from "../constants/color";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, Text, View, FlatList } from 'react-native';
+import { StyleSheet, SafeAreaView, Text, View, FlatList, Pressable } from 'react-native';
 import Calendar from "./Calendar";
 import { getMonthYearDetails, getNewMonthYear, getDateWithSeparator, formatDateWithDay, MonthYear } from "../utils/date";
 import { fetchPurchases, fetchPurchaseDates, PurchaseResponseDto } from '../api/purchaseApi';
+import { useNavigation } from '@react-navigation/native';
+import { stackNavigations } from '../constants';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface AccountBookProps {
   onChangeMonth?: (increment: number) => void;
@@ -16,7 +19,8 @@ function AccountBook({ onChangeMonth }: AccountBookProps) {
   const [purchases, setPurchases] = useState<PurchaseResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [purchaseDates, setPurchaseDates] = useState<string[]>([]);
-
+  const navigation = useNavigation();
+  
   const handlePressDate = (date: number) => {
     setSelectedDates(prev => {
       const newDates = prev.includes(date) ? prev.filter(d => d !== date) : [...prev, date];
@@ -75,6 +79,9 @@ function AccountBook({ onChangeMonth }: AccountBookProps) {
         setSelectedDates={setSelectedDates} // 드래그 이벤트를 위한 setter 전달
         purchaseDates={purchaseDates}
       />
+      <Pressable style={styles.pressableContainer} onPress={() => navigation.navigate(stackNavigations.PURCHASESADD)}>
+        <Icon name="add" size={40} color={colors.BLUE_300} />
+      </Pressable>
       {selectedDates.length > 0 && (
         <View style={styles.listContainer}>
           {isLoading ? (
@@ -114,9 +121,9 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 10,
     width: '100%',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   loadingContainer: {
     flex: 1,
@@ -167,6 +174,17 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 14,
     color: colors.GRAY_700,
+  },
+  pressableContainer : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    borderColor : colors.BLUE_250
+  },
+  pressableText : {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.BLACK,
   },
 });
 

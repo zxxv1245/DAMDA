@@ -159,6 +159,7 @@ function Signup({ navigation }: SignupProps) {
           <InputField
             placeholder="'-'없이 숫자 11자리만 입력"
             error={touched.phoneNumber && errors.phoneNumber}
+            keyboardType="numeric"
             touched={touched.phoneNumber}
             {...getTextInputProps('phoneNumber')}
           />

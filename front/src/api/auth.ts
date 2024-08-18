@@ -101,8 +101,8 @@ const changePassword = async ({ currentPassword, newPassword }: RequestChangePas
 
 // 이메일 찾기
 const findEmail = async ({ username, phoneNumber }: { username: string; phoneNumber: string }): Promise<string> => {
-  const response = await axiosInstance.get('/api/v1/getEmail', { username, phoneNumber });
-  return response.data.email; 
+  const response = await axiosInstance.post('/api/v1/getEmail', { username, phoneNumber });
+  return response.data.data; 
 };
 
 // 비밀번호 찾기

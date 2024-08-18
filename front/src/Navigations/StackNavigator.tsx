@@ -30,6 +30,7 @@ import ServiceScreen from '../components/ServiceScreen';
 import FindEmail from '../components/FindEmail';
 import FindPassword from '../components/FindPassword';
 import AllProduct from '../components/AllProduct';
+import PurchasesAdd from '../components/PurchasesAdd';
 
 // 이미지 파일 경로를 설정합니다.
 const logo = require('../assets/logo.png');
@@ -60,6 +61,7 @@ export type StackParamList = {
   [stackNavigations.FINDEMAIL]: undefined;
   [stackNavigations.FINPASSWORD]: undefined;
   [stackNavigations.ALLPRODUCT]: undefined;
+  [stackNavigations.PURCHASESADD]: undefined;
 };
 
 function StackNavigator() {
@@ -183,6 +185,10 @@ function StackNavigator() {
         <Stack.Screen
           name={stackNavigations.ALLPRODUCT}
           component={AllProduct}
+        />
+        <Stack.Screen
+          name={stackNavigations.PURCHASESADD}
+          component={PurchasesAdd}
         />
       </Stack.Navigator>
 

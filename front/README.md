@@ -16,6 +16,8 @@ npm i
 
 주의(안드로이드 빌드 전 할 것)
 
+ - 밑에 빌드 하기 전에 해야하는 설정 및 세팅을 적어두었지만 다른 세팅 및 설정이 다르다면 안될 가능성이 큼.
+
 1. react-native-camera-kit 라이브러리에서 
 react-native-camera-kit/android/build.gardle
 targetSdkVersion 34 으로 변경

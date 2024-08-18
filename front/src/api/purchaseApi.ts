@@ -28,7 +28,6 @@ const fetchDiscount = async (): Promise<void> => {
       'Requires-Auth': 'true',
     },
   });
-  console.log(response.data.data);
   return response.data.data;
 };
 
@@ -65,11 +64,21 @@ const fetchRecentPurchases = async () => {
       'Requires-Auth': 'true',
     },
   });
+  console.log(response)
   return response.data.data;
 };
 
 const savePurchases = async (Data: PurchaseProductDto[]): Promise<void> => {
   await axiosInstance.post('/api/v1/myPurchase/savePurchase', Data, {
+    headers: {
+      'Requires-Auth': 'true',
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+const savePurchasesDate = async (Data: PurchaseProductDto[], purchase_date : string): Promise<void> => {
+  await axiosInstance.post(`/api/v1/myPurchase/savePurchase/${purchase_date}`, Data, {
     headers: {
       'Requires-Auth': 'true',
       'Content-Type': 'application/json',
@@ -83,7 +92,8 @@ export {
   fetchPurchaseDates, 
   fetchTotalPriceByMonth, 
   fetchRecentPurchases, 
-  savePurchases, 
+  savePurchases,
+  savePurchasesDate, 
   fetchProduct, 
   fetchDiscount 
 };

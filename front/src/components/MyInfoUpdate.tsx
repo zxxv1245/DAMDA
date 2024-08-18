@@ -92,6 +92,7 @@ function MyInfoUpdate() {
         <InputField
           value={phoneNumber}
           onChangeText={setPhoneNumber}
+          keyboardType="numeric"
           onBlur={() => handleBlur('phoneNumber')}
           placeholder="'-'없이 11자리만 입력"
           error={touched.phoneNumber && !phoneNumber ? '핸드폰 번호를 입력해주세요.' : ''}

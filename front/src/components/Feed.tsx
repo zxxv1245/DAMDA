@@ -127,7 +127,7 @@ function Feed() {
             {recentPurchases.length > 0 ? (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.orderList}>
-                  {recentPurchases[0].purchaseProducts.map((item, index) => (
+                  {recentPurchases[recentPurchases.length-1].purchaseProducts.map((item, index) => (
                     <View key={index} style={styles.orderItemWrapper}>
                       <View style={styles.orderItem}>
                         <View style={styles.imageWrapper}>

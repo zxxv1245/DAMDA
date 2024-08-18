@@ -14,7 +14,6 @@ interface PaymentProps {
 const jjanggo = require('../assets/jjanggo.png');
 
 function Payment({ route }: PaymentProps) {
-  const [isAdult, setIsAdult] = useState<boolean | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   // const qrData= '진로,1,1500,카스,1,2430,칠성 사이다,1,770,파워에이드,3,3510,'

@@ -25,6 +25,7 @@ const stackNavigations = {
   FINDEMAIL : '아이디 찾기',
   FINPASSWORD : '비밀번호 찾기',
   ALLPRODUCT : '물품 목록',
+  PURCHASESADD : '직접 추가',
 } as const;
 
 export { stackNavigations };
