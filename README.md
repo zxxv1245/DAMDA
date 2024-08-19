@@ -128,13 +128,13 @@
 ## 아키텍쳐 📑
 
 <div align="center">
-  ![architecture.JPG](Picture/architecture.JPG)
+  <img src="Picture/architecture.JPG" alt="Logo" width="200px"/>
 </div>
 
 ## ERD 
 
 <div align="center">
-  ![erd.png](Picture/erd.png)
+  <img src="Picture/erd.png" alt="Logo" width="200px"/>
 </div>
 
 <div>
