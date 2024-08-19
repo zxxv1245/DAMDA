@@ -81,6 +81,7 @@
 
 ## 기술 스택 📖
 <div align="center">
+
   ### Frontend
 
   ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
@@ -365,5 +366,3 @@
 </div>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=BDBDC8&height=150&section=footer" width="100%" >
-
-출처: https://hulrud.tistory.com/3 [주독야독:티스토리]
