@@ -51,30 +51,36 @@
 
 
 ## 주요기능 🔍
+
 <div align="center">
 
-  ### 📌 쇼핑카트에서 QR 스캔으로 간편 결제 기능
-    
-    - 지금까지의 상품 리스트 정보를 담은 QR 코드 생성 (QT)
-    - 사용자 App QR 코드 스캔 기능 구현
-    - 사용자 App에서 구매 목록 리스트 저장
-    - 자체 DB를 통해 인터넷이 불안정한 상황에서도 상품 인식 및 장바구니 정보 제공 가능
+  <h3>📌 쇼핑카트에서 QR 스캔으로 간편 결제 기능</h3>
+  <ul style="text-align: center;">
+    <li>지금까지의 상품 리스트 정보를 담은 QR 코드 생성 (QT)</li>
+    <li>사용자 App QR 코드 스캔 기능 구현</li>
+    <li>사용자 App에서 구매 목록 리스트 저장</li>
+    <li>자체 DB를 통해 인터넷이 불안정한 상황에서도 상품 인식 및 장바구니 정보 제공 가능</li>
+  </ul>
 
-  ### 📌 쇼핑카트에 부착된 모니터로 편의성 증가
-    
-    - 상품 검색 기능을 통한 손쉬운 상품 찾기
-    - 장바구니 화면을 통해 중간 총 상품 금액 파악 가능
+  <h3>📌 쇼핑카트에 부착된 모니터로 편의성 증가</h3>
+  <ul style="text-align: center;">
+    <li>상품 검색 기능을 통한 손쉬운 상품 찾기</li>
+    <li>장바구니 화면을 통해 중간 총 상품 금액 파악 가능</li>
+  </ul>
 
-  ### 📌 사용자 트래킹하는 쇼핑카트
+  <h3>📌 사용자 트래킹하는 쇼핑카트</h3>
+  <ul style="text-align: center;">
+    <li>실내 측위 기술을 통해 사용자 위치 추적 및 트래킹 (UWB)</li>
+    <li>장애물 또는 사용자가 접근 시 쇼핑카트 정지</li>
+  </ul>
 
-    - 실내 측위 기술을 통해 사용자 위치 추적 및 트래킹 (UWB)
-    - 장애물 또는 사용자가 접근 시 쇼핑카트 정지
+  <h3>📌 담다 앱</h3>
+  <ul style="text-align: center;">
+    <li>근처 마트 찾기</li>
+    <li>쇼핑카트의 상품정보가 담긴 QR코드를 인식하고 결제 기능</li>
+    <li>결제 내역 및 가계부 기능</li>
+  </ul>
 
-  ### 📌 담다 앱
-
-    - 근처 마트 찾기
-    - 쇼핑카트의 상품정보가 담긴 QR코드를 인식하고 결제 기능
-    - 결제 내역 및 가계부 기능
 </div>
 
 
@@ -128,12 +134,16 @@
 ## 아키텍쳐 📑
 
 <div align="center">
+  
   ![architecture.JPG](Picture/architecture.JPG)
 </div>
+
+
 
 ## ERD 
 
 <div align="center">
+  
   ![erd.png](Picture/erd.png)
 </div>
 
@@ -143,8 +153,11 @@
 
 ## 쇼핑카트
 
- ![3.PNG](shopping_cart1.jpg)
- ![3.PNG](shopping_cart2.jpg)
+ ![shopping_cart1.JPG](Picture/shopping_cart1.jpg)
+ 
+ ![shopping_cart2.JPG](Picture/shopping_cart2.jpg)
+
+
 
 ## 사용자 App 및 Qt 이미지
 <div align="center">
@@ -154,59 +167,57 @@
   ### 앱의 메인화면
   <img src="Picture/logo.jpg" alt="Logo" width="200px"/>
 
-  <img src="Picture/sing_up.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/sign_up.jpg" alt="sing_up" width="200px"/>
 
-  <img src="Picture/sign_up1.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/sign_up1.jpg" alt="sign_up1" width="200px"/>
 
-  <img src="Picture/homepage.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/homepage.jpg" alt="homepage" width="200px"/>
 
-  <img src="Picture/homepage2.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/homepage2.jpg" alt="homepage2" width="200px"/>
 
   ### 결제 화면
-  <img src="Picture/pay.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/pay.jpg" alt="pay" width="200px"/>
 
-  <img src="Picture/qr.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/qr.jpg" alt="qr" width="200px"/>
 
-  <img src="Picture/pay_button.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/pay_button.jpg" alt="pay_button" width="200px"/>
 
   ### 앱의 가계부 기능
-  <img src="Picture/planner.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/planner.jpg" alt="planner" width="200px"/>
 
   ### 주변마트찾기 기능
-  <img src="Picture/find_mart.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/find_mart.jpg" alt="find_mart" width="200px"/>
 
   ### 기타 기능
-  <img src="Picture/find_pos.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/change_password.jpg" alt="change_password" width="200px"/>
 
-  <img src="Picture/find_snack.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/change_mypage.jpg" alt="change_mypage" width="200px"/>
 
-  <img src="Picture/change_password.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/naver_login.jpg" alt="naver_login" width="200px"/>
 
-  <img src="Picture/change_mypage.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/login.jpg" alt="login" width="200px"/>
 
-  <img src="Picture/naver_login.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/login2.jpg" alt="login2" width="200px"/>
 
-  <img src="Picture/login.jpg" alt="Logo" width="200px"/>
-
-  <img src="Picture/login2.jpg" alt="Logo" width="200px"/>
-
-  <img src="Picture/adult.jpg" alt="Logo" width="200px"/>
+  <img src="Picture/adult.jpg" alt="adult" width="200px"/>
 
   ### 사용자 Qt 화면
 
-  ![3.PNG](Picture/qt1.PNG)
+  ![1.PNG](Picture/qt1.PNG)
 
   ![2 (1).PNG](Picture/qt2.PNG)
 
-  ![1 (1).PNG](Picture/qt3.PNG)
+  ![find_snack.PNG](Picture/find_snack.png)
 
-  ![5 (1).PNG](Picture/qt4.PNG)
+  ![find_pos.PNG](Picture/find_pos.PNG)
 
-  ![4 (1).PNG](Picture/qt5.PNG)
+  ![4 (1).PNG](Picture/qt4.PNG)
 
-  ![4 (1).PNG](Picture/qt6.PNG)
+  ![5 (1).PNG](Picture/qt5.PNG)
 
-  ![4 (1).PNG](Picture/qt7.PNG)
+  ![6 (1).PNG](Picture/qt6.PNG)
+
+  ![7 (1).PNG](Picture/qt7.PNG)
 
   ### 기존 쇼핑과 담다의 쇼핑의 차별점 👍
 
@@ -364,5 +375,3 @@
 </table>
 
 </div>
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=BDBDC8&height=150&section=footer" width="100%" >
